@@ -17,19 +17,23 @@ DEPS=$(addprefix $(SRCDIR)/,$(addsuffix /*.h,$(INCPATHS)))
 OBJFILES=log.o linked_list.o array_list.o mem.o hashmap.o tokenizer.o infiles.o block.o cpu.o context.o errors.o segment.o operation.o parser.o arith.o print.o
 OBJ=$(addprefix $(SRCDIR)/obj/,$(OBJFILES))
 
-all: $(TESTBINS)
+all: bin $(TESTBINS)
+
+bin: 
+	mkdir bin
 
 bin/%: %.c $(OBJ) $(DEPS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $< 
-	./$@ > $@.x
-	cmp `echo "$@" | sed -e 's%bin/%%g'`.out $@.x
-	rm $@.x
+	./$@ > $(notdir $@.x)
+	cmp `echo "$@" | sed -e 's%bin/%%g'`.out $(notdir $@.x)
+	rm $(notdir $@.x)
 
 %: bin/%
 	# not empty
 
 clean:
 	rm -f *.o $(TESTBINS)
+	rmdir bin
 
  
 
