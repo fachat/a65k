@@ -38,6 +38,9 @@ typedef struct hash_s hash_t;
 // The bucket number is computed by taking the modulo of the hash value to the base nbucket.
 // The approximate size is divided by nbuckets to determine the initial size of 
 // an allocated bucket.
+// The function key_from_entry() returns the key object from an entry, hash_from_key() then
+// computes the hash from it. equals_key() compares two key objects in the case there is 
+// a hash collision.
 hash_t *hash_init(int approx_size, int nbuckets, 
 		int (*hash_from_key)(const void *data), 
 		const void* (*key_from_entry)(const void *entry),
@@ -45,7 +48,6 @@ hash_t *hash_init(int approx_size, int nbuckets,
 
 // convenience - key is a string (char *), so we can use our internal functions for 
 // hash_from_key and equals_key
-// TODO: ignore case flag
 hash_t *hash_init_stringkey(int approx_size, int nbuckets, 
 		const char* (*key_from_entry)(const void *entry));
 // same but ignore case when computing hash and comparing keys
