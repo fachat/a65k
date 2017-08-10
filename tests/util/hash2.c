@@ -28,7 +28,7 @@ static entry_t data[] = {
 
 static bool_t equals_key(const void *data1, const void *data2) {
 
-	log_debug("equals for '%s' vs. '%s' is %d\n", data1, data2, strcmp((char*)data1, (char*)data2));
+	log_debug("equals for '%s' vs. '%s' is %d", data1, data2, strcmp((char*)data1, (char*)data2));
 
 	return (0 == strcmp((char*)data1, (char*)data2));
 }
@@ -59,7 +59,7 @@ static int shorthash_from_key(const void *data) {
 		hash = hash * 13 + (cdata[i] & 0x07);
 	}
 
-	log_debug("hash for '%s' is %d\n", cdata, hash);
+	log_debug("hash for '%s' is %d", cdata, hash);
 
 	return hash;
 }
@@ -69,9 +69,11 @@ void do_test(hash_t *hash);
 
 int main(int argc, char *argv[]) {
 
+        log_module_init(LEV_DEBUG);
+
 	hash_t *hash = NULL;
 
-	log_debug("%s", "hashmap:\n");
+	log_debug("%s", "hashmap:");
 
 	hash = hash_init(3, 3, shorthash_from_key, key_from_entry, equals_key);
 
@@ -93,33 +95,33 @@ void do_test(hash_t *hash) {
 
 
 	entry_t *data = (entry_t*) hash_get(hash, "4");
-	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data != NULL) { log_error("Retrieved value %s for '4', expected NULL\n", data->data);}
+	log_debug("retrieved '%s'",data == NULL ? "<null>" : data->data);
+	if (data != NULL) { log_error("Retrieved value %s for '4', expected NULL", data->data);}
 
 	data = (entry_t*) hash_get(hash, "e");
-	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data == NULL) { log_error("%s", "Retrieved NULL for 'e'\n");}
+	log_debug("retrieved '%s'",data == NULL ? "<null>" : data->data);
+	if (data == NULL) { log_error("%s", "Retrieved NULL for 'e'");}
 
 	entry_t new_e = { "e", "66" };
 
 	data = hash_put(hash, &new_e);
-	log_debug("removed '%s'\n",data == NULL ? "<null>" : data->data);
+	log_debug("removed '%s'",data == NULL ? "<null>" : data->data);
 
 	data = (entry_t*) hash_get(hash, "e");
-	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data == NULL) { log_error("%s","Retrieved NULL for 'e'\n");}
+	log_debug("retrieved '%s'",data == NULL ? "<null>" : data->data);
+	if (data == NULL) { log_error("%s","Retrieved NULL for 'e'");}
 	else if (strcmp("66", data->data)) {
-		log_error("Did not retrieve the right value, expected '%s', got '%s'\n", 
+		log_error("Did not retrieve the right value, expected '%s', got '%s'", 
 			"66", data->data);
 	}
 
 	data = (entry_t*) hash_get(hash, "i");
-	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
+	log_debug("retrieved '%s'",data == NULL ? "<null>" : data->data);
 	data = (entry_t*) hash_get(hash, "a");
-	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data == NULL) { log_error("%s","Retrieved NULL for 'a'\n");}
+	log_debug("retrieved '%s'",data == NULL ? "<null>" : data->data);
+	if (data == NULL) { log_error("%s","Retrieved NULL for 'a'");}
 	else if (strcmp("11", data->data)) {
-		log_error("Did not retrieve the right value, expected '%s', got '%s'\n", 
+		log_error("Did not retrieve the right value, expected '%s', got '%s'", 
 			"11", data->data);
 	}
 }
