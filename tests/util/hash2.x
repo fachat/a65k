@@ -1,0 +1,1 @@
+sizeof data=10

@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 
 	hash_t *hash = NULL;
 
-	log_debug("hashmap:\n");
+	log_debug("%s", "hashmap:\n");
 
 	hash = hash_init(3, 3, shorthash_from_key, key_from_entry, equals_key);
 
@@ -98,7 +98,7 @@ void do_test(hash_t *hash) {
 
 	data = (entry_t*) hash_get(hash, "e");
 	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data == NULL) { log_error("Retrieved NULL for 'e'\n");}
+	if (data == NULL) { log_error("%s", "Retrieved NULL for 'e'\n");}
 
 	entry_t new_e = { "e", "66" };
 
@@ -107,7 +107,7 @@ void do_test(hash_t *hash) {
 
 	data = (entry_t*) hash_get(hash, "e");
 	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data == NULL) { log_error("Retrieved NULL for 'e'\n");}
+	if (data == NULL) { log_error("%s","Retrieved NULL for 'e'\n");}
 	else if (strcmp("66", data->data)) {
 		log_error("Did not retrieve the right value, expected '%s', got '%s'\n", 
 			"66", data->data);
@@ -117,7 +117,7 @@ void do_test(hash_t *hash) {
 	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
 	data = (entry_t*) hash_get(hash, "a");
 	log_debug("retrieved '%s'\n",data == NULL ? "<null>" : data->data);
-	if (data == NULL) { log_error("Retrieved NULL for 'a'\n");}
+	if (data == NULL) { log_error("%s","Retrieved NULL for 'a'\n");}
 	else if (strcmp("11", data->data)) {
 		log_error("Did not retrieve the right value, expected '%s', got '%s'\n", 
 			"11", data->data);
