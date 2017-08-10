@@ -8,8 +8,16 @@ INCPATHS=. util base
 INCLUDES=$(addprefix -I$(SRCDIR)/,$(INCPATHS))
 DEPS=$(addprefix $(SRCDIR)/,$(addsuffix /*.h,$(INCPATHS)))
 
-#OBJFILES=log.o linked_list.o array_list.o mem.o hashmap.o tokenizer.o infiles.o block.o cpu.o context.o errors.o segment.o operation.o parser.o arith.o print.o
 OBJ=$(addprefix $(SRCDIR)/obj/,$(OBJFILES))
+
+# Enable verbose compile with make V=1
+ifeq ($(V),1)
+  V1=
+  V2=@\#
+else
+  V1=@
+  V2=@echo
+endif
 
 all: subdirs bin $(TESTBINS) 
 
@@ -17,19 +25,20 @@ bin:
 	mkdir bin
 
 subdirs:
-	if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do (cd $$i; make); done; fi
+	$(V1) if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do echo "dir: "$$i; (cd $$i; make); done; fi
 
 bin/%: %.c $(OBJ) $(DEPS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $< 
-	./$@ > $(notdir $@.x)
-	cmp `echo "$@" | sed -e 's%bin/%%g'`.out $(notdir $@.x)
-	rm $(notdir $@.x)
+	$(V2) $<
+	$(V1) $(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $< 
+	$(V1) ./$@ > $(notdir $@.x)
+	$(V1) cmp `echo "$@" | sed -e 's%bin/%%g'`.out $(notdir $@.x)
+	$(V1) rm $(notdir $@.x)
 
 %: bin/%
 	# not empty
 
 clean:
-	if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do (cd $$i; make clean); done; fi
+	$(V1) if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do echo "dir: "$$i; (cd $$i; make clean); done; fi
 	rm -f *.o $(TESTBINS)
 	rmdir bin
 
