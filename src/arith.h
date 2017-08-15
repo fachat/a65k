@@ -24,6 +24,7 @@
 #ifndef ARITH_H
 #define ARITH_H
 
+#include "inline_list.h"
 
 typedef signed long maxval_t;
 
@@ -33,40 +34,35 @@ It is linked together in a tree-structure like such:
 
 	(foo + 3) << 2, "foo", -1
 
-	node0(A_BRACKET, AB_RND)
-          |  |    |
-          |  |    +-(expr)->node3(OP_SHFTLEFT, A_VALUE)
+	node0(A_BRACKET, AB_RND, OP_SHIFTLEFT), 
+          |  |    
+          |  |    
 	  |  |
-	  |  +-(child)->node1(A_LABEL)
-	  |              |
-          |              +-(expr)->node2(OP_ADD, A_VALUE)
-	(next)
-	  v
-	node4(A_VALUE, AB_STRD)
-	  |
-	(next)
-	  v
-	node5(OP_NEG, A_VALUE, AV_DEC)
+	  |  +-(value)->node1(A_LABEL, OP_ADD),
+          |             nodw2(A_VALUE, AV_DEC, OP_NONE)
+          |
+        node3(A_VALUE, AV_DEC, OP_END)
 
+	node4(A_VALUE, AB_STRD, OP_END)
+	 
+	node5(MOD_NEG, A_VALUE, AV_DEC)
+
+Note: comma-separated values are only allowed in special
+pseudo-opcodes and are handled as lists of values there.
+
+The parser result also is a list. Only where brackets are
+involved, there are sublists.
 */
 
 typedef enum {
+	A_NONE,		// placeholder
 	A_BRACKET,	// open bracket
 	A_VALUE,	// value
+	A_STRING,	// string
 	A_LABEL,	// label reference
 } a_type;
 
 typedef enum {
-	// A_VALUE subtypes
-	AV_NONE,	// for unary operators when another op follows
-	AV_HEX,		// $89ab
-	AV_HEXC,	// 0x89ab
-	AV_BIN,		// %0101
-	AV_DEC,		// 1234
-	AV_OCT,		// &1271
-	AV_OCTC,	// 01271
-	AV_STRS,	// string single quote '\''
-	AV_STRD,	// string double quote '"'
 	// A_BRACKET subtypes (not necessarily all are used)
 	AB_RND,		// (
 	AB_ANG,		// <
@@ -74,6 +70,12 @@ typedef enum {
 	AB_CRV,		// {
 	AB_DBLRCT,	// [[
 } asub_type;
+
+typedef enum {
+	AMOD_NONE,	// none
+	AMOD_LOW,	// low byte selector (bits 0-7)
+	AMOD_HIGH,	// high byte selector (bits 8-15)
+} amod_type;
 
 /*
  The anode struct allows building the AST for an arithmetic expression.
@@ -83,10 +85,8 @@ typedef struct anode_s anode_t;
 struct anode_s {
 	// type, incl. brackets, arithm. ops etc
 	a_type		type;
-	// parent node
-	const anode_t	*parent;	
-	// next in case of comma
-	const anode_t	*next;
+	// modifier
+	amod_type	modifier;
 	// operation
 	op_t		op;
 	// value (depending on a_type)
@@ -96,27 +96,20 @@ struct anode_s {
 	    maxval_t 	value;
 	    littype_t	type;	// note: maybe LIT_NONE in case of stacked unaries
 	  } intv;
-	} val;
-
-	// child nodes in case of brackets
-	anode_t		*child;
-	// the actual expression if any
-	anode_t		*expr;
-	// actual value
-/*
-	union {
+	  // A_STRING
 	  struct {
-	    maxval_t 	value;
-	    littype_t	type;
-	  } intv;
-	  struct {
-	    const char 	*str;
-	    int		len;
-	    quotetype_t type;
+	    const char 	*value;
+	    int 	len;
+	    quotetype_t	type;
 	  } strv;
-	  // TODO: label etc
+	  // A_LABEL
+	  // TODO
+	  // A_BRACKET
+	  struct {
+	    ilist_t *value;
+	    asub_type	type;
+	  } subv;
 	} val;
-*/
 };
 
 
@@ -125,21 +118,17 @@ static type_t anode_memtype = {
 	sizeof(anode_t)
 };
 
-static inline anode_t *anode_init(a_type type, const anode_t *parent) {
+static inline anode_t *anode_init() {
 	anode_t *anode = mem_alloc(&anode_memtype);
 	
-	anode->type = type;
+	anode->type = A_NONE;
 	anode->op = OP_NONE;
-
-	anode->parent = parent;
-	anode->child = NULL;
-	anode->next = NULL;
-	anode->expr = NULL;
+	anode->modifier = AMOD_NONE;
 
 	return anode;
 }
 
-void arith_parse(tokenizer_t *tok, int allow_index, const anode_t **anode);
+void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **anode);
 
 #endif
 

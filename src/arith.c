@@ -26,12 +26,13 @@
 #include "arith.h"
 
 
-void arith_parse(tokenizer_t *tok, int allow_index, const anode_t **ext_anode) {
+void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 
-	anode_t *anode = NULL;
-	anode_t *new_anode = NULL;
+	ilist_t *list = inline_list_init(10, &anode_memtype, (void(*)(void*))anode_init);
 
-	// when true, last token was a value
+	anode_t *anode = ilist_add(list);
+
+	// when true, next token should be a value
 	int expect_val = 1;
 
 	op_t unary = OP_NONE;
@@ -44,6 +45,8 @@ void arith_parse(tokenizer_t *tok, int allow_index, const anode_t **ext_anode) {
 			case T_INIT:
 				break;
 			case T_BRACKET:
+				// TODO
+/*
 				// open up a bracket
 				new_anode = anode_init(A_BRACKET, anode);
 				// bracket type
@@ -56,22 +59,22 @@ void arith_parse(tokenizer_t *tok, int allow_index, const anode_t **ext_anode) {
 				anode = new_anode;
 				new_anode = NULL;
 				expect_val = 1;
+*/
 				break;
 			case T_NAME:
 				// TODO
+				break;
 			case T_LITERAL:
 				// new node for literal value
-				new_anode = anode_init(A_VALUE, anode);
-				new_anode->val.intv.type = tok->vals.literal.type;
-				new_anode->val.intv.value = tok->vals.literal.value;
-				new_anode->op = unary;
-				unary = OP_NONE;
-				anode = new_anode;
-				new_anode = NULL;
+				anode->type = A_VALUE;
+				anode->val.intv.type = tok->vals.literal.type;
+				anode->val.intv.value = tok->vals.literal.value;
 				expect_val = 0;
 				break;
 			case T_TOKEN:
 				// unary operator, like inversion, negative
+				// TODO
+/*
 				if (unary != OP_NONE) {
 					new_anode = anode_init(A_VALUE, anode);
 					new_anode->val.intv.type = LIT_NONE;
@@ -81,6 +84,7 @@ void arith_parse(tokenizer_t *tok, int allow_index, const anode_t **ext_anode) {
 					new_anode = NULL;
 				}
 				unary = tok->vals.op;
+*/
 				break;
 			case T_STRING:
 			case T_ERROR:
@@ -110,11 +114,7 @@ void arith_parse(tokenizer_t *tok, int allow_index, const anode_t **ext_anode) {
 	}
 	while (tokenizer_next(tok, allow_index));
 
-	const anode_t *c_anode = anode;
-	while (c_anode && c_anode->parent) {
-		c_anode = c_anode->parent;
-	}
-	*ext_anode = c_anode;
+	*ext_anode = list;
 }
 
 
