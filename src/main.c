@@ -37,6 +37,7 @@
 #include "operation.h"
 #include "cmdline.h"
 #include "print.h"
+#include "tokenizer.h"
 
 
 /**
@@ -102,6 +103,8 @@ static void main_init(const char *prgname) {
 	segment_module_init();
 	// parser
 	parser_module_init();
+	// tokenizer
+	tokenizer_module_init();
 
 }
 

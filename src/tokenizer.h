@@ -61,7 +61,6 @@ static inline bool is_string_delim(char c) {
 } 
 
 
-
 typedef enum {
 	OP_NONE			= 0,
 	OP_EXCL 		= '!',	
@@ -119,6 +118,14 @@ typedef enum {
 	OP_BIND			= 152, 	// ",b"
 } op_t;
 
+typedef struct {
+	op_t		type;
+	char		is_modifier;
+	char		is_unary;
+	char		is_binary;
+} op_details_t;
+
+
 static inline bool is_stmt_delim(op_t t) {
 	return (t == OP_COLON);
 }
@@ -162,8 +169,11 @@ typedef struct {
 	} vals;
 } tokenizer_t;
 
+// init the tokenizer
+void tokenizer_module_init(void);
+
 // initialize a tokenizer 
-tokenizer_t *tokenizer_init(const char *line);
+tokenizer_t *tokenizer_create(const char *line);
 
 // set to next token; return true when there is a valid token
 // if allow_index is true, comma is folded into ",x" etc addressig mode tokens

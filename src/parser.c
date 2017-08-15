@@ -107,7 +107,7 @@ void parser_push(const context_t *ctx, const line_t *line) {
 
 	// tokenize the line
 	pstate_t state = P_INIT;
-	tokenizer_t *tok = tokenizer_init(line->line);
+	tokenizer_t *tok = tokenizer_create(line->line);
 	while (tokenizer_next(tok, allow_index)) {
 		switch(state) {
 		case P_OP:

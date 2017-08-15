@@ -23,6 +23,7 @@
 
 #include <ctype.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "types.h"
 #include "mem.h"
@@ -35,8 +36,76 @@ static type_t tokenizer_memtype = {
 	sizeof(tokenizer_t)
 };
 
+static op_details_t *sorted[256];
+
+static op_details_t ops[] = {
+        { 	OP_EXCL,		1,	0,	0	},
+        {	OP_AT,			1,	0,	0	},
+        {	OP_XQUOTE,		0,	0,	0	},
+        {	OP_SQUOTE,		0,	0,	0	},
+        {	OP_OPEN,		0,	0,	0	},
+        {	OP_CLOSE,		0,	0,	0	},
+        {	OP_HASH, 		0,	0,	0	},
+        {	OP_BOPEN,		0,	0,	0	},
+        {	OP_BBOPEN,		0,	0,	0	},
+        {	OP_BCLOSE,		0,	0,	0	},
+        {	OP_BBCLOSE,		0,	0,	0	}, 
+        {	OP_STAR,		0,	0,	0	},
+        {	OP_COMMA,		0,	0,	0	},
+        {	OP_PLUS,		0,	0,	0	},
+        {	OP_MINUS,		0,	1,	1	},
+        {	OP_DIV,			0,	0,	1	},
+        {	OP_COLON,		0,	0,	0	},
+        {	OP_SEMICOLON,		0,	0,	0	},
+        {	OP_DOT,			0,	0,	0	},
+        {	OP_LARGER,		1,	0,	1	},
+        {	OP_LARGEROREQUAL, 	1,	0,	1	},
+        {	OP_LESS,		1,	0,	1	},
+        {	OP_LESSOREQUAL,		0,	0,	1	},
+        {	OP_ASSIGN,		0,	0,	0	}, 
+        {	OP_ASSIGNADD,		0,	0,	0	},
+        {	OP_ASSIGNSUB,		0,	0,	0	},
+        {	OP_ASSIGNMULT,		0,	0,	0	},
+        {	OP_ASSIGNDIV,		0,	0,	0	},
+        {	OP_ASSIGNMOD,		0,	0,	0	},
+        {	OP_ASSIGNBITOR,		0,	0,	0	},
+        {	OP_ASSIGNBITAND,	0,	0,	0	},
+        {	OP_ASSIGNBITXOR,	0,	0,	0	},
+        {	OP_ASSIGNSHIFTLEFT,	0,	0,	0	},
+        {	OP_ASSIGNSHIFTRIGHT,	0,	0,	0	},
+        {	OP_BITXOR,		1,	0,	1	},
+        {	OP_BITOR,		0,	0,	1	},
+        {	OP_BITAND,		0,	0,	1	},
+        {	OP_EQUAL,		0,	0,	1	},
+        {	OP_NOTEQUAL,		0,	0,	1	},
+        {	OP_SHIFTLEFT,		0,	0,	1	},
+        {	OP_SHIFTRIGHT,		0,	0,	1	},
+        {	OP_LOGICAND,		0,	0,	1	},
+        {	OP_LOGICOR,		0,	0,	1	},
+        {	OP_LOGICXOR,		0,	0,	1	},
+        {	OP_BITINV,		1,	0,	1	},
+        {	OP_MOD,			1,	0,	1	},
+        {	OP_DOUBLESLASH,		0,	0,	0	},
+        {	OP_XIND,		0,	0,	0	},
+        {	OP_YIND,		0,	0,	0	},
+        {	OP_ZIND,		0,	0,	0	},
+        {	OP_SIND,		0,	0,	0	},
+        {	OP_BIND,		0,	0,	0	}
+};
+
+void tokenizer_module_init(void) {
+
+	memset(sorted, 0, 256 * sizeof(op_details_t*));
+
+	for (unsigned int i = 0; i < sizeof(ops); i++) {
+		op_details_t *p = &ops[i];	
+
+		sorted[p->type] = p;
+	}
+}
+
 // initialize a tokenizer 
-tokenizer_t *tokenizer_init(const char *line) {
+tokenizer_t *tokenizer_create(const char *line) {
 	
 	tokenizer_t *tok = mem_alloc(&tokenizer_memtype);
 
