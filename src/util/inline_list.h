@@ -57,9 +57,9 @@ static inline void* ilist_add(ilist_t *ilist) {
 	return (void*) &ptr[ilist->type->sizeoftype * (ilist->len-1)];
 }
 
-static inline void* ilist_get(ilist_t *ilist, int itemno) {
+static inline void* ilist_get(const ilist_t *ilist, int itemno) {
 
-	if (ilist->len >= itemno) {
+	if (ilist->len <= itemno) {
 		return NULL;
 	}
 	char *ptr = (char*) ilist->values;

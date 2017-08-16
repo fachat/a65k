@@ -72,8 +72,17 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 				expect_val = 0;
 				break;
 			case T_TOKEN:
+				// modifier?
+				if (tokenizer_op_details(tok->vals.op)->is_modifier) {
+					if (anode->modifier != AMOD_NONE) {
+						// TODO log error
+					} else {
+						// conveniently mapped
+						anode->modifier = tok->vals.op;
+					}
+					break;
+				}
 				// unary operator, like inversion, negative
-				// TODO
 /*
 				if (unary != OP_NONE) {
 					new_anode = anode_init(A_VALUE, anode);
@@ -88,7 +97,7 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 				break;
 			case T_STRING:
 			case T_ERROR:
-				// syntax error
+				// TODO syntax error
 			case T_END:
 				break;
 			}		

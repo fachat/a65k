@@ -25,8 +25,9 @@
 
 #include "parser.h"
 
-void print_debug_stmt(statement_t *stmt);
+void print_debug_stmt(const statement_t *stmt);
 
+void print_debug_arith(const ilist_t *anodes);
 
 #endif
 

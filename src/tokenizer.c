@@ -97,12 +97,20 @@ void tokenizer_module_init(void) {
 
 	memset(sorted, 0, 256 * sizeof(op_details_t*));
 
-	for (unsigned int i = 0; i < sizeof(ops); i++) {
+	unsigned int n = sizeof(ops) / sizeof(op_details_t);
+
+	for (unsigned int i = 0; i < n; i++) {
 		op_details_t *p = &ops[i];	
 
 		sorted[p->type] = p;
 	}
 }
+
+op_details_t *tokenizer_op_details(op_t op) {
+	return sorted[op];
+}
+
+
 
 // initialize a tokenizer 
 tokenizer_t *tokenizer_create(const char *line) {

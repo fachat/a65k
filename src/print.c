@@ -20,6 +20,7 @@
 ****************************************************************************/
 
 #include <stdarg.h>
+#include <ctype.h>
 
 #include "print.h"
 
@@ -41,7 +42,7 @@ static void do_print(const char *pattern, ...) {
 }
 
 
-void print_debug_stmt(statement_t *stmt) {
+void print_debug_stmt(const statement_t *stmt) {
 
 	do_print("B:%p lab:%p op:%p par:%p", 
 		(void*)stmt, (void*)stmt->label, (void*)stmt->op, (void*)stmt->param);
@@ -59,13 +60,27 @@ void print_debug_stmt(statement_t *stmt) {
 	}
 
 	if (stmt->param != NULL) {
-		const anode_t *a = stmt->param;
-		do_print("A:%p type:%d op:%d val:$%lx/%ld", 
-			(void*)a, a->type, a->op, a->val.intv.value, a->val.intv.value);
+		const ilist_t *a = stmt->param;
+		// TODO
+		do_print("A:%p len:%ld", 
+			(void*)a, a->len);
 	}
 	
 }
 
+static void print_debug_arith_int(const ilist_t *anodes, const char *indent) {
+	do_print("%sA:len=%d", indent, anodes->len);
+	for (int i = 0; i < anodes->len; i++) {
+		const anode_t *n = ilist_get(anodes, i);
+		do_print("%stype=%c, modifier=%d (%c), op=%d", indent, n->type, n->modifier, isprint(n->modifier)?n->modifier:' ', n->op);
+	}
+}
+
+/* debug output for the parsed arithmetic value */
+void print_debug_arith(const ilist_t *anodes) {
+
+	print_debug_arith_int(anodes, "");
+}
 
 //void print_canon_stmt(statement_t *stmt) {
 //}

@@ -181,6 +181,8 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index);
 
 void tokenizer_free(tokenizer_t *tok);
 
+op_details_t *tokenizer_op_details(op_t op);
+
 #endif
 
 

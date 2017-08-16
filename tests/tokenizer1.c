@@ -42,7 +42,7 @@ void do_test(const char *teststr) {
 
 	printf("tokenizing line: %s\n", teststr);
 
-	tokenizer_t *tok = tokenizer_init(teststr);
+	tokenizer_t *tok = tokenizer_create(teststr);
 
 	while (tokenizer_next(tok, false)) {
 

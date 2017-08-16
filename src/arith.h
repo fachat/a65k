@@ -54,12 +54,13 @@ The parser result also is a list. Only where brackets are
 involved, there are sublists.
 */
 
+// we might as well make our constants printable..
 typedef enum {
-	A_NONE,		// placeholder
-	A_BRACKET,	// open bracket
-	A_VALUE,	// value
-	A_STRING,	// string
-	A_LABEL,	// label reference
+	A_NONE		='-',	// placeholder
+	A_BRACKET	='b',	// open bracket
+	A_VALUE		='v',	// value
+	A_STRING	='s',	// string
+	A_LABEL		='l',	// label reference
 } a_type;
 
 typedef enum {
@@ -72,9 +73,9 @@ typedef enum {
 } asub_type;
 
 typedef enum {
-	AMOD_NONE,	// none
-	AMOD_LOW,	// low byte selector (bits 0-7)
-	AMOD_HIGH,	// high byte selector (bits 8-15)
+	AMOD_NONE 	=0,		// none
+	AMOD_LOW	=OP_LESS,	// low byte selector (bits 0-7)
+	AMOD_HIGH	=OP_LARGER,	// high byte selector (bits 8-15)
 } amod_type;
 
 /*

@@ -43,7 +43,7 @@ typedef struct {
         // optional
         const label_t           *label;
         const operation_t       *op;
-        const anode_t           *param;
+        const ilist_t           *param;
 } statement_t;
 
 
