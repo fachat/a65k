@@ -57,6 +57,15 @@ static inline void* ilist_add(ilist_t *ilist) {
 	return (void*) &ptr[ilist->type->sizeoftype * (ilist->len-1)];
 }
 
+static inline void ilist_pop(ilist_t *ilist) {
+
+	if (ilist->len > 0) {
+		ilist->len --;
+	} else {
+		// TODO: Error
+	}
+}
+
 static inline void* ilist_get(const ilist_t *ilist, int itemno) {
 
 	if (ilist->len <= itemno) {

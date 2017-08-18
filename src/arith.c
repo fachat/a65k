@@ -45,21 +45,15 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 			case T_INIT:
 				break;
 			case T_BRACKET:
-				// TODO
-/*
-				// open up a bracket
-				new_anode = anode_init(A_BRACKET, anode);
-				// bracket type
-				new_anode->op = tok->vals.op;
-				new_anode->op = unary;
-				if (anode != NULL) {
-					anode->child = new_anode;
+				anode->type = A_BRACKET;
+				anode->val.subv.type = tok->vals.op;
+				if (tokenizer_next(tok, allow_index)) {
+					// NOTE cast necessary due to stupid standards nitpicking by gcc 
+					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
+					arith_parse(tok, 0, (const ilist_t**) &anode->val.subv.value);
 				}
-				unary = OP_NONE;
-				anode = new_anode;
-				new_anode = NULL;
-				expect_val = 1;
-*/
+				expect_val = 0;
+				anode = ilist_add(list);
 				break;
 			case T_NAME:
 				// TODO
@@ -70,6 +64,7 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 				anode->val.intv.type = tok->vals.literal.type;
 				anode->val.intv.value = tok->vals.literal.value;
 				expect_val = 0;
+				anode = ilist_add(list);
 				break;
 			case T_TOKEN:
 				// modifier?
@@ -103,9 +98,11 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 			}		
 		} else {
 			switch(tok->type) {
-			case T_INIT:
 			case T_BRACKET:
 				// closing bracket
+				goto exit;
+				break;
+			case T_INIT:
 			case T_NAME:
 			case T_TOKEN:
 				anode->op = tok->vals.op;
@@ -122,7 +119,8 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 		}	
 	}
 	while (tokenizer_next(tok, allow_index));
-
+exit:
+	ilist_pop(list);
 	*ext_anode = list;
 }
 

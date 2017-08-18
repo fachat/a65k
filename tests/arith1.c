@@ -7,17 +7,34 @@
 #include "print.h"
 
 
-int main(int argc, char *argv[]) {
+void print(const char *val) {
 
-	tokenizer_module_init();
+	do_print("---> %s", val);
 
-	tokenizer_t *tok = tokenizer_create("<1234");
+	tokenizer_t *tok = tokenizer_create(val);
 
 	const ilist_t *out = NULL;
 
 	arith_parse(tok, 0, &out);
 
 	print_debug_arith(out);
+	
+	do_print("   > next is type %d, %s", tok->type, tok->line + tok->ptr);
+}
+
+int main(int argc, char *argv[]) {
+
+	tokenizer_module_init();
+
+	print("<1234");
+	print("<$1234");
+	print("<$x234");
+	print("0x234");
+
+	print("123+234");
+	print("123+34*44");
+
+	print("(123+34)*44");
 }
 
 

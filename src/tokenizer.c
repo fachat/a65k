@@ -176,10 +176,10 @@ static inline bool_t parse_decimal(tokenizer_t *tok, int ptr) {
 	return parse_base(tok, ptr, 10);
 }
 
-static inline bool_t parse_octal(tokenizer_t *tok, int ptr) {
+static inline bool_t parse_octal(tokenizer_t *tok, int ptr, int is_c) {
 
 	tok->type = T_LITERAL;
-	tok->vals.literal.type = LIT_OCTAL;
+	tok->vals.literal.type = is_c ? LIT_OCTAL_C : LIT_OCTAL;
 	return parse_base(tok, ptr, 8);
 }
 
@@ -190,10 +190,10 @@ static inline bool_t parse_binary(tokenizer_t *tok, int ptr) {
 	return parse_base(tok, ptr, 2);
 }
 
-static inline bool_t parse_hex(tokenizer_t *tok, int ptr) {
+static inline bool_t parse_hex(tokenizer_t *tok, int ptr, int is_c) {
 
 	tok->type = T_LITERAL;
-	tok->vals.literal.type = LIT_HEX;
+	tok->vals.literal.type = is_c ? LIT_HEX_C : LIT_HEX;
 	return parse_base(tok, ptr, 16);
 }
 
@@ -511,13 +511,13 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 		// handle octal (starting with '0'), hex (starting with '0x'), dec
 		if (c == '0') {
 			if (line[ptr+1] == 'x' || line[ptr+1] == 'X') {
-				// hex
+				// hex, C-style
 				ptr += 2;
 				tok->ptr = ptr;
-				return parse_hex(tok, ptr);
+				return parse_hex(tok, ptr, 1);
 			} else {
 				// octal
-				return parse_octal(tok, ptr);
+				return parse_octal(tok, ptr, 1);
 			}
 		} else {
 			// dec
@@ -534,13 +534,13 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 		// hex
 		ptr++;
 		tok->ptr = ptr;
-		return parse_hex(tok, ptr);
+		return parse_hex(tok, ptr, 0);
 	} else
 	if ((!can_have_operator) && (c == '&')) {
 		// octal
 		ptr++;
 		tok->ptr = ptr;
-		return parse_octal(tok, ptr);
+		return parse_octal(tok, ptr, 0);
 	} else
 	if (is_string_delim(c)) {
 		// string literal

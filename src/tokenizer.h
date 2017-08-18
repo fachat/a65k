@@ -41,13 +41,13 @@ typedef enum {
 
 // literal type
 typedef enum {
-	LIT_NONE,
-	LIT_DECIMAL,			// a decimal number, like 1 2 3
-	LIT_OCTAL,			// an octal number, like &127 
-	LIT_BINARY,			// a binary number, like %110101
-	LIT_HEX,			// a hex number, like $12dA 
-	LIT_OCTAL_C,			// C-type an octal number, like 0127
-	LIT_HEX_C			// C-type hex number, like 0x12Ad
+	LIT_NONE		=' ',
+	LIT_DECIMAL		='d',	// a decimal number, like 1 2 3
+	LIT_OCTAL		='o',	// an octal number, like &127 
+	LIT_BINARY		='b',	// a binary number, like %110101
+	LIT_HEX			='h',	// a hex number, like $12dA 
+	LIT_OCTAL_C		='O',	// C-type an octal number, like 0127
+	LIT_HEX_C		='H'	// C-type hex number, like 0x12Ad
 } littype_t;
 
 // quote type for strings

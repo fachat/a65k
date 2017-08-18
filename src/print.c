@@ -21,12 +21,13 @@
 
 #include <stdarg.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "print.h"
 
 #define	BUF_LEN		2048
 
-static void do_print(const char *pattern, ...) {
+void do_print(const char *pattern, ...) {
 	va_list ap;
 	va_start(ap, pattern);
 
@@ -68,18 +69,38 @@ void print_debug_stmt(const statement_t *stmt) {
 	
 }
 
-static void print_debug_arith_int(const ilist_t *anodes, const char *indent) {
+static inline char prop(int o) {  return isprint(o) ? o : ' '; }
+static inline int max(int a, int b) { return (a > b) ? a : b; }
+static const char* spaces = "                                                                         ";
+
+static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
+	const char* indent = spaces + max(0, strlen(spaces) - indlen);
+
 	do_print("%sA:len=%d", indent, anodes->len);
 	for (int i = 0; i < anodes->len; i++) {
 		const anode_t *n = ilist_get(anodes, i);
-		do_print("%stype=%c, modifier=%d (%c), op=%d", indent, n->type, n->modifier, isprint(n->modifier)?n->modifier:' ', n->op);
+		switch(n->type) {
+		case A_BRACKET:
+			do_print("  %stype=%c, modifier=%d(%c), op=%d(%c) %c", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type);
+			print_debug_arith_int(n->val.subv.value, indlen + 2);
+			break;
+		case A_VALUE:
+			do_print("  %stype=%c, modifier=%d (%c), op=%d(%c), val=(%c)%d/%x", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op),
+				n->val.intv.type, n->val.intv.value, n->val.intv.value);
+			break;
+		default:
+			do_print("  UNHANDLED: %stype=%c, modifier=%d (%c), op=%d(%c)", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
+		}
 	}
 }
 
 /* debug output for the parsed arithmetic value */
 void print_debug_arith(const ilist_t *anodes) {
 
-	print_debug_arith_int(anodes, "");
+	print_debug_arith_int(anodes, 2);
 }
 
 //void print_canon_stmt(statement_t *stmt) {
