@@ -19,6 +19,15 @@
 
 ****************************************************************************/
 
+/*
+   A list that stores the entries in an array.
+   (this is different from arraylist, that only stores pointers to the entry)
+
+   Because this requires that a pointer to the memory for the object must
+   be returned by the list, not added to it, the API changes and
+   inline_list does not implement the general list interface.
+*/
+
 
 #ifndef INLINE_LIST_H
 #define INLINE_LIST_H
