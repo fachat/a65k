@@ -22,10 +22,6 @@
 /*
  * a hashmap is used for example to quickly find labels
  *
- * Note: there is room for improvement. The actual hash of an entry is
- * not stored, so it needs to be computed on every put/get.
- * But for this to change, we need to remove the use of array_list
- * and hold our own arrays of [{ hash, &entry }]
  */
 
 #include <string.h>
