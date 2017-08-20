@@ -29,14 +29,14 @@
 
 // token type
 typedef enum {
-	T_INIT,				// initial state
-	T_BRACKET,			// any type of bracket
-	T_NAME,				// a name, like label1 do_this
-	T_TOKEN,			// a token, like ( ) . ++ == <> & 
-	T_STRING,			// string
-	T_LITERAL,			// a numerical literal value (decimal, hex, ...)
-	T_ERROR,			// an error has happened
-	T_END,				// end of string reached
+	T_INIT		= 'i',	// initial state
+	T_BRACKET	= 'b',	// any type of bracket
+	T_NAME		= 'n',	// a name, like label1 do_this
+	T_TOKEN		= 't',	// a token, like ( ) . ++ == <> & 
+	T_STRING	= 's',	// string
+	T_LITERAL	= 'l',	// a numerical literal value (decimal, hex, ...)
+	T_ERROR		= 'e',	// an error has happened
+	T_END		= 'x',	// end of string reached
 } tok_t;
 
 // literal type
@@ -120,9 +120,12 @@ typedef enum {
 
 typedef struct {
 	op_t		type;
+	const char	*print;
 	char		is_modifier;
 	char		is_unary;
 	char		is_binary;
+	char		is_index;	// like ",x"
+	char		is_assign;
 } op_details_t;
 
 

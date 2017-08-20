@@ -7,15 +7,15 @@
 #include "print.h"
 
 
-void print(const char *val) {
+void print(const char *val, int allow_index) {
 
-	do_print("---> %s", val);
+	do_print("---> %s%s", val, allow_index ? " (with index)":"");
 
 	tokenizer_t *tok = tokenizer_create(val);
 
 	const ilist_t *out = NULL;
 
-	arith_parse(tok, 0, &out);
+	arith_parse(tok, allow_index, &out);
 
 	print_debug_arith(out);
 	
@@ -26,15 +26,13 @@ int main(int argc, char *argv[]) {
 
 	tokenizer_module_init();
 
-	print("<1234");
-	print("<$1234");
-	print("<$x234");
-	print("0x234");
-
-	print("123+234");
-	print("123+34*44");
-
-	print("(123+34)*44");
+	print("123,x", 1);
+	print("$123,X", 0);
+	print("$123,X", 1);
+	print("($123),y", 0);
+	print("($123),y", 1);
+	print("($123,X)", 0);
+	print("($123,X)", 1);
 
 }
 

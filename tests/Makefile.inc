@@ -14,9 +14,11 @@ OBJ=$(addprefix $(SRCDIR)/obj/,$(OBJFILES))
 ifeq ($(V),1)
   V1=
   V2=@\#
+  DIFF=@cmp
 else
   V1=@
   V2=@echo
+  DIFF=@diff -u
 endif
 
 all: subdirs bin $(TESTBINS) 
@@ -31,11 +33,14 @@ bin/%: %.c $(OBJ) $(DEPS)
 	$(V2) $<
 	$(V1) $(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $< 
 	$(V1) ./$@ > $(notdir $@.x)
-	$(V1) cmp `echo "$@" | sed -e 's%bin/%%g'`.out $(notdir $@.x)
+	$(DIFF) `echo "$@" | sed -e 's%bin/%%g'`.out $(notdir $@.x)
 	$(V1) rm $(notdir $@.x)
 
 %: bin/%
-	# not empty
+	$(V1) ./bin/$@ > $@.x
+	$(V2) $(DIFF) $@.out $@.x
+	$(DIFF) $@.out $@.x
+	$(V1) rm $(notdir $@.x)
 
 clean:
 	$(V1) if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do echo "dir: "$$i; (cd $$i; make clean); done; fi

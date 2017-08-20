@@ -6,22 +6,13 @@
 
 
 const char *teststrings[] = {
-	"label1 lda #$10",
-	"label2: lda <xyz ; comment",
-	"dec 125",
-	"dec 125,",
-	"dec 125;",
-	"dec 0128",
-	"dec 0128,",
-	"dec 0128;",
-	"inc 0x12df",
-	"inc $1234f",
-	"inc $1234f,",
-	"inc $1234f;",
-	".byt 'xsd&'",
-	".byt 'xsd&",
-	".asc \"dsdd'",
-	".asc \"dsA€\"",
+	"label2: lda <xyz,x ; comment",
+	"dec 0125,y",
+	"dec (0127),z",
+	"inc (0x12df,x)",
+	"inc $1234f,y",
+	"($123),y",
+	"($123,X)",
 	NULL
 };
 
@@ -51,12 +42,12 @@ void do_test(const char *teststr) {
 
 	tokenizer_t *tok = tokenizer_create(teststr);
 
-	while (tokenizer_next(tok, false)) {
+	while (tokenizer_next(tok, true)) {
 
 		printf("TOK -> type=%c, len=%d, ptr=%s\n", tok->type, tok->len, tok->line+tok->ptr);
 	}
 	
-	printf("END -> type=%c, rest->%s\n", tok->type, tok->line+tok->ptr);
+        printf("END -> type=%c, rest->%s\n", tok->type, tok->line+tok->ptr);
 
 	tokenizer_free(tok);
 }

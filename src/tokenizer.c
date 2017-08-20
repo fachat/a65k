@@ -39,58 +39,58 @@ static type_t tokenizer_memtype = {
 static op_details_t *sorted[256];
 
 static op_details_t ops[] = {
-        { 	OP_EXCL,		1,	0,	0	},
-        {	OP_AT,			1,	0,	0	},
-        {	OP_XQUOTE,		0,	0,	0	},
-        {	OP_SQUOTE,		0,	0,	0	},
-        {	OP_OPEN,		0,	0,	0	},
-        {	OP_CLOSE,		0,	0,	0	},
-        {	OP_HASH, 		0,	0,	0	},
-        {	OP_BOPEN,		0,	0,	0	},
-        {	OP_BBOPEN,		0,	0,	0	},
-        {	OP_BCLOSE,		0,	0,	0	},
-        {	OP_BBCLOSE,		0,	0,	0	}, 
-        {	OP_STAR,		0,	0,	0	},
-        {	OP_COMMA,		0,	0,	0	},
-        {	OP_PLUS,		0,	0,	0	},
-        {	OP_MINUS,		0,	1,	1	},
-        {	OP_DIV,			0,	0,	1	},
-        {	OP_COLON,		0,	0,	0	},
-        {	OP_SEMICOLON,		0,	0,	0	},
-        {	OP_DOT,			0,	0,	0	},
-        {	OP_LARGER,		1,	0,	1	},
-        {	OP_LARGEROREQUAL, 	1,	0,	1	},
-        {	OP_LESS,		1,	0,	1	},
-        {	OP_LESSOREQUAL,		0,	0,	1	},
-        {	OP_ASSIGN,		0,	0,	0	}, 
-        {	OP_ASSIGNADD,		0,	0,	0	},
-        {	OP_ASSIGNSUB,		0,	0,	0	},
-        {	OP_ASSIGNMULT,		0,	0,	0	},
-        {	OP_ASSIGNDIV,		0,	0,	0	},
-        {	OP_ASSIGNMOD,		0,	0,	0	},
-        {	OP_ASSIGNBITOR,		0,	0,	0	},
-        {	OP_ASSIGNBITAND,	0,	0,	0	},
-        {	OP_ASSIGNBITXOR,	0,	0,	0	},
-        {	OP_ASSIGNSHIFTLEFT,	0,	0,	0	},
-        {	OP_ASSIGNSHIFTRIGHT,	0,	0,	0	},
-        {	OP_BITXOR,		1,	0,	1	},
-        {	OP_BITOR,		0,	0,	1	},
-        {	OP_BITAND,		0,	0,	1	},
-        {	OP_EQUAL,		0,	0,	1	},
-        {	OP_NOTEQUAL,		0,	0,	1	},
-        {	OP_SHIFTLEFT,		0,	0,	1	},
-        {	OP_SHIFTRIGHT,		0,	0,	1	},
-        {	OP_LOGICAND,		0,	0,	1	},
-        {	OP_LOGICOR,		0,	0,	1	},
-        {	OP_LOGICXOR,		0,	0,	1	},
-        {	OP_BITINV,		1,	0,	1	},
-        {	OP_MOD,			1,	0,	1	},
-        {	OP_DOUBLESLASH,		0,	0,	0	},
-        {	OP_XIND,		0,	0,	0	},
-        {	OP_YIND,		0,	0,	0	},
-        {	OP_ZIND,		0,	0,	0	},
-        {	OP_SIND,		0,	0,	0	},
-        {	OP_BIND,		0,	0,	0	}
+        { 	OP_EXCL,		"!",	1,	0,	0,	0,	0	},
+        {	OP_AT,			"@",	1,	0,	0,	0,	0	},
+        {	OP_XQUOTE,		"`",	0,	0,	0,	0,	0	},
+        {	OP_SQUOTE,		"'",	0,	0,	0,	0,	0	},
+        {	OP_OPEN,		"(",	0,	0,	0,	0,	0	},
+        {	OP_CLOSE,		")",	0,	0,	0,	0,	0	},
+        {	OP_HASH, 		"#",	0,	0,	0,	0,	0	},
+        {	OP_BOPEN,		"[",	0,	0,	0,	0,	0	},
+        {	OP_BBOPEN,		"[[",	0,	0,	0,	0,	0	},
+        {	OP_BCLOSE,		"]",	0,	0,	0,	0,	0	},
+        {	OP_BBCLOSE,		"]]",	0,	0,	0,	0,	0	}, 
+        {	OP_STAR,		"*",	0,	0,	1,	0,	0	},
+        {	OP_COMMA,		",",	0,	0,	0,	0,	0	},
+        {	OP_PLUS,		"+",	0,	0,	1,	0,	0	},
+        {	OP_MINUS,		"-",	0,	1,	1,	0,	0	},
+        {	OP_DIV,			"/",	0,	0,	1,	0,	0	},
+        {	OP_COLON,		":",	0,	0,	0,	0,	0	},
+        {	OP_SEMICOLON,		";",	0,	0,	0,	0,	0	},
+        {	OP_DOT,			".",	0,	0,	0,	0,	0	},
+        {	OP_LARGER,		">",	1,	0,	1,	0,	0	},
+        {	OP_LARGEROREQUAL, 	">=",	1,	0,	1,	0,	0	},
+        {	OP_LESS,		"<",	1,	0,	1,	0,	0	},
+        {	OP_LESSOREQUAL,		"<=",	0,	0,	1,	0,	0	},
+        {	OP_ASSIGN,		"=",	0,	0,	0,	0,	1	}, 
+        {	OP_ASSIGNADD,		"+=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNSUB,		"-=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNMULT,		"*=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNDIV,		"/=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNMOD,		"%=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNBITOR,		"|=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNBITAND,	"&=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNBITXOR,	"^=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNSHIFTLEFT,	"<<=",	0,	0,	0,	0,	1	},
+        {	OP_ASSIGNSHIFTRIGHT,	">>=",	0,	0,	0,	0,	1	},
+        {	OP_BITXOR,		"^",	1,	0,	1,	0,	0	},
+        {	OP_BITOR,		"|",	0,	0,	1,	0,	0	},
+        {	OP_BITAND,		"&",	0,	0,	1,	0,	0	},
+        {	OP_EQUAL,		"==",	0,	0,	1,	0,	0	},
+        {	OP_NOTEQUAL,		"!=",	0,	0,	1,	0,	0	},
+        {	OP_SHIFTLEFT,		"<<",	0,	0,	1,	0,	0	},
+        {	OP_SHIFTRIGHT,		">>",	0,	0,	1,	0,	0	},
+        {	OP_LOGICAND,		"&&",	0,	0,	1,	0,	0	},
+        {	OP_LOGICOR,		"||",	0,	0,	1,	0,	0	},
+        {	OP_LOGICXOR,		"^^",	0,	0,	1,	0,	0	},
+        {	OP_BITINV,		"~",	1,	0,	1,	0,	0	},
+        {	OP_MOD,			"%",	1,	0,	1,	0,	0	},
+        {	OP_DOUBLESLASH,		"//",	0,	0,	0,	0,	0	},
+        {	OP_XIND,		",x",	0,	0,	0,	1,	0	},
+        {	OP_YIND,		",y",	0,	0,	0,	1,	0	},
+        {	OP_ZIND,		",z",	0,	0,	0,	1,	0	},
+        {	OP_SIND,		",s",	0,	0,	0,	1,	0	},
+        {	OP_BIND,		",b",	0,	0,	0,	1,	0	}
 };
 
 void tokenizer_module_init(void) {
@@ -127,34 +127,28 @@ tokenizer_t *tokenizer_create(const char *line) {
 
 static bool_t parse_base(tokenizer_t *tok, int ptr, int base) {
 
-	int limit = base - 10;
 	const char *line = tok->line;
 	signed char c = 0;
 
 	long value = 0;
 	while (line[ptr] != 0) {
-		if (isdigit(c = tok->line[ptr])) {
-			c &= 0x0f;
-			if (c > (base-1)) {
-				// TODO: continue till end of number, so simple typo still allows detect further errors
-				tok->vals.errno = E_TOK_DIGITRANGE;
-				tok->type = T_ERROR;
-				return false;
-			}
-			value = value * base + c;
-		} else 
-		if (base > 10) {
-			c = tolower(c) - 'a';
-		
-			// c is char, which is unsigned, so no need to compare for <0
-			if (c < limit) {
-				value = value * base + c;
-			} else {
-				break;
-			}
-		} else {
+		c = tok->line[ptr];
+		if (!isalnum(c)) {
+			// other tokens like ",", or operators
 			break;
 		}
+		if (isdigit(c)) {
+			c &= 0x0f;
+		} else {
+			c = tolower(c) - 'a' + 10;
+		}
+		if (c > (base-1)) {
+			// TODO: continue till end of number, so simple typo still allows detect further errors
+			tok->vals.errno = E_TOK_DIGITRANGE;
+			tok->type = T_ERROR;
+			return false;
+		}
+		value = value * base + c;
 		ptr++;
 	}
 	tok->vals.literal.value = value;
@@ -277,8 +271,30 @@ static inline bool_t parse_token(tokenizer_t *tok, int ptr, int can_have_operato
 		tok->type = T_BRACKET;
 		return true;
 	case ',':
-		// TODO: check OP_*IND
-		// using allow_index
+		if (allow_index) {
+			// check OP_*IND
+			char c = tolower(line[ptr+1]);
+			if (c == 'x') {
+				tok->len++;
+				tok->vals.op = OP_XIND;
+			} else
+			if (c == 'y') {
+				tok->len++;
+				tok->vals.op = OP_YIND;
+			} else
+			if (c == 'z') {
+				tok->len++;
+				tok->vals.op = OP_ZIND;
+			} else
+			if (c == 'b') {
+				tok->len++;
+				tok->vals.op = OP_BIND;
+			} else
+			if (c == 's') {
+				tok->len++;
+				tok->vals.op = OP_SIND;
+			}
+		}
 		return true;
 	case '%':
 		if (line[ptr+1] == '=') {
@@ -512,11 +528,13 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 		if (c == '0') {
 			if (line[ptr+1] == 'x' || line[ptr+1] == 'X') {
 				// hex, C-style
-				ptr += 2;
 				tok->ptr = ptr;
+				ptr += 2;
 				return parse_hex(tok, ptr, 1);
 			} else {
 				// octal
+				tok->ptr = ptr;
+				ptr += 1;
 				return parse_octal(tok, ptr, 1);
 			}
 		} else {
@@ -526,14 +544,14 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 	} else
 	if ((!can_have_operator) && (c == '%')) {
 		// binary
-		ptr++;
 		tok->ptr = ptr;
+		ptr++;
 		return parse_binary(tok, ptr);
 	} else
 	if ((!can_have_operator) && (c == '$')) {
 		// hex
-		ptr++;
 		tok->ptr = ptr;
+		ptr++;
 		return parse_hex(tok, ptr, 0);
 	} else
 	if ((!can_have_operator) && (c == '&')) {

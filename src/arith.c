@@ -25,22 +25,32 @@
 #include "tokenizer.h"
 #include "arith.h"
 
+typedef enum {
+	EXP_VAL,
+	EXP_OP,
+	EXP_IND,
+	EXP_END
+} expect_t;
 
-void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
+static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode, op_t closing) {
+
+	err_t rv = E_OK;
 
 	ilist_t *list = inline_list_init(10, &anode_memtype, (void(*)(void*))anode_init);
 
 	anode_t *anode = ilist_add(list);
 
 	// when true, next token should be a value
-	int expect_val = 1;
+	expect_t expect = EXP_VAL;
 
 	op_t unary = OP_NONE;
 
 	//while (tokenizer_next(tok, allow_index)) {
 	do {
-	
-		if (expect_val) {
+		//printf("loop at: type=%c len=%d op=%d -> %s (n=%p, subv.type='%c')\n", 
+		//	tok->type, tok->len, tok->vals.op, tok->line+tok->ptr, anode, anode->val.subv.type);
+		switch(expect) {
+		case EXP_VAL:
 			switch(tok->type) {
 			case T_INIT:
 				break;
@@ -50,9 +60,9 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 				if (tokenizer_next(tok, allow_index)) {
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
-					arith_parse(tok, 0, (const ilist_t**) &anode->val.subv.value);
+					arith_parse(tok, allow_index, (const ilist_t**) &anode->val.subv.value);
 				}
-				expect_val = 0;
+				expect = EXP_OP;
 				anode = ilist_add(list);
 				break;
 			case T_NAME:
@@ -63,7 +73,7 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 				anode->type = A_VALUE;
 				anode->val.intv.type = tok->vals.literal.type;
 				anode->val.intv.value = tok->vals.literal.value;
-				expect_val = 0;
+				expect = EXP_OP;
 				anode = ilist_add(list);
 				break;
 			case T_TOKEN:
@@ -95,34 +105,72 @@ void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
 				// TODO syntax error
 			case T_END:
 				break;
-			}		
-		} else {
+			}
+			break;
+		case EXP_OP:	
 			switch(tok->type) {
 			case T_BRACKET:
 				// closing bracket
-				goto exit;
+				goto end;
 				break;
 			case T_INIT:
 			case T_NAME:
-			case T_TOKEN:
-				anode->op = tok->vals.op;
-				// identify arithmetic tokens
-				// TODO check for comment tokens etc
-				expect_val = 1;
 				break;
+			case T_TOKEN:
+				if (tokenizer_op_details(tok->vals.op)->is_index) {
+					anode->type = A_INDEX;
+					anode->op = tok->vals.op;
+					expect = EXP_IND;
+					break;
+				}
+				if (tokenizer_op_details(tok->vals.op)->is_binary) {
+					anode->op = tok->vals.op;
+					expect = EXP_VAL;
+					break;
+				}
+				goto end;
 			case T_STRING:
 			case T_LITERAL:
 			case T_ERROR:
 			case T_END:
 				break;
 			}
+			break;
+		case EXP_IND:
+			// TODO
+			// fall-through
+		case EXP_END:
+end:
+			if (closing) {
+				if (tok->type == T_BRACKET) {
+					if (tok->vals.op != closing) {
+						rv = E_ARITH_CLOSING;
+						goto exit;
+					}
+					
+				}
+			}
+			goto exit;
+			break;
 		}	
 	}
 	while (tokenizer_next(tok, allow_index));
 exit:
-	ilist_pop(list);
+	if (anode->op == OP_NONE) {
+		ilist_pop(list);
+	}
 	*ext_anode = list;
+
+	// printf("return at tok: type=%c len=%d -> %s (n=%p, subv.type='%c')\n", 
+	//	tok->type, tok->len, tok->line+tok->ptr, anode, anode->val.subv.type);
+
+	return rv;
 }
 
+
+err_t arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
+
+	return arith_parse_int(tok, allow_index, ext_anode, OP_NONE);
+}
 
 

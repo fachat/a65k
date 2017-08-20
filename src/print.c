@@ -90,6 +90,10 @@ static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
 				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op),
 				n->val.intv.type, n->val.intv.value, n->val.intv.value);
 			break;
+		case A_INDEX:
+			do_print("  %stype=%c, modifier=%d (%c), op=%d(%c)", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
+			break;
 		default:
 			do_print("  UNHANDLED: %stype=%c, modifier=%d (%c), op=%d(%c)", 
 				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));

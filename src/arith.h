@@ -25,6 +25,7 @@
 #define ARITH_H
 
 #include "inline_list.h"
+#include "err.h"
 
 typedef signed long maxval_t;
 
@@ -61,6 +62,7 @@ typedef enum {
 	A_VALUE		='v',	// value
 	A_STRING	='s',	// string
 	A_LABEL		='l',	// label reference
+	A_INDEX		='i',	// index, ",x"
 } a_type;
 
 typedef enum {
@@ -129,7 +131,7 @@ static inline anode_t *anode_init() {
 	return anode;
 }
 
-void arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **anode);
+err_t arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **anode);
 
 #endif
 

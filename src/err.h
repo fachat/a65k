@@ -26,11 +26,14 @@
 
 
 typedef enum {
+	E_OK			= 0,		// OK
+
 	E_TOK_DIGITRANGE 	= 100,		// illegal digit when parsing an int value
 	E_TOK_EMPTY		= 101,		// empty token (e.g. "$" hex indicator, but no digits), or empty string
 	E_TOK_NONPRINT		= 102,		// illegal (non-printable) character in parsed string
 	E_TOK_UNKNOWN		= 103,		// unknown token
-	
+
+	E_ARITH_CLOSING		= 104,		// wrong closing bracket	
 } err_t;
 
 

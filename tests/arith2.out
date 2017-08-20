@@ -1,0 +1,40 @@
+WRN:---> 123,x (with index)
+WRN:  A:len=2
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:    type=i, modifier=0 ( ), op=148( )
+WRN:   > next is type x, 
+WRN:---> $123,X
+WRN:  A:len=1
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(h)291/123
+WRN:   > next is type t, ,X
+WRN:---> $123,X (with index)
+WRN:  A:len=2
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(h)291/123
+WRN:    type=i, modifier=0 ( ), op=148( )
+WRN:   > next is type x, 
+WRN:---> ($123),y
+WRN:  A:len=1
+WRN:    type=b, modifier=0( ), op=0( ) (
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)291/123
+WRN:   > next is type t, ,y
+WRN:---> ($123),y (with index)
+WRN:  A:len=2
+WRN:    type=b, modifier=0( ), op=0( ) (
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)291/123
+WRN:    type=i, modifier=0 ( ), op=149( )
+WRN:   > next is type x, 
+WRN:---> ($123,X)
+WRN:  A:len=1
+WRN:    type=b, modifier=0( ), op=0( ) (
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)291/123
+WRN:   > next is type b, )
+WRN:---> ($123,X) (with index)
+WRN:  A:len=1
+WRN:    type=b, modifier=0( ), op=0( ) (
+WRN:    A:len=2
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)291/123
+WRN:      type=i, modifier=0 ( ), op=148( )
+WRN:   > next is type x, 
