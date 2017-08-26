@@ -43,13 +43,14 @@ typedef struct {
         // optional
         const label_t           *label;
         const operation_t       *op;
-        const ilist_t           *param;
+	syntax_type		syn;
+        const ilist_t  	        *param;
 } statement_t;
 
 
 void parser_module_init(void);
 
-void parser_push(const context_t *context, const line_t *line);
+err_t parser_push(const context_t *context, const line_t *line);
 
 list_iterator_t *parser_get_statements(void);
 

@@ -29,6 +29,7 @@
 #include "mem.h"
 #include "err.h"
 #include "tokenizer.h"
+#include "log.h"
 
 
 static type_t tokenizer_memtype = {
@@ -106,8 +107,14 @@ void tokenizer_module_init(void) {
 	}
 }
 
+
 op_details_t *tokenizer_op_details(op_t op) {
-	return sorted[op];
+	op_details_t *od = sorted[op];
+
+	if (od == NULL) {
+		log_fatal("illegal token %d\n", op);
+	}
+	return od;
 }
 
 

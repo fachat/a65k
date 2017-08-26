@@ -27,6 +27,7 @@
 
 typedef enum {
 	E_OK			= 0,		// OK
+	E_SYNTAX		= 1,		// Syntax error, unexpected token
 
 	E_TOK_DIGITRANGE 	= 100,		// illegal digit when parsing an int value
 	E_TOK_EMPTY		= 101,		// empty token (e.g. "$" hex indicator, but no digits), or empty string

@@ -99,6 +99,7 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 				}
 				unary = tok->vals.op;
 */
+				rv = E_SYNTAX;
 				break;
 			case T_STRING:
 			case T_ERROR:
@@ -154,7 +155,7 @@ end:
 			break;
 		}	
 	}
-	while (tokenizer_next(tok, allow_index));
+	while ((rv == E_OK) && tokenizer_next(tok, allow_index));
 exit:
 	if (anode->op == OP_NONE) {
 		ilist_pop(list);

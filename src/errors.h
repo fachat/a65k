@@ -95,5 +95,6 @@ static inline void error_syntax(const position_t *loc) {
 	loclog_error(loc, "%s error!", "Syntax");
 }
 
+
 #endif
 

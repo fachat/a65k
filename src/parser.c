@@ -80,6 +80,7 @@ static statement_t *new_statement(const context_t *ctx) {
 	stmt->ctx = ctx;
 	stmt->op = NULL;
 	stmt->label = NULL;
+	stmt->syn = SY_IMP;
 	return stmt;
 }
 
@@ -87,7 +88,48 @@ static void statement_push(statement_t *stmt) {
 	list_add(p->statements, stmt);
 }
 
-void parser_push(const context_t *ctx, const line_t *line) {
+
+/**
+ * parse the operation parameter incl. addressing mode
+ */
+err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
+
+	if (tok->type == T_TOKEN && tok->vals.op == OP_HASH) {
+
+		stmt->syn = SY_IMM;
+
+		if (tokenizer_next(tok, 0)) {
+			return arith_parse(tok, 0, &stmt->param);	
+		}
+		return E_OK;
+	} else {
+		err_t rv = arith_parse(tok, 1, &stmt->param);	
+		if (rv == E_OK && stmt->param->len > 0) {
+			anode_t *outer = NULL;
+			anode_t *inner = NULL;
+			anode_t *base = NULL;
+			// unwrap brackets and/or index tokens (',x')
+			// 1st unwrap ending indexes
+			outer = ilist_last(stmt->param);
+			if (outer && outer->type == A_INDEX) {
+				ilist_pop((ilist_t*)stmt->param);
+			} else {
+				outer = NULL;
+			}
+			// 2nd unwrap brackets
+	
+			// 3rd from resulting unwrap ,x index
+
+			// 4th finally unwrapp base (,s / ,b) 
+	
+		}
+		return rv;
+	}
+}
+
+err_t parser_push(const context_t *ctx, const line_t *line) {
+
+	err_t rv = E_OK;
 
 	position_t *pos = line->position;
 
@@ -108,7 +150,7 @@ void parser_push(const context_t *ctx, const line_t *line) {
 	// tokenize the line
 	pstate_t state = P_INIT;
 	tokenizer_t *tok = tokenizer_create(line->line);
-	while (tokenizer_next(tok, allow_index)) {
+	while ((rv == E_OK) && tokenizer_next(tok, allow_index)) {
 		switch(state) {
 		case P_OP:
 			if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
@@ -163,13 +205,13 @@ void parser_push(const context_t *ctx, const line_t *line) {
 			default:
 				// syntax error
 				error_syntax(pos);
-				goto end;
+				rv = E_SYNTAX;
 				break;
 			}
 			break;
 		case P_PARAM:
 			// parse parameters
-			arith_parse(tok, allow_index, &stmt->param);
+			rv = param_parse(tok, stmt);
 			break;
 		default:
 			error_syntax(pos);
@@ -180,6 +222,8 @@ void parser_push(const context_t *ctx, const line_t *line) {
 	statement_push(stmt);
 end:
 	tokenizer_free(tok);
+
+	return rv;
 }
 
 list_iterator_t *parser_get_statements(void) {

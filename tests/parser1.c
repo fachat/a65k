@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
 	segment_module_init();
 	operation_module_init();
 	parser_module_init();
+	tokenizer_module_init();
 
 
 	const cpu_t *cpu = cpu_by_name("nmos");

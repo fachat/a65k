@@ -84,5 +84,14 @@ static inline void* ilist_get(const ilist_t *ilist, int itemno) {
 	return (void*) &ptr[ilist->type->sizeoftype * itemno];
 }
 
+static inline void* ilist_last(const ilist_t *ilist) {
+
+	if (ilist->len == 0) {
+		return NULL;
+	}
+	char *ptr = (char*) ilist->values;
+	return (void*) &ptr[ilist->type->sizeoftype * (ilist->len - 1)];
+}
+
 #endif
 
