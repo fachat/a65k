@@ -142,7 +142,6 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 					ilist_t *basenode = first->val.subv.value;
 					stmt->param = basenode;
 				}
-printf("set brtype to %d\n", brtype);
 			}
 
 			// 3rd from resulting unwrap ,x index

@@ -23,6 +23,8 @@
 #ifndef INFILES_H
 #define INFILES_H
 
+#include "position.h"
+
 struct openfile {
         char            *filename;      // the file name part
         char            *filepath;      // the path part

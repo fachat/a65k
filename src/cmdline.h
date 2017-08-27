@@ -24,13 +24,31 @@
 #ifndef CMDLINE_H
 #define CMDLINE_H
 
+#include "err.h"
 
 // init the cmdline parser with the name as which the program was called
 // for example "a65k", but also "xa65"
 void cmdline_module_init(const char *prgname);
 
-// parse a single option
-void cmdline_parse(const char *option);
+// parse the options
+err_t cmdline_parse(int argc, char *argv[]);
+
+typedef struct {
+	// name of cmdline param
+	const char 	*name;		
+
+	// option has a parameter
+	const int	need_arg;	
+
+	// function to call when parsed
+	// value will be NULL when no value provided
+	err_t 		(*setfunc)(const char *value, void *extra_param);
+
+	// extra param to be passed to set function
+	void		*extra_param;
+} cmdline_t;
+
+void cmdline_register(const cmdline_t *param);
 
 #endif
 

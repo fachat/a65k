@@ -75,17 +75,6 @@ static void parse() {
 	}
 }
 
-static void main_parse_args(int argc, char *argv[]) {
-
-	int i = 1;
-	while (i < argc) {
-		if (argv[i][0] == '-') {
-			cmdline_parse(argv[i]);
-		} else {
-			infiles_register(argv[i]);
-		}
-	}
-}
 
 static void main_init(const char *prgname) {
 
@@ -115,8 +104,7 @@ int main(int argc, char *argv[]) {
 	main_init(argv[0]);
 
 	// parse command line parameters
-	// TODO: need two functions, one legacy xa, one new a65k
-	main_parse_args(argc, argv);
+	cmdline_parse(argc, argv);
 
 	// parse files into AST
 	parse();
