@@ -26,7 +26,7 @@ WRN:    type=v, modifier=0 ( ), op=42(*), val=(d)44/2c
 WRN:   > next is type x, 
 WRN:---> (123+34)*44
 WRN:  A:len=2
-WRN:    type=b, modifier=0( ), op=0( ) (
+WRN:    type=b, modifier=0( ), op=0( ) btype=40 (()
 WRN:    A:len=2
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
 WRN:      type=v, modifier=0 ( ), op=43(+), val=(d)34/22

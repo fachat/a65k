@@ -33,29 +33,34 @@ typedef enum {
 	SY_ABS		= 2,	// absolute/relative address: zp; word; long; quad; rel; relwide; rellong; relquad
 	SY_ABSX		= 3,	// absolute x-indexed: zp,x; word,x; long,x; quad,x
 	SY_ABSY		= 4,	// absolute y-indexed: zp,y; word,y; long,y; quad,y
+	SY_ABSZ		= 5,	// absolute y-indexed: zp,y; word,y; long,y; quad,y
 
-	SY_IND		= 5,	// zp/word-indirect, word address: (zp); (word)
-	SY_INDY		= 6,	// zp/word-indirect, y-indexed, word address: (zp),y; (word),y
-	SY_XIND		= 7,	// x-indexed, zp/word-indirect, word address: (zp,x); (word,x)
+	SY_IND		= 6,	// zp/word-indirect, word address: (zp); (word)
+	SY_INDY		= 7,	// zp/word-indirect, y-indexed, word address: (zp),y; (word),y
+	SY_INDZ		= 8,	// zp/word-indirect, y-indexed, word address: (zp),y; (word),y
+	SY_XIND		= 9,	// x-indexed, zp/word-indirect, word address: (zp,x); (word,x)
 
-	SY_INDL		= 8,	// zp/word-indirect, long address: [zp]; [word]
-	SY_INDYL	= 9,	// zp/word-indirect, y-indexed, long address: [zp],y; [word],y
-	SY_XINDL	= 10,	// x-indexed, zp/word-indirect, long address: [zp,x]; [word,x]
+	SY_INDL		= 10,	// zp/word-indirect, long address: [zp]; [word]
+	SY_INDYL	= 11,	// zp/word-indirect, y-indexed, long address: [zp],y; [word],y
+	SY_INDZL	= 12,	// zp/word-indirect, y-indexed, long address: [zp],y; [word],y
+	SY_XINDL	= 13,	// x-indexed, zp/word-indirect, long address: [zp,x]; [word,x]
 
-	SY_INDQ		= 11,	// zp/word-indirect, quad address: [[zp]]; [[word]]
-	SY_INDYQ	= 12,	// zp/word-indirect, y-indexed, quad address: [[zp]],y; [[word]],y
-	SY_XINDQ	= 13,	// x-indexed, zp/word-indirect, quad address: [[zp,x]]; [[word,x]]
+	SY_INDQ		= 14,	// zp/word-indirect, quad address: [[zp]]; [[word]]
+	SY_INDYQ	= 15,	// zp/word-indirect, y-indexed, quad address: [[zp]],y; [[word]],y
+	SY_INDZQ	= 16,	// zp/word-indirect, y-indexed, quad address: [[zp]],y; [[word]],y
+	SY_XINDQ	= 17,	// x-indexed, zp/word-indirect, quad address: [[zp,x]]; [[word,x]]
 	
-	SY_MV		= 14,	// two byte 65816 MVN/MVP addressing
-	SY_BBREL	= 15,	// zeropage address, plus relative address, R65C02 BBR/BBS
+	SY_MV		= 18,	// two byte 65816 MVN/MVP addressing
+	SY_BBREL	= 19,	// zeropage address, plus relative address, R65C02 BBR/BBS
 	
-	SY_MAX		= 16,	// end
+	SY_MAX		= 20,	// end
 
 	// virtual addressing modes. Will be mapped to SY_IND, SY_INDL or SY_INDQ depending
 	// on memory model used during assembly
-	SY_INDD		= 17,	// zp/word-indirect, dynamic address: ((zp)); ((word))
-	SY_INDYD	= 18,	// zp/word-zp-indirect, y-indexed, dynamic address: ((zp)),y; ((word)),y
-	SY_XINDD	= 19,	// x-indexed, zp/word-indirect, dynamic address: ((zp,x)); ((word,x))
+	SY_INDD		= 21,	// zp/word-indirect, dynamic address: ((zp)); ((word))
+	SY_INDYD	= 22,	// zp/word-zp-indirect, y-indexed, dynamic address: ((zp)),y; ((word)),y
+	SY_INDZD	= 23,	// zp/word-zp-indirect, y-indexed, dynamic address: ((zp)),y; ((word)),y
+	SY_XINDD	= 24,	// x-indexed, zp/word-indirect, dynamic address: ((zp,x)); ((word,x))
 
 } syntax_type;
 

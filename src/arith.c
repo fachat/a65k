@@ -138,7 +138,13 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 			}
 			break;
 		case EXP_IND:
-			// TODO
+			if (tokenizer_op_details(tok->vals.op)->is_index) {
+				anode = ilist_add(list);
+				anode->type = A_INDEX;
+				anode->op = tok->vals.op;
+				expect = EXP_IND;
+				break;
+			}
 			// fall-through
 		case EXP_END:
 end:

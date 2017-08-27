@@ -27,6 +27,8 @@
 
 #define	BUF_LEN		2048
 
+static void print_debug_arith_int(const ilist_t *anodes, int indlen);
+
 void do_print(const char *pattern, ...) {
 	va_list ap;
 	va_start(ap, pattern);
@@ -45,26 +47,39 @@ void do_print(const char *pattern, ...) {
 
 void print_debug_stmt(const statement_t *stmt) {
 
-	do_print("B:%p lab:%p op:%p par:%p", 
+	do_print("BLK:%p lab:%p op:%p par:%p", 
 		(void*)stmt, (void*)stmt->label, (void*)stmt->op, (void*)stmt->param);
 
 	if (stmt->label != NULL) {
 		const label_t *l = stmt->label;
-		do_print("L:%p name:%s ctx:%p pos:%s:%d", 
+		do_print("LAB:%p name:%s ctx:%p pos:%s:%d", 
 			(void*)l, l->name, (void*)l->ctx, l->position->filename, l->position->lineno);
+	}
+	if (stmt->setlabel != NULL) {
+		const ilist_t *a = stmt->setlabel;
+		// TODO
+		do_print("SET:");
+		print_debug_arith_int(a, 4);
 	}
 
 	if (stmt->op != NULL) {
 		const operation_t *o = stmt->op;
-		do_print("O:%p name:%s isa:$%x isrel:%d acw:%d idxw:%d", 
+		do_print("OPR:%p name:%s isa:$%x isrel:%d acw:%d idxw:%d", 
 			(void*)o, o->name, o->isa, o->abs_is_rel, o->check_ac_w, o->check_idx_w);
+	}
+
+	if (stmt->base) {
+		do_print("BASE: %d", stmt->base);
+	}
+	if (stmt->syn) {
+		do_print("SYN: %d", stmt->syn);
 	}
 
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;
 		// TODO
-		do_print("A:%p len:%ld", 
-			(void*)a, a->len);
+		do_print("PAR: ");
+		print_debug_arith_int(a, 4);
 	}
 	
 }
@@ -81,8 +96,8 @@ static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
 		const anode_t *n = ilist_get(anodes, i);
 		switch(n->type) {
 		case A_BRACKET:
-			do_print("  %stype=%c, modifier=%d(%c), op=%d(%c) %c", 
-				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type);
+			do_print("  %stype=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
 			print_debug_arith_int(n->val.subv.value, indlen + 2);
 			break;
 		case A_VALUE:

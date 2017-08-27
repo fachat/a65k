@@ -79,6 +79,7 @@ static statement_t *new_statement(const context_t *ctx) {
 	stmt->blk = p->blk;
 	stmt->ctx = ctx;
 	stmt->op = NULL;
+	stmt->setlabel = NULL;
 	stmt->label = NULL;
 	stmt->syn = SY_IMP;
 	return stmt;
@@ -88,6 +89,11 @@ static void statement_push(statement_t *stmt) {
 	list_add(p->statements, stmt);
 }
 
+
+void parser_reset() {
+	// only for tests - ignore that we would have to mfree stuff before
+	p->statements = array_list_init(10000);
+}
 
 /**
  * parse the operation parameter incl. addressing mode
@@ -99,29 +105,118 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 		stmt->syn = SY_IMM;
 
 		if (tokenizer_next(tok, 0)) {
-			return arith_parse(tok, 0, &stmt->param);	
+			return arith_parse(tok, 0, (const ilist_t**)&stmt->param);	
 		}
 		return E_OK;
 	} else {
-		err_t rv = arith_parse(tok, 1, &stmt->param);	
+		err_t rv = arith_parse(tok, 1, (const ilist_t**)&stmt->param);	
 		if (rv == E_OK && stmt->param->len > 0) {
+
+			stmt->syn = SY_ABS;
+
 			anode_t *outer = NULL;
 			anode_t *inner = NULL;
 			anode_t *base = NULL;
+			asub_type brtype = 0;
+			anode_t *last = NULL;
+
 			// unwrap brackets and/or index tokens (',x')
-			// 1st unwrap ending indexes
-			outer = ilist_last(stmt->param);
-			if (outer && outer->type == A_INDEX) {
-				ilist_pop((ilist_t*)stmt->param);
-			} else {
-				outer = NULL;
+
+			// 1st unwrap ending indexes, just ",y", ",z"  
+			last = ilist_last(stmt->param);
+			if (last && last->type == A_INDEX && (last->op == OP_YIND || last->op == OP_ZIND)) {
+				outer = ilist_pop(stmt->param);
 			}
+
 			// 2nd unwrap brackets
-	
+			anode_t *first = ilist_get(stmt->param, 0);
+			if (first->type == A_BRACKET && ilist_len(stmt->param) == 1) {
+				// outer node is a bracket, and it is the only one
+				brtype = first->val.subv.type; 
+				ilist_t *basenode = first->val.subv.value;
+				stmt->param = basenode;
+
+				// TODO: unwrap virtual addressing modes (())
+			}
+
 			// 3rd from resulting unwrap ,x index
+			last = ilist_last(stmt->param);
+			if (last && last->type == A_INDEX && last->op == OP_XIND) {
+				inner = ilist_pop(stmt->param);
+			}
 
 			// 4th finally unwrapp base (,s / ,b) 
-	
+			last = ilist_last(stmt->param);
+			if (last && last->type == A_INDEX) {
+				base = ilist_pop(stmt->param);
+				stmt->base = base->op;
+			}
+
+			// then compute syntax identifier
+			// note that base is independent of syntax
+			if (inner != NULL) {
+				if (outer != NULL) {
+					rv = E_SYNTAX;
+				}
+				switch (brtype) {
+				case 0:
+					stmt->syn = SY_ABSX;
+					break;
+				case AB_RND:
+					stmt->syn = SY_XIND;
+					break;
+				case AB_RCT:
+					stmt->syn = SY_XINDL;
+					break;
+				case AB_DBLRCT:
+					stmt->syn = SY_XINDQ;
+					break;
+				default:
+					// borken
+					rv = E_SYNTAX;
+					break;
+				}
+			} else if (outer != NULL && outer->op == OP_YIND) {
+				switch (brtype) {
+				case 0:
+					stmt->syn = SY_ABSY;
+					break;
+				case AB_RND:
+					stmt->syn = SY_INDY;
+					break;
+				case AB_RCT:
+					stmt->syn = SY_INDYL;
+					break;
+				case AB_DBLRCT:
+					stmt->syn = SY_INDYQ;
+					break;
+				default:
+					// borken
+					rv = E_SYNTAX;
+					break;
+				}
+			} else if (outer != NULL && outer->op == OP_ZIND) {
+				switch (brtype) {
+				case 0:
+					stmt->syn = SY_ABSZ;
+					break;
+				case AB_RND:
+					stmt->syn = SY_INDZ;
+					break;
+				case AB_RCT:
+					stmt->syn = SY_INDZL;
+					break;
+				case AB_DBLRCT:
+					stmt->syn = SY_INDZQ;
+					break;
+				default:
+					// borken
+					rv = E_SYNTAX;
+					break;
+				}
+				
+			
+			}
 		}
 		return rv;
 	}

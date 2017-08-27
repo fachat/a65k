@@ -41,6 +41,7 @@
 typedef struct {
 	int		cap;		// capacity of list
 	int		len;		// number of items in list
+	int		popped;		// flag, if true add is not allowed anymore
 	const type_t	*type;		// type info for array element
 					// function to init a new item
 	void 		(*init_item)(void*);
@@ -54,24 +55,35 @@ static inline int ilist_len(ilist_t *il) {
 	return il->len;
 }
 
+static inline void* ilist_get_internal(const ilist_t *ilist, int itemno) {
+	char *ptr = (char*) ilist->values;
+	return (void*) &ptr[ilist->type->sizeoftype * itemno];
+}
+
 static inline void* ilist_add(ilist_t *ilist) {
+
+	if (ilist->popped) {
+		// we have popped stuff, so we cannot overwrite it!
+		return NULL;
+	}
 	
 	ilist->len++;
 	if (ilist->len >= ilist->cap) {
 		ilist->cap = ilist->cap * 2;
 		ilist->values = mem_realloc_n(ilist->cap, ilist->type, ilist->values);
 	}
-	char *ptr = (char*) ilist->values;
-
-	return (void*) &ptr[ilist->type->sizeoftype * (ilist->len-1)];
+	return ilist_get_internal(ilist, ilist->len - 1);
 }
 
-static inline void ilist_pop(ilist_t *ilist) {
+static inline void* ilist_pop(ilist_t *ilist) {
 
 	if (ilist->len > 0) {
+		ilist->popped = 1;
 		ilist->len --;
+		return ilist_get_internal(ilist, ilist->len);
 	} else {
 		// TODO: Error
+		return NULL;
 	}
 }
 
@@ -80,8 +92,7 @@ static inline void* ilist_get(const ilist_t *ilist, int itemno) {
 	if (ilist->len <= itemno) {
 		return NULL;
 	}
-	char *ptr = (char*) ilist->values;
-	return (void*) &ptr[ilist->type->sizeoftype * itemno];
+	return ilist_get_internal(ilist, itemno);
 }
 
 static inline void* ilist_last(const ilist_t *ilist) {
@@ -89,8 +100,7 @@ static inline void* ilist_last(const ilist_t *ilist) {
 	if (ilist->len == 0) {
 		return NULL;
 	}
-	char *ptr = (char*) ilist->values;
-	return (void*) &ptr[ilist->type->sizeoftype * (ilist->len - 1)];
+	return ilist_get_internal(ilist, ilist->len - 1);
 }
 
 #endif

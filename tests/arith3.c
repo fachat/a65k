@@ -26,14 +26,23 @@ int main(int argc, char *argv[]) {
 
 	tokenizer_module_init();
 
-	print("123,x", 1);
-	print("$123,X", 0);
-	print("$123,X", 1);
-	print("($123),y", 0);
-	print("($123),y", 1);
-	print("($123,X)", 0);
-	print("($123,X)", 1);
-	print("($123,s,X)", 1);
+	print("[$123],y", 0);
+	print("[$123],y", 1);
+	print("[$123,X]", 0);
+	print("[$123,X]", 1);
+	print("[$123,s,X]", 1);
+
+	print("[[$123]],y", 0);
+	print("[[$123]],y", 1);
+	print("[[$123,X]]", 0);
+	print("[[$123,X]]", 1);
+	print("[[$123,s,X]]", 1);
+
+	print("(($123)),y", 0);
+	print("(($123)),y", 1);
+	print("(($123,X))", 0);
+	print("(($123,X))", 1);
+	print("(($123,s,X))", 1);
 
 }
 
