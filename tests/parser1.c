@@ -20,12 +20,13 @@ static void test(const context_t *ctx, position_t *pos, const char *txt) {
 
 	line_t line = { txt, pos };
 
+	do_print("");
 	do_print(">>> %s", line.line);
 		
 	err_t err = parser_push(ctx, &line);
 
 	if (err) {
-		do_print("err=%d\n", err);
+		do_print("err=%d", err);
 	}
 	//log_set_level(LEV_DEBUG);
 
@@ -59,6 +60,18 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "ldx (12),y");	
 	test(ctx, &pos, "lda ($12,s,x)");	
 	test(ctx, &pos, "lda (12,s),y");	
+
+	test(ctx, &pos, "ldx [12],y");	
+	test(ctx, &pos, "lda [$12,s,x]");	
+	test(ctx, &pos, "lda [12,s],y");	
+
+	test(ctx, &pos, "ldx [[12]],y");	
+	test(ctx, &pos, "lda [[$12,s,x]]");	
+	test(ctx, &pos, "lda [[12,s]],y");	
+
+	test(ctx, &pos, "ldx ((12)),y");	
+	test(ctx, &pos, "lda (($12,s,x))");	
+	test(ctx, &pos, "lda ((12,s)),y");	
 }
 
 

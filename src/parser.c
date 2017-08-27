@@ -136,7 +136,13 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 				ilist_t *basenode = first->val.subv.value;
 				stmt->param = basenode;
 
-				// TODO: unwrap virtual addressing modes (())
+				anode_t *first = ilist_get(stmt->param, 0);
+				if (brtype == AB_RND && first->type == A_BRACKET && first->val.subv.type == AB_RND && ilist_len(stmt->param) == 1) {
+					brtype = AB_DBLRND;
+					ilist_t *basenode = first->val.subv.value;
+					stmt->param = basenode;
+				}
+printf("set brtype to %d\n", brtype);
 			}
 
 			// 3rd from resulting unwrap ,x index
@@ -171,6 +177,9 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 				case AB_DBLRCT:
 					stmt->syn = SY_XINDQ;
 					break;
+				case AB_DBLRND:
+					stmt->syn = SY_XINDD;
+					break;
 				default:
 					// borken
 					rv = E_SYNTAX;
@@ -190,6 +199,9 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 				case AB_DBLRCT:
 					stmt->syn = SY_INDYQ;
 					break;
+				case AB_DBLRND:
+					stmt->syn = SY_INDYD;
+					break;
 				default:
 					// borken
 					rv = E_SYNTAX;
@@ -208,6 +220,9 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 					break;
 				case AB_DBLRCT:
 					stmt->syn = SY_INDZQ;
+					break;
+				case AB_DBLRND:
+					stmt->syn = SY_INDZD;
 					break;
 				default:
 					// borken
