@@ -68,12 +68,12 @@ typedef enum {
 typedef enum {
 	// A_BRACKET subtypes (not necessarily all are used)
 	AB_NONE		= 0,
-	AB_RND		='(',		// (
-	AB_ANG		='<',		// <
-	AB_RCT		='[',		// [
-	AB_CRV		='{',		// {
-	AB_DBLRND	='d',		// ((
-	AB_DBLRCT	='D',		// [[
+	AB_RND		=OP_OPEN,	// (
+	AB_ANG		=OP_LESS,	// <
+	AB_RCT		=OP_BOPEN,	// [
+	AB_CRV		=OP_COPEN,	// {
+	AB_DBLRND	=OP_RROPEN,	// ((
+	AB_DBLRCT	=OP_BBOPEN,	// [[
 } asub_type;
 
 typedef enum {
