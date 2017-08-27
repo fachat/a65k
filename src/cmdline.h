@@ -26,28 +26,42 @@
 
 #include "err.h"
 
-// init the cmdline parser with the name as which the program was called
-// for example "a65k", but also "xa65"
-void cmdline_module_init(const char *prgname);
+// init the cmdline parser 
+void cmdline_module_init();
 
 // parse the options
 err_t cmdline_parse(int argc, char *argv[]);
+
+typedef enum {
+	// no parameter, sets a bool when present with/without "no-" prefix
+	PARTYPE_FLAG,
+	// with required parameter
+	PARTYPE_PARAM
+} param_type_t;
 
 typedef struct {
 	// name of cmdline param
 	const char 	*name;		
 
 	// option has a parameter
-	const int	need_arg;	
+	param_type_t	type;
 
-	// function to call when parsed
-	// value will be NULL when no value provided
+	// function to call when parsed and type is PARTYPE_PARAM
 	err_t 		(*setfunc)(const char *value, void *extra_param);
+
+	// function to call when parsed and type is PARTYPE_FLAG
+	void 		(*setflag)(int flag, void *extra_param);
 
 	// extra param to be passed to set function
 	void		*extra_param;
+
+	// description
+	const char	*description;
 } cmdline_t;
 
+// template method where extra_param is the pointer to an int variable to set
+void cmdline_set_flag(int flag, void *extra_param);
+ 
 void cmdline_register(const cmdline_t *param);
 
 #endif

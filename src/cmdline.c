@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <strings.h>
+#include <string.h>
 
 #include "hashmap.h"
 #include "cmdline.h"
@@ -36,9 +37,14 @@ static const char *key_from_param(const void *entry) {
 
 // init the cmdline parser with the name as which the program was called
 // for example "a65k", but also "xa65"
-void cmdline_module_init(const char *prgname) {
+void cmdline_module_init() {
 
 	params = hash_init_stringkey(50, 25, key_from_param);
+}
+
+// template method where extra_param is the pointer to an int variable to set
+void cmdline_set_flag(int flag, void *extra_param) {
+	*((int*)extra_param) = flag;
 }
 
 void cmdline_register(const cmdline_t *param) {
@@ -54,10 +60,15 @@ err_t cmdline_parse(int argc, char *argv[]) {
 	err_t rv = E_OK;
 
         int i = 1;
-        while (i < argc) {
+        while (i < argc && !rv) {
                 if (argv[i][0] == '-') {
 			char *val = NULL;
+			int flag = 1;
 			const char *name = argv[i]+1;
+			if (name == strstr(name, "no-")) {
+				name = name+3;
+				flag = 0;
+			}
 			char *end = index(name, '=');
 			if (end != NULL) {
 				val = end + 1;
@@ -67,15 +78,25 @@ err_t cmdline_parse(int argc, char *argv[]) {
 			// lookup option
 			cmdline_t *opt = hash_get(params, name);
 			if (opt != NULL) {
-				err_t r = opt->setfunc(val, opt->extra_param);
-				if (r) {
-					rv = r;
+				switch (opt->type) {
+				case PARTYPE_FLAG:
+					opt->setflag(flag, opt->extra_param);
+					break;
+				case PARTYPE_PARAM:
+					// TODO: error if param is missing
+					// TODO: if started with "no-" return error
+					rv = opt->setfunc(val, opt->extra_param);
+					break;
 				}
+			} else {
+				// TODO error cmdline parameter not found
+				// also check on no-* negative flags
 			}
                 } else {
 			// TODO snapshot parser configuration for each file before each file
                         infiles_register(argv[i]);
                 }   
+		i++;
         }   
 	return rv;
 }

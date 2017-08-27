@@ -76,14 +76,14 @@ static void parse() {
 }
 
 
-static void main_init(const char *prgname) {
+static void main_init() {
 
 	// memory handling
 	mem_module_init();
 	// configuration
 	config_module_init();
 	// cmdline
-	cmdline_module_init(prgname);
+	cmdline_module_init();
 	// input files
 	infiles_module_init();
 	// operation
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 
 	// initialize modules
 
-	main_init(argv[0]);
+	main_init();
 
 	// parse command line parameters
 	cmdline_parse(argc, argv);

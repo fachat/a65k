@@ -40,6 +40,7 @@
 #include "operation.h"
 #include "errors.h"
 #include "arith.h"
+#include "parser-config.h"
 
 typedef struct {
 	block_t			*blk;
@@ -72,6 +73,8 @@ void parser_module_init(void) {
 	p = mem_alloc(&parser_memtype);
 	p->blk = NULL;
 	p->statements = array_list_init(10000);
+	
+	parser_config_init();
 }
 
 static statement_t *new_statement(const context_t *ctx) {
