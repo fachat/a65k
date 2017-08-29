@@ -25,26 +25,61 @@
 #include <string.h>
 
 #include "hashmap.h"
+#include "array_list.h"
 #include "cmdline.h"
 #include "err.h"
 #include "infiles.h"
 
+// hash from param name to cmdline_t sruct for quick find
 static hash_t *params = NULL;
+// list of parameters for help output
+static list_t *paramlist = NULL;
+
+static const char *prg_name = NULL;
+
+static err_t usage(int flag, void* extra) {
+	printf("Usage: %s [options] in-filename1 [in-filename2 ...]\n"
+		"Cross-assembler for 65xx/R65C02/65816/65CE02/65002\n"
+		"\n", prg_name); 
+
+	list_iterator_t *iter = list_iterator(paramlist);
+	cmdline_t *param = NULL;
+	while ( (param = list_iterator_next(iter)) ) {
+		printf("  -%s\n\t%s\n", param->name, param->description);
+	}
+	
+	return E_ABORT;
+}
+
+static const cmdline_t help[] = {
+	{ "?", PARTYPE_FLAG, NULL, usage, NULL, "Show this help" },
+	{ "help", PARTYPE_FLAG, NULL, usage, NULL, "Show this help" },
+};
 
 static const char *key_from_param(const void *entry) {
 	return ((cmdline_t*)entry)->name;
 }
 
-// init the cmdline parser with the name as which the program was called
+// TODO init the cmdline parser with the name as which the program was called
 // for example "a65k", but also "xa65"
 void cmdline_module_init() {
 
 	params = hash_init_stringkey(50, 25, key_from_param);
+	paramlist = array_list_init(20);
+
+	cmdline_register_mult(help, sizeof(help)/sizeof(cmdline_t));
 }
 
 // template method where extra_param is the pointer to an int variable to set
-void cmdline_set_flag(int flag, void *extra_param) {
+err_t cmdline_set_flag(int flag, void *extra_param) {
 	*((int*)extra_param) = flag;
+	return E_OK;
+}
+
+void cmdline_register_mult(const cmdline_t *param, int num ) {
+	for (int i = 0; i < num; i++) {
+		cmdline_register(&param[i]);
+	}
 }
 
 void cmdline_register(const cmdline_t *param) {
@@ -53,11 +88,14 @@ void cmdline_register(const cmdline_t *param) {
 		// must not happen
 		exit(1);
 	}
+	list_add(paramlist, (void*)param);
 }
 
 err_t cmdline_parse(int argc, char *argv[]) {
 
 	err_t rv = E_OK;
+
+	prg_name = argv[0];
 
         int i = 1;
         while (i < argc && !rv) {
@@ -80,7 +118,7 @@ err_t cmdline_parse(int argc, char *argv[]) {
 			if (opt != NULL) {
 				switch (opt->type) {
 				case PARTYPE_FLAG:
-					opt->setflag(flag, opt->extra_param);
+					rv = opt->setflag(flag, opt->extra_param);
 					break;
 				case PARTYPE_PARAM:
 					// TODO: error if param is missing
@@ -90,10 +128,10 @@ err_t cmdline_parse(int argc, char *argv[]) {
 				}
 			} else {
 				// TODO error cmdline parameter not found
-				// also check on no-* negative flags
 			}
                 } else {
 			// TODO snapshot parser configuration for each file before each file
+			// also register the current parser configuration snapshot together with file
                         infiles_register(argv[i]);
                 }   
 		i++;

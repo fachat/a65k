@@ -94,7 +94,7 @@ void cpu_module_init() {
 
 	int num_cpus = sizeof(cpus)/sizeof(cpu_t);
 
-	cpu_typemap = hash_init_stringkey(10, 5, cpu_key_from_entry);
+	cpu_typemap = hash_init_stringkey(num_cpus, 5, cpu_key_from_entry);
 
 	for (int i = 0; i < num_cpus; i++) {
 		hash_put(cpu_typemap, (void*)&cpus[i]);

@@ -50,7 +50,7 @@ typedef struct {
 	err_t 		(*setfunc)(const char *value, void *extra_param);
 
 	// function to call when parsed and type is PARTYPE_FLAG
-	void 		(*setflag)(int flag, void *extra_param);
+	err_t 		(*setflag)(int flag, void *extra_param);
 
 	// extra param to be passed to set function
 	void		*extra_param;
@@ -60,9 +60,12 @@ typedef struct {
 } cmdline_t;
 
 // template method where extra_param is the pointer to an int variable to set
-void cmdline_set_flag(int flag, void *extra_param);
+err_t cmdline_set_flag(int flag, void *extra_param);
  
 void cmdline_register(const cmdline_t *param);
+
+// register a list of #num options from an array of options starting at param
+void cmdline_register_mult(const cmdline_t *param, int num);
 
 #endif
 

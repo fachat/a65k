@@ -38,6 +38,7 @@
 #include "cmdline.h"
 #include "print.h"
 #include "tokenizer.h"
+#include "err.h"
 
 
 /**
@@ -61,7 +62,7 @@ static void debug_output() {
 static void parse() {
 
 	const cpu_t *cpu = cpu_by_name(config()->initial_cpu_name);
-	const segment_t *segment = segment_new(NULL, NULL, SEG_ANY, cpu->type, false);
+	const segment_t *segment = segment_new(NULL, "_initial", SEG_ANY, cpu->type, false);
 	context_init(segment, cpu);
 
 	line_t *line;
@@ -94,6 +95,8 @@ static void main_init() {
 	parser_module_init();
 	// tokenizer
 	tokenizer_module_init();
+	// cpu info
+	cpu_module_init();
 
 }
 
@@ -104,7 +107,10 @@ int main(int argc, char *argv[]) {
 	main_init();
 
 	// parse command line parameters
-	cmdline_parse(argc, argv);
+	err_t e;
+	if ( (e = cmdline_parse(argc, argv)) ) {
+		return e;
+	} 
 
 	// parse files into AST
 	parse();
