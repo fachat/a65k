@@ -1,0 +1,68 @@
+DBG:hashmap:
+sizeof data=10
+DBG:hash for 'a' is 14
+DBG:hash for 'b' is 15
+DBG:hash for 'c' is 16
+DBG:hash for 'd' is 17
+DBG:hash for 'e' is 18
+DBG:hash for 'f' is 19
+DBG:hash for 'g' is 20
+DBG:hash for 'h' is 13
+DBG:hash for 'i' is 14
+DBG:equals for 'a' vs. 'i' is -8
+DBG:hash for 'nmos_illegal_nobcd' is 3125
+-------- len =10
+k:b, v:22
+k:e, v:55
+k:c, v:33
+k:f, v:66
+k:h, v:88
+k:a, v:11
+k:d, v:44
+k:g, v:77
+k:i, v:99
+k:nmos_illegal_nobcd, v:test has negative hash used to cause illegal pointer ref
+excess call returns: (nil)
+DBG:hash for 'foo' is 592
+-------- len =11
+k:b, v:22
+k:e, v:55
+k:c, v:33
+k:f, v:66
+k:h, v:88
+k:foo, v:bar
+k:a, v:11
+k:d, v:44
+k:g, v:77
+k:i, v:99
+k:nmos_illegal_nobcd, v:test has negative hash used to cause illegal pointer ref
+-------- len =11
+k:b, v:22
+k:e, v:55
+k:c, v:33
+k:f, v:66
+DBG:hash for 'foo2' is 761
+k:h, v:88
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:foo, v:bar
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:a, v:11
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:d, v:44
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:g, v:77
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:i, v:99
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:nmos_illegal_nobcd, v:test has negative hash used to cause illegal pointer ref
+ERR:Hash modification count mismatch! expected 11, was 12
+
+k:foo2, v:bar
+ERR:Hash modification count mismatch! expected 11, was 12
+

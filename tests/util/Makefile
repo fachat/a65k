@@ -1,7 +1,7 @@
 
 .PHONY: clean
 
-TESTS=hash2 hash1 list1 stringhash 
+TESTS=hash3 hash2 hash1 list1 stringhash 
 
 SRCDIR=../../src
 

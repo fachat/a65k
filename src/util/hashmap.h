@@ -34,6 +34,8 @@
 
 typedef struct hash_s hash_t;
 
+typedef struct hash_iterator_s hash_iterator_t;
+
 // initialize a hashmap. nbuckets is the number of hash values that are actually used
 // The bucket number is computed by taking the modulo of the hash value to the base nbucket.
 // The approximate size is divided by nbuckets to determine the initial size of 
@@ -64,6 +66,14 @@ static inline bool_t hash_contains(hash_t *hash, void *key) {
         return NULL != hash_get(hash, key);
 }
 
+long hash_size(hash_t *hash);
+
+// iterate over all values. Prints error when modified during iteration
+hash_iterator_t *hash_iterator(hash_t *hash);
+
+void* hash_iterator_next(hash_iterator_t *iter);
+
+void hash_iterator_free(hash_iterator_t *iter);
 
 
 #endif

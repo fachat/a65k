@@ -51,7 +51,7 @@ struct hash_s {
       int             initial_bucket_size;
       // number of buckets
       int             n_buckets;
-      // ptr to array of buckets
+      // array of ptrs to bucket
       hash_bucket_t   *buckets;
       // ptr to hash function - hash from key
       int             (*hash_from_key)(const void *key);
@@ -60,6 +60,17 @@ struct hash_s {
       // optional - when set, check newly added entries if they are equal with a 
       // previous entry and remove the previous one
       bool_t          (*equals_key)(const void *fromhash, const void *tobeadded);
+      // modification count
+      int             mod_cnt;
+      // total items
+      long	      total_cnt;
+};
+
+struct hash_iterator_s {
+	hash_t		*hash;
+	int 		bucketno;
+	int		entryinbucket;
+	int 		mod_cnt;
 };
 
 static type_t entry_memtype = {
@@ -73,8 +84,13 @@ static type_t hash_memtype = {
 };
 
 static type_t hash_bucket_memtype = {
-	"hashmap_bucket",
+	"hashmap_bucket_t",
 	sizeof(hash_bucket_t)
+};
+
+static type_t hash_iterator_memtype = {
+	"hash_iterator_t",
+	sizeof(hash_iterator_t)
 };
 
 static bool_t equals_stringkey(const void *fromhash, const void *tobeadded) {
@@ -83,6 +99,13 @@ static bool_t equals_stringkey(const void *fromhash, const void *tobeadded) {
 
 static bool_t equals_stringkey_nocase(const void *fromhash, const void *tobeadded) {
 	return !strcasecmp((const char*)fromhash, (const char*)tobeadded);
+}
+
+static inline void hash_check_mod(hash_iterator_t *iter) {
+        if (iter->hash->mod_cnt != iter->mod_cnt) {
+                log_error("Hash modification count mismatch! expected %d, was %d\n",
+                        iter->mod_cnt, iter->hash->mod_cnt);
+        }
 }
 
 static inline int bucket_from_hash(hash_t *hash, int hashval) {
@@ -144,6 +167,8 @@ void *hash_put(hash_t *hash, void *value) {
 
 	void *removed = NULL;
 
+	hash->mod_cnt ++;
+
 	const void *key = hash->key_from_entry(value);
 
 	// calculate hash
@@ -163,6 +188,7 @@ void *hash_put(hash_t *hash, void *value) {
 		
 		entry = bucket_list->array;
 		bucket_list->num_filled = 1;
+		hash->total_cnt++;
 	} else {
 		// find the entry in the bucket
 		int i = 0;
@@ -170,6 +196,8 @@ void *hash_put(hash_t *hash, void *value) {
 			entry = &bucket_list->array[i];
 			if (entry->hash == hashval && hash->equals_key(entry->key, key)) {
 				// found
+				// no need to add to total_cnt
+				// return old value
 				removed = entry->data;
 				break;
 			}
@@ -184,6 +212,7 @@ void *hash_put(hash_t *hash, void *value) {
 			// now we are sure to have space in the array
 			entry = &bucket_list->array[bucket_list->num_filled];
 			bucket_list->num_filled ++;
+			hash->total_cnt++;
 		}
 	}
 	entry->key = key;
@@ -216,4 +245,41 @@ void *hash_get(hash_t *hash, const void *key) {
 	return NULL;
 }
 
+long hash_size(hash_t *hash) {
+	return hash->total_cnt;
+}
+
+
+hash_iterator_t *hash_iterator(hash_t *hash) {
+	
+	hash_iterator_t *iter = mem_alloc(&hash_iterator_memtype);
+
+	iter->hash = hash;
+	iter->mod_cnt = hash->mod_cnt;
+	iter->bucketno = 0;
+	iter->entryinbucket = 0;
+
+	return iter;
+}
+
+void* hash_iterator_next(hash_iterator_t *iter) {
+
+	hash_check_mod(iter);
+
+	while (iter->bucketno < iter->hash->n_buckets) {
+		hash_bucket_t *bucket = &iter->hash->buckets[iter->bucketno];
+		if (iter->entryinbucket < bucket->num_filled) {
+			return bucket->array[ iter->entryinbucket++ ].data;
+		} else {
+			iter->bucketno++;
+			iter->entryinbucket = 0;
+		}
+	}
+	return NULL;
+}
+
+void hash_iterator_free(hash_iterator_t *iter) {
+
+	mem_free(iter);
+}
 
