@@ -1,0 +1,6 @@
+config:
+  initial_binary=0
+config:
+  initial_binary=1
+config:
+  initial_binary=0

@@ -12,6 +12,7 @@
 #include "parser.h"
 #include "print.h"
 #include "log.h"
+#include "cmdline.h"
 
 
 static void test(const context_t *ctx, position_t *pos, const char *txt) {
@@ -43,6 +44,7 @@ int main(int argc, char *argv[]) {
 	cpu_module_init();
 	segment_module_init();
 	operation_module_init();
+	cmdline_module_init();
 	parser_module_init();
 	tokenizer_module_init();
 

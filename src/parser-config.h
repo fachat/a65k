@@ -25,8 +25,20 @@
 
 
 typedef struct {
-	// parse address and bytes
+	// parse address and bytes (disables initial_lineno, default off)
 	int	initial_binary;	
+
+	// parse initial line number (default, disables initial_binary)
+	int	initial_lineno;
+
+	// do the actual include (default in assembler, off in lint mode)
+	int	follow_includes;
+
+	// parse xa preprocessor (default off)
+	int	xa_preprocessor;
+
+	// convert xa pp to standard pseudo-ops (only in lint mode)
+	int	convert_xapp;
 
 	// allow colons in comments (instead of starting a new statement)
 	int	colon_in_comments;
