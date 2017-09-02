@@ -130,9 +130,8 @@ err_t cmdline_parse(int argc, char *argv[]) {
 				// TODO error cmdline parameter not found
 			}
                 } else {
-			// TODO snapshot parser configuration for each file before each file
-			// also register the current parser configuration snapshot together with file
-                        infiles_register(argv[i]);
+			// register file with snapshot (clone) of current parser configuration
+                        infiles_register(argv[i], parser_current_config());
                 }   
 		i++;
         }   

@@ -27,6 +27,7 @@
 #include "position.h"
 #include "infiles.h"
 #include "linked_list.h"
+#include "parser-config.h"
 
 #define	PATH_SEPARATOR_CHAR 	'/'
 #define	PATH_SEPARATOR_STR 	"/"
@@ -34,9 +35,19 @@
 #define	INITIAL_BUFFER_SIZE	4096
 
 
+typedef struct {
+	const char	*filename;
+	const parser_config_t	*parsercfg;
+} fileinfo_t;
+
+
+static type_t fileinfo_memtype = {
+	"fileinfo_t",
+	sizeof(fileinfo_t)
+};
 
 static type_t openfile_memtype = {
-	"openfile",
+	"openfile_t",
 	sizeof(openfile_t)
 };
 
@@ -55,7 +66,7 @@ static line_t line;
 // hold references to e.g. the file name
 static list_t *filestack;
 
-// list of input files as given by the command line (char*)
+// list of input files as given by the command line (fileinfo_t*)
 static list_t *infiles;
 // iterator over the input files
 static list_iterator_t *infile_iter;
@@ -84,9 +95,13 @@ void infiles_includedir(const char *dirname) {
 
 
 // register a top level input file 
-void infiles_register(const char *filename) {
+void infiles_register(const char *filename, const parser_config_t *parsercfg) {
 
-	list_add(infiles, (char*) filename);
+	fileinfo_t *finfo = mem_alloc(&fileinfo_memtype);
+	finfo->filename = filename;
+	finfo->parsercfg = parsercfg;
+
+	list_add(infiles, finfo);
 }
 
 // combine the (optional) path and the name into a full file path,
@@ -146,7 +161,7 @@ static openfile_t *open_file(char *filepath) {
 }
 
 // open a file, checking all the include dirs
-static openfile_t *infile_open(const char *filename) {
+static openfile_t *infile_open(const char *filename, const parser_config_t *parsercfg) {
 
 
 	// first try with current dir
@@ -177,6 +192,11 @@ static openfile_t *infile_open(const char *filename) {
 		ofile = open_file(fullpath);
 	}
 
+	if (ofile != NULL) {
+		
+		ofile->parsercfg = parsercfg;
+	}
+
 	return ofile;
 }
 
@@ -184,7 +204,7 @@ void infiles_include(const char *filename) {
 
 	list_add(filestack, current_file);
 
-	current_file = infile_open(filename);
+	current_file = infile_open(filename, current_file->parsercfg);
 }
 
 // low level close, also releases the allocated attributes (buffer)
@@ -221,19 +241,19 @@ line_t *infiles_readline() {
 	// we were not in an include, so try the next top level file	
 	if (current_file == NULL) {
 
-		char *filename = list_iterator_next(infile_iter);
+		fileinfo_t *fileinfo = list_iterator_next(infile_iter);
 
-		if (filename == NULL) {
+		if (fileinfo == NULL) {
 			// last input file done
 			// end of pass
 			return NULL;
 		}
 
-		current_file = infile_open(filename);
+		current_file = infile_open(fileinfo->filename, fileinfo->parsercfg);
 
 		if (current_file == NULL) {
 			// could not open file
-			log_error("Could not open file from all include dirs: %s", filename);
+			log_error("Could not open file from all include dirs: %s", fileinfo->filename);
 			return NULL;
 		}
 	}

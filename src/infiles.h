@@ -24,14 +24,16 @@
 #define INFILES_H
 
 #include "position.h"
+#include "parser-config.h"
 
 struct openfile {
-        char            *filename;      // the file name part
-        char            *filepath;      // the path part
-        int             current_line;
-        FILE            *filep;
-        int             buffer_size;
-        char            *buffer;
+        char 		        *filename;      // the file name part
+        char           		*filepath;      // the path part
+        int             	current_line;
+        FILE            	*filep;
+        int             	buffer_size;
+        char            	*buffer;
+	const parser_config_t	*parsercfg;
 };
 typedef struct openfile openfile_t;
 
@@ -42,7 +44,7 @@ void infiles_module_init(void);
 void infiles_includedir(const char *filename);
 
 // register a top level input file 
-void infiles_register(const char *filename);
+void infiles_register(const char *filename, const parser_config_t *parsercfg);
 
 // read a line from the input. Note the result is static and must not be freed.
 // Ownership of the actual line stays with the infile module, so line must be copied
