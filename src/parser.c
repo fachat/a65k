@@ -243,6 +243,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 
 	err_t rv = E_OK;
 
+	const parser_config_t *cfg = line->parsercfg;
 	position_t *pos = line->position;
 
 	// is the first block already set?

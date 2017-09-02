@@ -23,6 +23,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+#include "parser-config.h"
+
 
 typedef struct {
         const char	        *filename;
@@ -32,6 +34,7 @@ typedef struct {
 typedef struct {
         const char              *line;
         position_t              *position;
+	const parser_config_t	*parsercfg;
 } line_t;
 
 #endif

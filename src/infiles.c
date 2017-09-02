@@ -293,6 +293,7 @@ line_t *infiles_readline() {
 	line.position = mem_alloc(&position_memtype);
 	line.position->filename = current_file->filename;
 	line.position->lineno = current_file->current_line;
+	line.parsercfg = current_file->parsercfg;
 	line.line = buffer;
 
 	current_file->current_line++;
