@@ -52,16 +52,16 @@ void do_test(const char *teststr) {
 
 	printf("tokenizing line: %s\n", teststr);
 
-	tokenizer_t *tok = tokenizer_create(teststr, 1);
+	tokenizer_t *tok = tokenizer_create(teststr, 0);
 
 	while (tokenizer_next(tok, false)) {
 
-                if (tok->type == T_LITERAL) {
-                        printf("TOK -> type=%c, len=%d, ptr=%s ltype=%c, val=%ld\n",
-                                tok->type, tok->len, tok->line+tok->ptr, tok->vals.literal.type, tok->vals.literal.value);
-                } else {
-                        printf("TOK -> type=%c, len=%d, ptr=%s\n", tok->type, tok->len, tok->line+tok->ptr);
-                }
+		if (tok->type == T_LITERAL) {
+			printf("TOK -> type=%c, len=%d, ptr=%s ltype=%c, val=%ld\n", 
+				tok->type, tok->len, tok->line+tok->ptr, tok->vals.literal.type, tok->vals.literal.value);
+		} else {
+			printf("TOK -> type=%c, len=%d, ptr=%s\n", tok->type, tok->len, tok->line+tok->ptr);
+		}
 	}
 	
 	printf("END -> type=%c, rest->%s\n", tok->type, tok->line+tok->ptr);

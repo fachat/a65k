@@ -30,30 +30,28 @@ TOK -> type=t, len=1, ptr=;
 END -> type=x, rest->
 tokenizing line: dec 0128
 TOK -> type=n, len=3, ptr=dec 0128
-END -> type=e, rest->0128
+TOK -> type=l, len=4, ptr=0128 ltype=d, val=128
+END -> type=x, rest->
 tokenizing line: dec 0127,
 TOK -> type=n, len=3, ptr=dec 0127,
-TOK -> type=l, len=4, ptr=0127, ltype=O, val=87
+TOK -> type=l, len=4, ptr=0127, ltype=d, val=127
 TOK -> type=t, len=1, ptr=,
 END -> type=x, rest->
 tokenizing line: dec 0126;
 TOK -> type=n, len=3, ptr=dec 0126;
-TOK -> type=l, len=4, ptr=0126; ltype=O, val=86
+TOK -> type=l, len=4, ptr=0126; ltype=d, val=126
 TOK -> type=t, len=1, ptr=;
 END -> type=x, rest->
 tokenizing line: inc 0x12df
 TOK -> type=n, len=3, ptr=inc 0x12df
-TOK -> type=l, len=6, ptr=0x12df ltype=H, val=4831
-END -> type=x, rest->
+END -> type=e, rest->0x12df
 tokenizing line: inc $1234f
 TOK -> type=n, len=3, ptr=inc $1234f
 TOK -> type=l, len=6, ptr=$1234f ltype=h, val=74575
 END -> type=x, rest->
 tokenizing line: inc 0x1234f,
 TOK -> type=n, len=3, ptr=inc 0x1234f,
-TOK -> type=l, len=7, ptr=0x1234f, ltype=H, val=74575
-TOK -> type=t, len=1, ptr=,
-END -> type=x, rest->
+END -> type=e, rest->0x1234f,
 tokenizing line: inc $1234f,
 TOK -> type=n, len=3, ptr=inc $1234f,
 TOK -> type=l, len=6, ptr=$1234f, ltype=h, val=74575
