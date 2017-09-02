@@ -11,7 +11,7 @@ void print(const char *val) {
 
 	do_print("---> %s", val);
 
-	tokenizer_t *tok = tokenizer_create(val);
+	tokenizer_t *tok = tokenizer_create(val, 1);
 
 	const ilist_t *out = NULL;
 

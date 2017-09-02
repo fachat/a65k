@@ -9,17 +9,17 @@
 #include "context.h"
 #include "position.h"
 #include "operation.h"
+#include "cmdline.h"
 #include "parser.h"
 #include "print.h"
 #include "log.h"
-#include "cmdline.h"
 
 
 static void test(const context_t *ctx, position_t *pos, const char *txt) {
 
 	parser_reset();
 
-	line_t line = { txt, pos };
+	line_t line = { txt, pos, parser_current_config() };
 
 	do_print("");
 	do_print(">>> %s", line.line);
@@ -48,6 +48,7 @@ int main(int argc, char *argv[]) {
 	parser_module_init();
 	tokenizer_module_init();
 
+	//parser_config_init();
 
 	const cpu_t *cpu = cpu_by_name("nmos");
 

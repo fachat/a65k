@@ -161,6 +161,7 @@ static inline int prio_of_operator(const op_t op) {
 
 typedef struct {
 	const char 	*line;		// line to tokenize
+	int		cstyle_allowed;	// config - C-style octal and hex allowed
 	tok_t		type;		// type of token
 	int 		ptr;		// current pointer to token in line
 	int		len;		// length of current token (total, i.e. incl. quotes for a string)
@@ -183,7 +184,7 @@ typedef struct {
 void tokenizer_module_init(void);
 
 // initialize a tokenizer 
-tokenizer_t *tokenizer_create(const char *line);
+tokenizer_t *tokenizer_create(const char *line, int cstyle_allowed);
 
 // set to next token; return true when there is a valid token
 // if allow_index is true, comma is folded into ",x" etc addressig mode tokens

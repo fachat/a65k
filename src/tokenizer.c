@@ -120,11 +120,12 @@ op_details_t *tokenizer_op_details(op_t op) {
 
 
 // initialize a tokenizer 
-tokenizer_t *tokenizer_create(const char *line) {
+tokenizer_t *tokenizer_create(const char *line, int cstyle_allowed) {
 	
 	tokenizer_t *tok = mem_alloc(&tokenizer_memtype);
 
 	tok->line = line;
+	tok->cstyle_allowed = cstyle_allowed;
 	tok->ptr = 0;
 	tok->len = 0;
 	tok->type = T_INIT;
@@ -531,8 +532,8 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 	char c = line[ptr];
 
 	if (isdigit(c)) {
-		// handle octal (starting with '0'), hex (starting with '0x'), dec
-		if (c == '0') {
+		// handle C-style octal (starting with '0'), hex (starting with '0x'), dec
+		if (tok->cstyle_allowed && c == '0') {
 			if (line[ptr+1] == 'x' || line[ptr+1] == 'X') {
 				// hex, C-style
 				tok->ptr = ptr;
