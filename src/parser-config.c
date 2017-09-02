@@ -54,10 +54,10 @@ static err_t set_initial_lineno(int flag, void *params) {
 
 static cmdline_t params[] = {
 	{ "parse-initial-binary", PARTYPE_FLAG, NULL, set_initial_binary, NULL, 
-		"if set, allow parsing (and ignoring) address and hex data values before the actual label and operation "
+		"parse address and hex data values before the actual label and operation "
 		"(disables parse-initial-lineno)" },
 	{ "parse-initial-lineno", PARTYPE_FLAG, NULL, set_initial_lineno, NULL, 
-		"if set, allow parsing (and ignoring) a BASIC-style line number before the actual label and operation " 
+		"parse a BASIC-style line number before the actual label and operation " 
 		"(disables parse-initial-binary)" },
 	{ "parse-follow-includes", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.follow_includes, 
 		"Follow include statements (default in assembler, off by default in lint mode)" },
