@@ -75,6 +75,11 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "ldx ((12)),y");	
 	test(ctx, &pos, "lda (($12,s,x))");	
 	test(ctx, &pos, "lda ((12,s)),y");	
+
+	test(ctx, &pos, "ldx.0 123");	
+	test(ctx, &pos, "lda.1u 123");	
+	test(ctx, &pos, "lda.ne 123");	
+	test(ctx, &pos, "lda.sw 123");	
 }
 
 

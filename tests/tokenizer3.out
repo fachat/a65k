@@ -1,0 +1,78 @@
+tokenizer:
+tokenizing line: label2: lda <xyz,x ; comment
+TOK -> type=n, len=6, ptr=label2: lda <xyz,x ; comment
+TOK -> type=t, len=1, ptr=: lda <xyz,x ; comment
+TOK -> type=n, len=3, ptr=lda <xyz,x ; comment
+TOK -> type=t, len=1, ptr=<xyz,x ; comment
+TOK -> type=n, len=3, ptr=xyz,x ; comment
+TOK -> type=t, len=2, ptr=,x ; comment
+TOK -> type=t, len=1, ptr=; comment
+TOK -> type=n, len=7, ptr=comment
+END -> type=x, rest->
+tokenizing line: dec.u 0125,y
+TOK -> type=n, len=3, ptr=dec.u 0125,y
+TOK -> type=t, len=1, ptr=.u 0125,y
+TOK -> type=n, len=1, ptr=u 0125,y
+TOK -> type=l, len=4, ptr=0125,y
+TOK -> type=t, len=2, ptr=,y
+END -> type=x, rest->
+tokenizing line: dec.n (0127),z
+TOK -> type=n, len=3, ptr=dec.n (0127),z
+TOK -> type=t, len=1, ptr=.n (0127),z
+TOK -> type=n, len=1, ptr=n (0127),z
+TOK -> type=b, len=1, ptr=(0127),z
+TOK -> type=l, len=4, ptr=0127),z
+TOK -> type=b, len=1, ptr=),z
+TOK -> type=t, len=2, ptr=,z
+END -> type=x, rest->
+tokenizing line: inc.w (0x12df,x)
+TOK -> type=n, len=3, ptr=inc.w (0x12df,x)
+TOK -> type=t, len=1, ptr=.w (0x12df,x)
+TOK -> type=n, len=1, ptr=w (0x12df,x)
+TOK -> type=b, len=1, ptr=(0x12df,x)
+TOK -> type=l, len=6, ptr=0x12df,x)
+TOK -> type=t, len=2, ptr=,x)
+TOK -> type=b, len=1, ptr=)
+END -> type=x, rest->
+tokenizing line: inc.b $1234f,y
+TOK -> type=n, len=3, ptr=inc.b $1234f,y
+TOK -> type=t, len=1, ptr=.b $1234f,y
+TOK -> type=n, len=1, ptr=b $1234f,y
+TOK -> type=l, len=6, ptr=$1234f,y
+TOK -> type=t, len=2, ptr=,y
+END -> type=x, rest->
+tokenizing line: inc.l0 $1234f,y
+TOK -> type=n, len=3, ptr=inc.l0 $1234f,y
+TOK -> type=t, len=1, ptr=.l0 $1234f,y
+TOK -> type=n, len=2, ptr=l0 $1234f,y
+TOK -> type=l, len=6, ptr=$1234f,y
+TOK -> type=t, len=2, ptr=,y
+END -> type=x, rest->
+tokenizing line: inc.q $1234f,y
+TOK -> type=n, len=3, ptr=inc.q $1234f,y
+TOK -> type=t, len=1, ptr=.q $1234f,y
+TOK -> type=n, len=1, ptr=q $1234f,y
+TOK -> type=l, len=6, ptr=$1234f,y
+TOK -> type=t, len=2, ptr=,y
+END -> type=x, rest->
+tokenizing line: inc.lnu $1234f,y
+TOK -> type=n, len=3, ptr=inc.lnu $1234f,y
+TOK -> type=t, len=1, ptr=.lnu $1234f,y
+TOK -> type=n, len=3, ptr=lnu $1234f,y
+TOK -> type=l, len=6, ptr=$1234f,y
+TOK -> type=t, len=2, ptr=,y
+END -> type=x, rest->
+tokenizing line: lda . nw #123
+TOK -> type=n, len=3, ptr=lda . nw #123
+TOK -> type=t, len=1, ptr=. nw #123
+TOK -> type=n, len=2, ptr=nw #123
+TOK -> type=t, len=1, ptr=#123
+TOK -> type=l, len=3, ptr=123
+END -> type=x, rest->
+tokenizing line: lda.1 #123
+TOK -> type=n, len=3, ptr=lda.1 #123
+TOK -> type=t, len=1, ptr=.1 #123
+TOK -> type=l, len=1, ptr=1 #123
+TOK -> type=t, len=1, ptr=#123
+TOK -> type=l, len=3, ptr=123
+END -> type=x, rest->
