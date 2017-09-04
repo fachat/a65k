@@ -118,8 +118,9 @@ typedef enum {
 	OP_XIND			= 148, 	// ",x"
 	OP_YIND			= 149,	// ",y"
 	OP_ZIND			= 150,	// ",z"
-	OP_SIND			= 151,	// ",s"
-	OP_BIND			= 152, 	// ",b"
+	OP_SIND			= 151,	// ",s" - stack offset
+	OP_BIND			= 152, 	// ",b" - base register offset
+	OP_PIND			= 153, 	// ",p" - PC offset
 } op_t;
 
 typedef struct {

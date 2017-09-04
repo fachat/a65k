@@ -57,6 +57,7 @@ typedef struct {
 	// S_OPCODE
        	const operation_t       *op;		// pointer to info about operation, like "ADC", "TAX", ...
 	op_t			base;		// base extension of the parameter, like ",B", ",s" if any, zero else
+	
 	syntax_type		syn;		// addressing mode syntax, see SY_* constants
        	ilist_t  	        *param;		// list of anode_t structs that describe the syntax tree for the parameter value
 } statement_t;

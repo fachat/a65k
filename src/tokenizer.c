@@ -91,7 +91,8 @@ static op_details_t ops[] = {
         {	OP_YIND,		",y",	0,	0,	0,	1,	0	},
         {	OP_ZIND,		",z",	0,	0,	0,	1,	0	},
         {	OP_SIND,		",s",	0,	0,	0,	1,	0	},
-        {	OP_BIND,		",b",	0,	0,	0,	1,	0	}
+        {	OP_BIND,		",b",	0,	0,	0,	1,	0	},
+        {	OP_PIND,		",p",	0,	0,	0,	1,	0	},
 };
 
 void tokenizer_module_init(void) {
@@ -301,6 +302,10 @@ static inline bool_t parse_token(tokenizer_t *tok, int ptr, int can_have_operato
 			if (c == 's') {
 				tok->len++;
 				tok->vals.op = OP_SIND;
+			} else
+			if (c == 'p') {
+				tok->len++;
+				tok->vals.op = OP_PIND;
 			}
 		}
 		return true;

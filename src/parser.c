@@ -153,7 +153,7 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 				inner = ilist_pop(stmt->param);
 			}
 
-			// 4th finally unwrapp base (,s / ,b) 
+			// 4th finally unwrapp base (,s / ,b / ,p) 
 			last = ilist_last(stmt->param);
 			if (last && last->type == A_INDEX) {
 				base = ilist_pop(stmt->param);
