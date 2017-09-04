@@ -38,6 +38,7 @@ typedef enum {
 	S_PSEUDO,		// pseudo opcode
 } stype_t;
 
+
 /**
  * The statement_t struct is the main structure of the internal workings.
  * The parser creates a statement_t with all information to be gathered from the source.
@@ -57,7 +58,10 @@ typedef struct {
 	// S_OPCODE
        	const operation_t       *op;		// pointer to info about operation, like "ADC", "TAX", ...
 	op_t			base;		// base extension of the parameter, like ",B", ",s" if any, zero else
-	
+	le_type			le_prefix;	// LE prefix
+	rs_type			rs_prefix;	// RS prefix
+	bool_t			um_prefix;	// UM prefix
+	bool_t			nf_prefix;	// NF prefix
 	syntax_type		syn;		// addressing mode syntax, see SY_* constants
        	ilist_t  	        *param;		// list of anode_t structs that describe the syntax tree for the parameter value
 } statement_t;

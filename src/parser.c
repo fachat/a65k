@@ -22,6 +22,7 @@
 #define	DEBUG
 
 #include <stdio.h>
+#include <ctype.h>
 
 #include "log.h"
 #include "mem.h"
@@ -85,6 +86,11 @@ static statement_t *new_statement(const context_t *ctx) {
 	stmt->setlabel = NULL;
 	stmt->label = NULL;
 	stmt->syn = SY_IMP;
+
+	stmt->rs_prefix = RS_NOT_SET;
+	stmt->le_prefix = LE_NOT_SET;
+	stmt->um_prefix = 0;
+	stmt->nf_prefix = 0;
 	return stmt;
 }
 
@@ -323,8 +329,76 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 			}
 			break;
 		case P_PARAM:
-			// parse parameters
-			rv = param_parse(tok, stmt);
+			// TODO check CPU type if prefixes are allowed
+			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
+				// parse prefix
+				if (tokenizer_next_prefix(tok) && (tok->type == T_NAME)) {
+				   for (int i = 0; i < tok->len; i++) {
+					char c = tolower(tok->line[tok->ptr + i]);
+					switch(c) {
+					case 'u':
+						stmt->um_prefix = 1;
+						break;
+					case 'n':
+						stmt->nf_prefix = 1;
+						break;
+					case 'b':
+						if (stmt->rs_prefix != RS_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->rs_prefix = RS_BYTE;
+						break;
+					case 'w':
+						if (stmt->rs_prefix != RS_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->rs_prefix = RS_WORD;
+						break;
+					case 'l':
+						if (stmt->rs_prefix != RS_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->rs_prefix = RS_LONG;
+						break;
+					case 'q':
+						if (stmt->rs_prefix != RS_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->rs_prefix = RS_QUAD;
+						break;
+					case 'e':
+						if (stmt->le_prefix != LE_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->le_prefix = LE_E;
+						break;
+					case 's':
+						if (stmt->le_prefix != LE_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->le_prefix = LE_S;
+						break;
+					case '0':
+						if (stmt->le_prefix != LE_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->le_prefix = LE_0;
+						break;
+					case '1':
+						if (stmt->le_prefix != LE_NOT_SET) {
+							// TODO warn double prefix
+						}
+						stmt->le_prefix = LE_1;
+						break;
+					}
+				   }
+				} else {
+					rv = E_SYNTAX;
+				}
+			} else {
+				// parse parameters
+				rv = param_parse(tok, stmt);
+			}
 			break;
 		default:
 			error_syntax(pos);

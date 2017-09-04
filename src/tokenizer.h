@@ -190,6 +190,7 @@ tokenizer_t *tokenizer_create(const char *line, int cstyle_allowed);
 // set to next token; return true when there is a valid token
 // if allow_index is true, comma is folded into ",x" etc addressig mode tokens
 bool_t tokenizer_next(tokenizer_t *tok, int allow_index);
+bool_t tokenizer_next_prefix(tokenizer_t *tok);
 
 void tokenizer_free(tokenizer_t *tok);
 
