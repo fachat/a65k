@@ -31,6 +31,7 @@
 #include "list.h"
 #include "inline_list.h"
 #include "err.h"
+#include "pseudo.h"
 
 typedef enum {
         S_LABEQPC,              // set label to PC
@@ -40,6 +41,8 @@ typedef enum {
 } stype_t;
 
 
+typedef struct statement_s statement_t;
+
 /**
  * The statement_t struct is the main structure of the internal workings.
  * The parser creates a statement_t with all information to be gathered from the source.
@@ -48,7 +51,7 @@ typedef enum {
  * The printer can then also print the extended statement with binary values
  * The renderer can then put (a list of) statements into a binary format, depending on the output options
  */
-typedef struct {
+struct statement_s {
         const block_t           *blk;		// pointer to current block structure for label dereferencing
         const context_t         *ctx;		// current context, like CPU type, width, other options
         stype_t                 type;		// type of statement (see above)
@@ -65,7 +68,10 @@ typedef struct {
 	bool_t			nf_prefix;	// NF prefix
 	syntax_type		syn;		// addressing mode syntax, see SY_* constants
        	ilist_t  	        *param;		// list of anode_t structs that describe the syntax tree for the parameter value
-} statement_t;
+	// S_PSEUDO
+	pseudo_t		*pseudo;	// pseudo opcode definition
+	list_t			*pparams;	// parameters for the pseudo opcode
+};
 
 
 void parser_module_init(void);
