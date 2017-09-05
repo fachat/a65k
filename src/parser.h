@@ -28,8 +28,9 @@
 #include "block.h"
 #include "operation.h"
 #include "tokenizer.h"
-#include "arith.h"
 #include "list.h"
+#include "inline_list.h"
+#include "err.h"
 
 typedef enum {
         S_LABEQPC,              // set label to PC

@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "print.h"
+#include "arith.h"
 
 #define	BUF_LEN		2048
 
