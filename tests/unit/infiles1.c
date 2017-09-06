@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
 
 	infiles_module_init();
 
-	infiles_register("testfiles/main.a65", NULL);
-	infiles_includedir("testfiles/incdir1");
+	infiles_register("../testfiles/main.a65", NULL);
+	infiles_includedir("../testfiles/incdir1");
 
 	do_test();
 
