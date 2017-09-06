@@ -42,12 +42,14 @@ static type_t context_memtype = {
 
 static context_t *current_context = NULL;
 
+static int ctx_counter = 0;
 
 // create a new context. Usually only called at beginning of parse
 const context_t *context_init(const segment_t *segment, const cpu_t *cpu) {
 
 	context_t *ctx = mem_alloc(&context_memtype);
 
+	ctx->ctxno = ctx_counter++;
 	ctx->segment = segment;
 	ctx->cpu = cpu;
 

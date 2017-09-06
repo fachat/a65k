@@ -36,6 +36,7 @@ typedef struct context_s context_t;
 struct context_s {
 	const segment_t	*segment;
 	const cpu_t	*cpu;
+	int		ctxno;		// repeatable debug output
 	int		cpu_width;	// CPU width, normally taken from *cpu, but can be modified with .width
         bool_t          index_width;    // true when index registers are wide in 65816 (.xe/.xs)
         bool_t          acc_width;      // true when accumulator is wide in 65816 

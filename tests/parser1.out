@@ -1,0 +1,145 @@
+WRN:
+WRN:>>> label adc #123
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:LAB: name:label ctx:0 pos:bogusfile:1
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:
+WRN:>>> lda 123
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:
+WRN:>>> ldx (12),y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDX isa:$401 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 7, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> lda ($12,s,x)
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 9, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)18/12
+WRN:
+WRN:>>> lda (12,s),y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 7, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> ldx [12],y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDX isa:$401 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 11, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> lda [$12,s,x]
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 13, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)18/12
+WRN:
+WRN:>>> lda [12,s],y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 11, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> ldx [[12]],y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDX isa:$401 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 15, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> lda [[$12,s,x]]
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 17, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)18/12
+WRN:
+WRN:>>> lda [[12,s]],y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 15, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> ldx ((12)),y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDX isa:$401 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 22, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> lda (($12,s,x))
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 24, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)18/12
+WRN:
+WRN:>>> lda ((12,s)),y
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 151, SYN: 22, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12/c
+WRN:
+WRN:>>> ldx.0 123
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDX isa:$401 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: -1, LE: 2
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:
+WRN:>>> lda.1u 123
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 1, NF: 0, RS: -1, LE: 3
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:
+WRN:>>> lda.ne 123
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 1, RS: -1, LE: 0
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:
+WRN:>>> lda.sw 123
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: 1, LE: 1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b

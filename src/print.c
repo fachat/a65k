@@ -48,13 +48,13 @@ void do_print(const char *pattern, ...) {
 
 void print_debug_stmt(const statement_t *stmt) {
 
-	do_print("BLK:%p lab:%p", 
-		(void*)stmt, (void*)stmt->label);
+	do_print("BLK:%d ctx:%d (CPU: %s, isa:$%x)", 
+		stmt->blk->blockno, stmt->ctx->ctxno, stmt->ctx->cpu->name, stmt->ctx->cpu->isa);
 
 	if (stmt->label != NULL) {
 		const label_t *l = stmt->label;
-		do_print("LAB:%p name:%s ctx:%p pos:%s:%d", 
-			(void*)l, l->name, (void*)l->ctx, l->position->filename, l->position->lineno);
+		do_print("LAB: name:%s ctx:%d pos:%s:%d", 
+			l->name, l->ctx->ctxno, l->position->filename, l->position->lineno);
 	}
 	if (stmt->setlabel != NULL) {
 		const ilist_t *a = stmt->setlabel;
@@ -74,7 +74,6 @@ void print_debug_stmt(const statement_t *stmt) {
 
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;
-		// TODO
 		do_print("PAR: ");
 		print_debug_arith_int(a, 4);
 	}

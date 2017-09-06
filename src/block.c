@@ -63,12 +63,15 @@ static bool_t block_equals_entry(const void *fromhash, const void *tobeadded) {
 	return !strcmp((const char*) fromhash, (const char*) tobeadded);
 }
 
+static int block_counter = 0;
+
 // create a new block, links it with parent (both ways)
 // when parent is given. parent can be NULL
 block_t *block_init(block_t *parent, position_t *start_pos) {
 
 	block_t *blk = mem_alloc(&block_memtype);
 
+	blk->blockno = block_counter++;
 	blk->children = array_list_init(DEFAULT_SIZE_CHILDREN_BUCKET);
 	blk->parent = parent;
 	blk->blk_start = start_pos;

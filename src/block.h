@@ -33,6 +33,8 @@ typedef struct block_s block_t;
 struct block_s {
 	// parent block
 	block_t 	*parent;
+	// block number (for readable, repeatable output)
+	int		blockno;
 	// line where block starts and end
 	position_t	*blk_start;
 	position_t	*blk_end;
