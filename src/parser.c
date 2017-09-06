@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include "err.h"
+
 #include "log.h"
 #include "mem.h"
 #include "list.h"
@@ -280,7 +282,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				stmt = new_statement(ctx);
 				state = P_INIT;
 				break;
-			}
+			} 
 			if (tok->type == T_TOKEN && tok->vals.op == OP_ASSIGN) {
 				// after label, that's a label value definition
 				stmt->type = S_LABDEF;
@@ -320,6 +322,16 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					stmt->op = op;
 					state = P_PARAM;
 				}
+				break;
+			case T_TOKEN:
+				if (tok->vals.op == OP_DOT) {
+					if (tokenizer_next(tok, 0)) {
+						rv = parse_pseudo(tok, stmt);
+					} else {
+						rv = E_SYNTAX;
+					}
+				}
+				// TODO assign PC
 				break;
 			default:
 				// syntax error
@@ -408,6 +420,11 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 	}
 	statement_push(stmt);
 end:
+	if (rv != E_OK) {
+		loclog_error(line->position, "Syntax error at position %d in '%s'",
+			tok->ptr, tok->line);
+	}
+
 	tokenizer_free(tok);
 
 	return rv;

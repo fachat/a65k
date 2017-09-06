@@ -530,7 +530,9 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 	// are we done with the line yet?
 	if (line[ptr] == 0 || tok->type == T_END || tok->type == T_ERROR) {
 		tok->len = 0;
-		tok->type = T_END;
+		if (tok->type != T_ERROR) {
+			tok->type = T_END;
+		}
 		return false;
 	}
 
@@ -610,7 +612,9 @@ bool_t tokenizer_next_prefix(tokenizer_t *tok) {
 	// are we done with the line yet?
 	if (line[ptr] == 0 || tok->type == T_END || tok->type == T_ERROR) {
 		tok->len = 0;
-		tok->type = T_END;
+		if (tok->type != T_ERROR) {
+			tok->type = T_END;
+		}
 		return false;
 	}
 

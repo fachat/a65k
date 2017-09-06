@@ -28,8 +28,9 @@
 #include "arith.h"
 #include "array_list.h"
 #include "parser.h"
+#include "mem.h"
 
-static err_t byte_parse(tokenizer_t *tok, statement_t *stmt) {
+static err_t arith_list_parse(tokenizer_t *tok, statement_t *stmt) {
 
 	err_t rv = E_OK;
 	list_t *pparams = array_list_init(8);
@@ -46,14 +47,15 @@ static err_t byte_parse(tokenizer_t *tok, statement_t *stmt) {
 			break;
 		}
 	}
+printf("parse -> %d\n", rv);
 	return rv;
 }
 
 
 static pseudo_t pseudos[] = {
-	{ "byt",	byte_parse,	NULL,		NULL },
-	{ "byte",	byte_parse,	NULL,		NULL },
-	//{ "word",	word_parse,	NULL,		NULL },
+	{ "byt",	arith_list_parse,	NULL,		NULL },
+	{ "byte",	arith_list_parse,	NULL,		NULL },
+	{ "word",	arith_list_parse,	NULL,		NULL },
 };
 
 static hash_t *pseudomap = NULL;
@@ -70,6 +72,7 @@ void pseudo_module_init(void) {
 	pseudomap = hash_init_stringkey_nocase(n, n/2+1, name_from_pseudo);
 
 	for (int i = 0; i < n; i++) {
+		printf("hash put name=%s\n", pseudos[i].name);
 		if (hash_put(pseudomap, &pseudos[i]) != NULL) {
 			// TODO error, double entry should not happen
 			exit(1);
@@ -77,9 +80,34 @@ void pseudo_module_init(void) {
 	}
 }
 
-pseudo_t *find_pseudo(tokenizer_t *tok) {
+err_t parse_pseudo(tokenizer_t *tok, statement_t *stmt) {
 
-	return NULL;
+	err_t rv = E_OK;
+
+	char *name = NULL;
+	if (tok->type == T_NAME) {
+		name = mem_alloc_strn(tok->line + tok->ptr, tok->len);
+	} else
+	if (tok->type == T_TOKEN) {
+		name = mem_alloc_str(tokenizer_op_details(tok->vals.op)->print);
+	}
+
+	pseudo_t *p = hash_get(pseudomap, name);
+	if (p != NULL) {
+
+		stmt->pseudo = p;
+		tokenizer_next(tok, 0);
+
+		if (p->parse) {
+			rv = p->parse(tok, stmt);
+		}
+	} else {
+		rv = E_SYNTAX;
+	}
+
+	mem_free(name);
+
+	return rv;
 }
 
 

@@ -78,6 +78,19 @@ void print_debug_stmt(const statement_t *stmt) {
 		do_print("PAR: ");
 		print_debug_arith_int(a, 4);
 	}
+
+	if (stmt->pseudo) {
+		do_print("PSEUDO: %s", stmt->pseudo->name);
+
+		if (stmt->pparams) {
+			do_print("PARS:");
+			list_iterator_t *iter = list_iterator(stmt->pparams);
+			while (list_iterator_has_next(iter)) {
+				ilist_t *parlist = list_iterator_next(iter);
+				print_debug_arith_int(parlist, 4);
+			}
+		}
+	}
 	
 }
 

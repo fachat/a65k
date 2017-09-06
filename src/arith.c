@@ -102,8 +102,25 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 				rv = E_SYNTAX;
 				break;
 			case T_STRING:
+				if (tok->vals.string.len == 1) {
+					anode->type = A_VALUE;
+					anode->val.intv.type = LIT_CHAR;
+					anode->val.intv.value = 0xff&tok->line[tok->vals.string.ptr];
+					expect = EXP_OP;
+					anode = ilist_add(list);
+					break;
+				} else
+				if (tok->vals.string.len == 2) {
+					anode->type = A_VALUE;
+					anode->val.intv.type = LIT_TWOCHAR;
+					// TODO: byte order
+					anode->val.intv.value = tok->line[tok->vals.string.ptr] << 8 + (tok->line[tok->vals.string.ptr+1]&0xff);
+					expect = EXP_OP;
+					anode = ilist_add(list);
+					break;
+				}
 			case T_ERROR:
-				// TODO syntax error
+				rv = E_SYNTAX;
 			case T_END:
 				break;
 			}
@@ -113,9 +130,6 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 			case T_BRACKET:
 				// closing bracket
 				goto end;
-				break;
-			case T_INIT:
-			case T_NAME:
 				break;
 			case T_TOKEN:
 				if (tokenizer_op_details(tok->vals.op)->is_index) {
@@ -130,9 +144,12 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 					break;
 				}
 				goto end;
+			case T_INIT:
+			case T_NAME:
 			case T_STRING:
 			case T_LITERAL:
 			case T_ERROR:
+				rv = E_SYNTAX;
 			case T_END:
 				break;
 			}
@@ -168,7 +185,7 @@ exit:
 	}
 	*ext_anode = list;
 
-	// printf("return at tok: type=%c len=%d -> %s (n=%p, subv.type='%c')\n", 
+	//printf("return at tok: type=%c len=%d -> %s (n=%p, subv.type='%c')\n", 
 	//	tok->type, tok->len, tok->line+tok->ptr, anode, anode->val.subv.type);
 
 	return rv;

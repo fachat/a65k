@@ -40,7 +40,7 @@ typedef struct {
 // init the pseudo opcodes
 void pseudo_module_init(void);
 
-pseudo_t *find_pseudo(tokenizer_t *tok);
+err_t parse_pseudo(tokenizer_t *tok, statement_t *stmt);
 
 
 #endif
