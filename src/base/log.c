@@ -100,7 +100,7 @@ void log_x(err_level lev, const char *msg, ...) {
        		va_list args;
        		va_start(args, msg);
 
-       		printf(prefix);
+       		printf("%s", prefix);
        		vprintf(msg, args);
 		printf("\n");
 	}

@@ -12,8 +12,6 @@
 #include "block.h"
 
 
-void do_test();
-
 
 static const type_t position_memtype = {
 	"position_t",
@@ -21,6 +19,9 @@ static const type_t position_memtype = {
 };
 
 int main(int argc, char *argv[]) {
+
+        (void)argc;
+        (void)argv;
 
 	position_t *pos = mem_alloc(&position_memtype);
 	pos->filename = NULL;
@@ -97,8 +98,4 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-
-void do_test(list_t *list) {
-
-}
 

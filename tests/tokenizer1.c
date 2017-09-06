@@ -33,6 +33,8 @@ void do_test(const char *teststr);
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
 
 	printf("tokenizer:\n");
 

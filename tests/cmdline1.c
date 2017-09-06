@@ -14,6 +14,9 @@ void print_cfg(parser_config_t *cfg) {
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	cmdline_module_init("a65k");
 	parser_module_init();
 

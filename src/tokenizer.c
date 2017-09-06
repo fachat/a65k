@@ -618,8 +618,6 @@ bool_t tokenizer_next_prefix(tokenizer_t *tok) {
 		return false;
 	}
 
-	char c = line[ptr];
-
 	return parse_name(tok, ptr);
 }
 

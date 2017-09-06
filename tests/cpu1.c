@@ -9,6 +9,9 @@
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	cpu_module_init();
 
 	const cpu_t *c = cpu_by_name("nmos");

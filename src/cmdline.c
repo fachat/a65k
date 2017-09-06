@@ -38,6 +38,10 @@ static list_t *paramlist = NULL;
 static const char *prg_name = NULL;
 
 static err_t usage(int flag, void* extra) {
+	
+	(void) flag;
+	(void) extra;
+
 	printf("Usage: %s [options] in-filename1 [in-filename2 ...]\n"
 		"Cross-assembler for 65xx/R65C02/65816/65CE02/65002\n"
 		"\n", prg_name); 

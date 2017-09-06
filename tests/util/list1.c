@@ -10,6 +10,9 @@ void do_test(list_t *list);
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	list_t *list = NULL;
 
 	printf("linked list:\n");

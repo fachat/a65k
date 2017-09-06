@@ -5,6 +5,7 @@
 #include "inline_list.h"
 #include "tokenizer.h"
 #include "print.h"
+#include "arith.h"
 
 
 void print(const char *val, int allow_index) {
@@ -23,6 +24,9 @@ void print(const char *val, int allow_index) {
 }
 
 int main(int argc, char *argv[]) {
+
+        (void)argc;
+        (void)argv;
 
 	tokenizer_module_init();
 

@@ -13,6 +13,9 @@ void do_test();
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	log_module_init(LEV_DEBUG);
 
 	printf("infiles:\n");
@@ -33,7 +36,6 @@ void do_test() {
         line_t *line;
 
 	char *tmp = NULL;
-	char *ptr = NULL;
 
         line = infiles_readline();
         while (line != NULL) {
@@ -47,9 +49,9 @@ void do_test() {
 		}
 		printf("got f='%s', l=%03d: %s\n", line->position->filename, line->position->lineno, tmp);
 
-		char *tok = strtok_r(tmp, " ", &ptr);
+		char *tok = strtok(tmp, " ");
 		if (tok != NULL && !strcmp("include", tok)) {
-			char *incfilename = strtok_r(NULL, " ", &ptr);
+			char *incfilename = strtok(NULL, " ");
 			infiles_include(incfilename);
 		}
 		mem_free(tmp);

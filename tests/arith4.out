@@ -1,0 +1,32 @@
+WRN:---> 1+2+3+4
+WRN:  A:len=4
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:    type=v, modifier=0 ( ), op=43(+), val=(d)2/2
+WRN:    type=v, modifier=0 ( ), op=43(+), val=(d)3/3
+WRN:    type=v, modifier=0 ( ), op=43(+), val=(d)4/4
+WRN:   > next is type x, 
+WRN:---> 1+2+3+4 (with index)
+WRN:  A:len=4
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:    type=v, modifier=0 ( ), op=43(+), val=(d)2/2
+WRN:    type=v, modifier=0 ( ), op=43(+), val=(d)3/3
+WRN:    type=v, modifier=0 ( ), op=43(+), val=(d)4/4
+WRN:   > next is type x, 
+WRN:---> 1+(2+3)*4
+WRN:  A:len=3
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:    type=b, modifier=0( ), op=43(+) btype=40 (()
+WRN:    A:len=2
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)2/2
+WRN:      type=v, modifier=0 ( ), op=43(+), val=(d)3/3
+WRN:    type=v, modifier=0 ( ), op=42(*), val=(d)4/4
+WRN:   > next is type x, 
+WRN:---> 1+(2+3)*4 (with index)
+WRN:  A:len=3
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:    type=b, modifier=0( ), op=43(+) btype=40 (()
+WRN:    A:len=2
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)2/2
+WRN:      type=v, modifier=0 ( ), op=43(+), val=(d)3/3
+WRN:    type=v, modifier=0 ( ), op=42(*), val=(d)4/4
+WRN:   > next is type x, 

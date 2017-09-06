@@ -12,6 +12,9 @@ static void test(const char *c) {
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	printf("string_hash:\n");
 
 	test("lda");

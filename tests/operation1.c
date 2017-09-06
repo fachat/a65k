@@ -12,6 +12,9 @@
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	cpu_module_init();
 	segment_module_init();
 	operation_module_init();

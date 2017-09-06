@@ -1,7 +1,7 @@
 
 TESTBINS=$(addprefix bin/,$(TESTS))
 
-CFLAGS=-g -W -Wall -pedantic -O2 -std=c11 -DMALLOC_CHECK_=3 
+CFLAGS=-g -Wall -pedantic -O2 -std=c11 -DMALLOC_CHECK_=3 
 
 # Sorting include paths and defines simplifies checking them
 INCPATHS=. util base

@@ -57,6 +57,9 @@ void do_test(hash_t *hash);
 
 int main(int argc, char *argv[]) {
 
+        (void)argc;
+        (void)argv;
+
 	log_module_init(LEV_DEBUG);
 
 	hash_t *hash = NULL;

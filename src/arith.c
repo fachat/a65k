@@ -43,7 +43,7 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 	// when true, next token should be a value
 	expect_t expect = EXP_VAL;
 
-	op_t unary = OP_NONE;
+	//op_t unary = OP_NONE;
 
 	//while (tokenizer_next(tok, allow_index)) {
 	do {
@@ -61,6 +61,10 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
 					arith_parse(tok, allow_index, (const ilist_t**) &anode->val.subv.value);
+
+					if (tok->type != T_BRACKET) {
+						rv = E_SYNTAX;
+					}
 				}
 				expect = EXP_OP;
 				anode = ilist_add(list);
@@ -114,7 +118,7 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 					anode->type = A_VALUE;
 					anode->val.intv.type = LIT_TWOCHAR;
 					// TODO: byte order
-					anode->val.intv.value = tok->line[tok->vals.string.ptr] << 8 + (tok->line[tok->vals.string.ptr+1]&0xff);
+					anode->val.intv.value = (tok->line[tok->vals.string.ptr] << 8) + (tok->line[tok->vals.string.ptr+1]&0xff);
 					expect = EXP_OP;
 					anode = ilist_add(list);
 					break;

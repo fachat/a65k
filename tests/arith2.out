@@ -30,7 +30,7 @@ WRN:  A:len=1
 WRN:    type=b, modifier=0( ), op=0( ) btype=40 (()
 WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)291/123
-WRN:   > next is type b, )
+WRN:   > next is type t, ,X)
 WRN:---> ($123,X) (with index)
 WRN:  A:len=1
 WRN:    type=b, modifier=0( ), op=0( ) btype=40 (()
