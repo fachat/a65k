@@ -113,6 +113,9 @@ static void main_init() {
 	// register command line options
 	cmdline_register_mult(main_options, sizeof(main_options)/sizeof(cmdline_t));
 
+	// cpu info
+	cpu_module_init();
+
 	// input files
 	infiles_module_init();
 	// operation
@@ -123,8 +126,6 @@ static void main_init() {
 	parser_module_init();
 	// tokenizer
 	tokenizer_module_init();
-	// cpu info
-	cpu_module_init();
 
 }
 

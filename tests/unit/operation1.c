@@ -8,6 +8,7 @@
 #include "segment.h"
 #include "context.h"
 #include "operation.h"
+#include "cmdline.h"
 
 
 int main(int argc, char *argv[]) {
@@ -15,6 +16,7 @@ int main(int argc, char *argv[]) {
         (void)argc;
         (void)argv;
 
+	cmdline_module_init();
 	cpu_module_init();
 	segment_module_init();
 	operation_module_init();

@@ -5,6 +5,7 @@
 #include "types.h"
 #include "position.h"
 #include "cpu.h"
+#include "cmdline.h"
 
 
 int main(int argc, char *argv[]) {
@@ -12,6 +13,7 @@ int main(int argc, char *argv[]) {
         (void)argc;
         (void)argv;
 
+	cmdline_module_init();
 	cpu_module_init();
 
 	const cpu_t *c = cpu_by_name("nmos");

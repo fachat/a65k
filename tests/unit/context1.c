@@ -6,6 +6,7 @@
 #include "position.h"
 #include "cpu.h"
 #include "segment.h"
+#include "cmdline.h"
 
 #include "context.h"
 
@@ -15,6 +16,7 @@ int main(int argc, char *argv[]) {
         (void)argc;
         (void)argv;
 
+	cmdline_module_init();
 	cpu_module_init();
 
 	// test vectors

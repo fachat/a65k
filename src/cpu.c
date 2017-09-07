@@ -30,6 +30,8 @@
 #include "infiles.h"
 #include "cpu.h"
 #include "errors.h"
+#include "err.h"
+#include "cmdline.h"
 
 // corresponds to the classes definitions in af65002.xml 
 static const cpu_t cpus[] = {
@@ -90,17 +92,44 @@ static const char *cpu_key_from_entry(const void *entry) {
 	return cpu->name;
 }
 
+static err_t set_cpu(const char *value, void *extra) {
+        (void) extra;
+
+        // TODO
+        printf("set cpu: %s\n", value);
+
+        return E_OK;
+}
+
+static param_enum_t *cpulist;
+
+static param_enum_t *get_cpus() {
+        return cpulist;
+}
+
+static cmdline_t cpu_options[] = {
+        { "cpu",       PARTYPE_ENUM,   set_cpu,  NULL, NULL,
+                "Set the (initial) cpu type", get_cpus },
+};
+
 void cpu_module_init() {
 
 	int num_cpus = sizeof(cpus)/sizeof(cpu_t);
 
+	cpulist = cmdline_pval_alloc(num_cpus + 1);
+
 	cpu_typemap = hash_init_stringkey(num_cpus, 5, cpu_key_from_entry);
 
-	for (int i = 0; i < num_cpus; i++) {
+	int i = 0;
+	for (; i < num_cpus; i++) {
 		hash_put(cpu_typemap, (void*)&cpus[i]);
-	}
 
-	
+		cpulist[i].value = cpus[i].name;
+		cpulist[i].description = cpus[i].desc;
+	}
+	cpulist[i].value = NULL;
+
+	cmdline_register_mult(cpu_options, sizeof(cpu_options)/sizeof(cmdline_t));
 }
 
 const cpu_t *cpu_by_name(const char *name) {
