@@ -29,6 +29,7 @@
 #include "cmdline.h"
 #include "err.h"
 #include "infiles.h"
+#include "mem.h"
 
 // hash from param name to cmdline_t sruct for quick find
 static hash_t *params = NULL;
@@ -49,15 +50,36 @@ static err_t usage(int flag, void* extra) {
 	list_iterator_t *iter = list_iterator(paramlist);
 	cmdline_t *param = NULL;
 	while ( (param = list_iterator_next(iter)) ) {
-		printf("  -%s\n\t%s\n", param->name, param->description);
+		switch(param->type) {
+		case PARTYPE_FLAG:
+			printf("  -%s\n\t%s\n", param->name, param->description);
+			break;
+		case PARTYPE_PARAM:
+			printf("  -%s=<value>\n\t%s\n", param->name, param->description);
+			break;
+		case PARTYPE_ENUM:
+			printf("  -%s=<value>\n\t%s\n", param->name, param->description);
+			param_enum_t *options = param->values();
+			int i = 0;
+			while (options[i].value) {
+				printf("\t'%s'\t%s\n", options[i].value, options[i].description);
+				i++;
+			}
+			break;
+		}
 	}
 	
 	return E_ABORT;
 }
 
 static const cmdline_t help[] = {
-	{ "?", PARTYPE_FLAG, NULL, usage, NULL, "Show this help" },
-	{ "help", PARTYPE_FLAG, NULL, usage, NULL, "Show this help" },
+	{ "?", PARTYPE_FLAG, NULL, usage, NULL, "Show this help", NULL },
+	{ "help", PARTYPE_FLAG, NULL, usage, NULL, "Show this help", NULL },
+};
+
+static type_t param_memtype = {
+	"param_enum_t",
+	sizeof(param_enum_t)
 };
 
 static const char *key_from_param(const void *entry) {
@@ -73,6 +95,13 @@ void cmdline_module_init() {
 
 	cmdline_register_mult(help, sizeof(help)/sizeof(cmdline_t));
 }
+
+// allocate an array of param_enum_t structs for use as param option
+param_enum_t *cmdline_pval_alloc(int n) {
+
+	return mem_alloc_n(n, &param_memtype);
+}
+
 
 // template method where extra_param is the pointer to an int variable to set
 err_t cmdline_set_flag(int flag, void *extra_param) {
@@ -107,18 +136,28 @@ err_t cmdline_parse(int argc, char *argv[]) {
 			char *val = NULL;
 			int flag = 1;
 			const char *name = argv[i]+1;
-			if (name == strstr(name, "no-")) {
-				name = name+3;
-				flag = 0;
-			}
+
 			char *end = index(name, '=');
 			if (end != NULL) {
 				val = end + 1;
 				end[0] = 0;
 			}
-			
+
 			// lookup option
 			cmdline_t *opt = hash_get(params, name);
+			if (opt == NULL) {
+				// check "no-" flag option
+				if (name == strstr(name, "no-")) {
+					name = name+3;
+					flag = 0;
+					opt = hash_get(params, name);
+					if (opt != NULL && opt->type != PARTYPE_FLAG) {
+						opt = NULL;
+					}
+				}
+			}
+			
+			param_enum_t *values = NULL;
 			if (opt != NULL) {
 				switch (opt->type) {
 				case PARTYPE_FLAG:
@@ -126,8 +165,21 @@ err_t cmdline_parse(int argc, char *argv[]) {
 					break;
 				case PARTYPE_PARAM:
 					// TODO: error if param is missing
-					// TODO: if started with "no-" return error
 					rv = opt->setfunc(val, opt->extra_param);
+					break;
+				case PARTYPE_ENUM:
+					values = opt->values();
+					int i = 0;
+					while (values[i].value) {
+						if (!strcmp(values[i].value, val)) {
+							opt->setfunc(val, opt->extra_param);
+							break;
+						}
+						i++;
+					}
+					if (!values[i].value) {
+						// TODO error option value not found
+					}
 					break;
 				}
 			} else {

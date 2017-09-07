@@ -36,8 +36,15 @@ typedef enum {
 	// no parameter, sets a bool when present with/without "no-" prefix
 	PARTYPE_FLAG,
 	// with required parameter
-	PARTYPE_PARAM
+	PARTYPE_PARAM,
+	// with enumerated parameter
+	PARTYPE_ENUM,
 } param_type_t;
+
+typedef struct {
+	const char	*value;
+	const char	*description;
+} param_enum_t;
 
 typedef struct {
 	// name of cmdline param
@@ -46,7 +53,7 @@ typedef struct {
 	// option has a parameter
 	param_type_t	type;
 
-	// function to call when parsed and type is PARTYPE_PARAM
+	// function to call when parsed and type is PARTYPE_PARAM, PARTYPE_ENUM
 	err_t 		(*setfunc)(const char *value, void *extra_param);
 
 	// function to call when parsed and type is PARTYPE_FLAG
@@ -57,6 +64,9 @@ typedef struct {
 
 	// description
 	const char	*description;
+
+	// return optional enum values for enumerated parameter, last entry must be NULL
+	param_enum_t*	(*values)();
 } cmdline_t;
 
 // template method where extra_param is the pointer to an int variable to set
@@ -66,6 +76,9 @@ void cmdline_register(const cmdline_t *param);
 
 // register a list of #num options from an array of options starting at param
 void cmdline_register_mult(const cmdline_t *param, int num);
+
+// allocate an array of param_enum_t structs for use as param option
+param_enum_t *cmdline_pval_alloc(int n);
 
 #endif
 

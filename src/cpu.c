@@ -99,6 +99,8 @@ void cpu_module_init() {
 	for (int i = 0; i < num_cpus; i++) {
 		hash_put(cpu_typemap, (void*)&cpus[i]);
 	}
+
+	
 }
 
 const cpu_t *cpu_by_name(const char *name) {

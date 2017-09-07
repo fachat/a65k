@@ -41,6 +41,30 @@
 #include "err.h"
 
 
+static err_t main_set_mode(const char *value, void *extra) {
+	(void) extra;
+
+	// TODO
+	printf("set mode: %s\n", value);
+
+	return E_OK;
+}
+
+static param_enum_t modes[] = {
+	{ "ass", 	"Assembler mode (default)" },
+	{ "lint",	"Just format the code and print it on stdout" },
+	{ NULL },
+};
+
+static param_enum_t *main_get_modes() {
+	return modes;
+}
+
+static cmdline_t main_options[] = {
+	{ "mode", 	PARTYPE_ENUM, 	main_set_mode, 	NULL, NULL, 
+		"Set the operation mode:", main_get_modes },
+};
+
 /**
  * print prints out the structures 
  */
@@ -85,6 +109,10 @@ static void main_init() {
 	config_module_init();
 	// cmdline
 	cmdline_module_init();
+
+	// register command line options
+	cmdline_register_mult(main_options, sizeof(main_options)/sizeof(cmdline_t));
+
 	// input files
 	infiles_module_init();
 	// operation
