@@ -53,13 +53,14 @@ static err_t set_initial_lineno(int flag, void *params) {
 
 
 static cmdline_t params[] = {
-/* TODO so far unused!
+// TODO: unused, except for unit tests (so far)
 	{ "parse-initial-binary", PARTYPE_FLAG, NULL, set_initial_binary, NULL, 
 		"parse address and hex data values before the actual label and operation "
 		"(disables parse-initial-lineno)", NULL },
 	{ "parse-initial-lineno", PARTYPE_FLAG, NULL, set_initial_lineno, NULL, 
 		"parse a BASIC-style line number before the actual label and operation " 
 		"(disables parse-initial-binary)", NULL },
+/* TODO so far unused!
 	{ "parse-follow-includes", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.follow_includes, 
 		"Follow include statements (default in assembler, off by default in lint mode)", NULL },
 	{ "parse-xa-preproc", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.xa_preprocessor, 
