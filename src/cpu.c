@@ -108,7 +108,7 @@ static param_enum_t *get_cpus() {
 }
 
 static cmdline_t cpu_options[] = {
-        { "cpu",       PARTYPE_ENUM,   set_cpu,  NULL, NULL,
+        { "cpu", 	NULL,      PARTYPE_ENUM,   set_cpu,  NULL, NULL,
                 "Set the (initial) cpu type", get_cpus },
 };
 

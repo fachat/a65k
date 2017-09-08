@@ -61,7 +61,7 @@ static param_enum_t *main_get_modes() {
 }
 
 static cmdline_t main_options[] = {
-	{ "mode", 	PARTYPE_ENUM, 	main_set_mode, 	NULL, NULL, 
+	{ "mode", 	NULL, 	PARTYPE_ENUM, 	main_set_mode, 	NULL, NULL, 
 		"Set the operation mode:", main_get_modes },
 };
 

@@ -4,3 +4,31 @@ config:
   initial_binary=1
 config:
   initial_binary=0
+set_inc(/foo)
+set_inc(/bar)
+set_flag(1)
+set_inc2(fub)
+set_flag(0)
+set_inc2(yyy)
+Usage: a65k [options] in-filename1 [in-filename2 ...]
+Cross-assembler for 65xx/R65C02/65816/65CE02/65002
+Flag options can be inverted with 'no-' prefix for long
+names resp. '+' for short names
+
+  --help
+  -?
+	Show this help
+  --include-dir=<value>
+  -I<value>
+	include dir
+  -i<value>
+	include dir2
+  -o
+	include flag
+  --parse-initial-binary
+	parse address and hex data values before the actual label and operation (disables parse-initial-lineno)
+  --parse-initial-lineno
+	parse a BASIC-style line number before the actual label and operation (disables parse-initial-binary)
+  --parse-c-style
+	allow C-style hex and octal values (default off)
+unknown cmdline parameter: -?

@@ -56,6 +56,7 @@ struct statement_s {
         const context_t         *ctx;		// current context, like CPU type, width, other options
         stype_t                 type;		// type of statement (see above)
         // optional
+	int			lineno;		// parsed BASIC-style line number
         const label_t           *label;		// TODO allow for multiple label definitions per line/statement
 	// S_LABDEF
 	const ilist_t		*setlabel;	// anode_t list for setting label to a value 

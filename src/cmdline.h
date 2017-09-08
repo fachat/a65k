@@ -47,8 +47,10 @@ typedef struct {
 } param_enum_t;
 
 typedef struct {
-	// name of cmdline param
+	// name of cmdline param (long for "--" option)
 	const char 	*name;		
+	// name of cmdline param (short, i.e. single char for "-" option)
+	const char 	*shortname;		
 
 	// option has a parameter
 	param_type_t	type;

@@ -56,6 +56,7 @@ typedef enum {
 	P_INIT,		// start of line, accept label definitions, operations and pseudos
 	P_OP,		// has parsed label, accept "=" or operation
 	P_PARAM,	// after operation, parse parameters to the operation
+	P_COLON,	// after either label or line number, where a colon can be
 } pstate_t;
 
 
@@ -88,6 +89,9 @@ static statement_t *new_statement(const context_t *ctx) {
 	stmt->setlabel = NULL;
 	stmt->label = NULL;
 	stmt->syn = SY_IMP;
+
+	// negative line number is not set
+	stmt->lineno = -1;
 
 	stmt->rs_prefix = RS_NOT_SET;
 	stmt->le_prefix = LE_NOT_SET;
@@ -274,6 +278,15 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 	while ((rv == E_OK) && tokenizer_next(tok, allow_index)) {
 		switch(state) {
 		case P_OP:
+			if (tok->type == T_TOKEN && tok->vals.op == OP_ASSIGN) {
+				// after label, that's a label value definition
+				stmt->type = S_LABDEF;
+				// next define the label from param
+				state = P_PARAM;
+				break;
+			}
+			// fall-through!
+		case P_COLON:
 			if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
 				// accept after label
 				// continue to next 
@@ -283,13 +296,6 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				state = P_INIT;
 				break;
 			} 
-			if (tok->type == T_TOKEN && tok->vals.op == OP_ASSIGN) {
-				// after label, that's a label value definition
-				stmt->type = S_LABDEF;
-				// next define the label from param
-				state = P_PARAM;
-				break;
-			}
 			// fall-through!
 		case P_INIT:
 			switch(tok->type) {
@@ -333,6 +339,13 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				}
 				// TODO assign PC
 				break;
+			case T_LITERAL:
+				if (cfg->initial_lineno && (state == P_INIT) && (tok->vals.literal.type == LIT_DECIMAL)) {
+					// line number parsing
+					stmt->lineno = tok->vals.literal.value;
+					state = P_COLON;
+				}
+				// fall-through
 			default:
 				// syntax error
 				error_syntax(pos);

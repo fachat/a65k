@@ -33,6 +33,8 @@
 
 // hash from param name to cmdline_t sruct for quick find
 static hash_t *params = NULL;
+static hash_t *shorts = NULL;
+
 // list of parameters for help output
 static list_t *paramlist = NULL;
 
@@ -45,6 +47,8 @@ static err_t usage(int flag, void* extra) {
 
 	printf("Usage: %s [options] in-filename1 [in-filename2 ...]\n"
 		"Cross-assembler for 65xx/R65C02/65816/65CE02/65002\n"
+		"Flag options can be inverted with 'no-' prefix for long\n"
+		"names resp. '+' for short names\n"
 		"\n", prg_name); 
 
 	list_iterator_t *iter = list_iterator(paramlist);
@@ -52,18 +56,30 @@ static err_t usage(int flag, void* extra) {
 	while ( (param = list_iterator_next(iter)) ) {
 		switch(param->type) {
 		case PARTYPE_FLAG:
-			printf("  -%s\n\t%s\n", param->name, param->description);
+			if (param->name) {
+				printf("  --%s\n", param->name);
+			} 
+			if (param->shortname) {
+				printf("  -%s\n", param->shortname);
+			}
+			printf("\t%s\n", param->description);
 			break;
 		case PARTYPE_PARAM:
-			printf("  -%s=<value>\n\t%s\n", param->name, param->description);
-			break;
 		case PARTYPE_ENUM:
-			printf("  -%s=<value>\n\t%s\n", param->name, param->description);
-			param_enum_t *options = param->values();
-			int i = 0;
-			while (options[i].value) {
-				printf("\t'%s'\t%s\n", options[i].value, options[i].description);
-				i++;
+			if (param->name) {
+				printf("  --%s=<value>\n", param->name);
+			} 
+			if (param->shortname) {
+				printf("  -%s<value>\n", param->shortname);
+			}
+			printf("\t%s\n", param->description);
+			if (param->type == PARTYPE_ENUM) {
+				param_enum_t *options = param->values();
+				int i = 0;
+				while (options[i].value) {
+					printf("\t'%s'\t%s\n", options[i].value, options[i].description);
+					i++;
+				}
 			}
 			break;
 		}
@@ -73,8 +89,7 @@ static err_t usage(int flag, void* extra) {
 }
 
 static const cmdline_t help[] = {
-	{ "?", PARTYPE_FLAG, NULL, usage, NULL, "Show this help", NULL },
-	{ "help", PARTYPE_FLAG, NULL, usage, NULL, "Show this help", NULL },
+	{ "help", "?", PARTYPE_FLAG, NULL, usage, NULL, "Show this help", NULL },
 };
 
 static type_t param_memtype = {
@@ -82,15 +97,20 @@ static type_t param_memtype = {
 	sizeof(param_enum_t)
 };
 
-static const char *key_from_param(const void *entry) {
+static const char *longkey_from_param(const void *entry) {
 	return ((cmdline_t*)entry)->name;
+}
+
+static const char *shortkey_from_param(const void *entry) {
+	return ((cmdline_t*)entry)->shortname;
 }
 
 // TODO init the cmdline parser with the name as which the program was called
 // for example "a65k", but also "xa65"
 void cmdline_module_init() {
 
-	params = hash_init_stringkey(50, 25, key_from_param);
+	params = hash_init_stringkey(50, 25, longkey_from_param);
+	shorts = hash_init_stringkey(50, 25, shortkey_from_param);
 	paramlist = array_list_init(20);
 
 	cmdline_register_mult(help, sizeof(help)/sizeof(cmdline_t));
@@ -117,11 +137,71 @@ void cmdline_register_mult(const cmdline_t *param, int num ) {
 
 void cmdline_register(const cmdline_t *param) {
 	
-	if (hash_put(params, (void*)param) != NULL) {
+	if (param->name && hash_put(params, (void*)param) != NULL) {
+		// must not happen
+		exit(1);
+	}
+	if (param->shortname && hash_put(shorts, (void*)param) != NULL) {
 		// must not happen
 		exit(1);
 	}
 	list_add(paramlist, (void*)param);
+}
+
+static err_t cmdline_parse_long(char *name, cmdline_t **opt, char **val, int *flag) {
+	err_t rv = E_OK;
+	*val = NULL;
+	*flag = 1;
+	char *end = index(name, '=');
+	if (end != NULL) {
+		(*val) = end + 1;
+		end[0] = 0;
+	}
+
+	// lookup option
+	*opt = hash_get(params, name);
+	if (*opt == NULL) {
+		// check "no-" flag option
+		if (name == strstr(name, "no-")) {
+			name = name+3;
+			*flag = 0;
+			*opt = hash_get(params, name);
+			if (*opt != NULL && (*opt)->type != PARTYPE_FLAG) {
+				*opt = NULL;
+			}
+		}
+	}
+	if (*opt == NULL) {
+		rv = E_ABORT;
+	}
+	return rv;
+}
+
+/*
+ * parse short cmdline params; call flags in case multiple flag options
+ * return param option in case of last one is option
+ */
+static err_t cmdline_parse_short(char *pname, cmdline_t **opt, char **val, int flag) {
+	err_t rv = E_OK;
+	*val = NULL;
+
+	do {
+		char *name = mem_alloc_strn(pname, 1);
+		*opt = hash_get(shorts, name);
+		if (*opt != NULL) {
+			if ((*opt)->type == PARTYPE_FLAG) {
+				rv = (*opt)->setflag(flag, (*opt)->extra_param);
+			} else {
+				mem_free(name);
+				*val = pname+1;
+				return E_OK;
+			}
+		} else {
+			rv = E_ABORT;
+		}
+	} while ((pname++)[0] != 0);
+
+	return rv;
 }
 
 err_t cmdline_parse(int argc, char *argv[]) {
@@ -132,63 +212,52 @@ err_t cmdline_parse(int argc, char *argv[]) {
 
         int i = 1;
         while (i < argc && !rv) {
-                if (argv[i][0] == '-') {
-			char *val = NULL;
-			int flag = 1;
-			const char *name = argv[i]+1;
-
-			char *end = index(name, '=');
-			if (end != NULL) {
-				val = end + 1;
-				end[0] = 0;
-			}
-
-			// lookup option
-			cmdline_t *opt = hash_get(params, name);
-			if (opt == NULL) {
-				// check "no-" flag option
-				if (name == strstr(name, "no-")) {
-					name = name+3;
-					flag = 0;
-					opt = hash_get(params, name);
-					if (opt != NULL && opt->type != PARTYPE_FLAG) {
-						opt = NULL;
-					}
-				}
-			}
-			
-			param_enum_t *values = NULL;
-			if (opt != NULL) {
-				switch (opt->type) {
-				case PARTYPE_FLAG:
-					rv = opt->setflag(flag, opt->extra_param);
-					break;
-				case PARTYPE_PARAM:
-					// TODO: error if param is missing
-					rv = opt->setfunc(val, opt->extra_param);
-					break;
-				case PARTYPE_ENUM:
-					values = opt->values();
-					int i = 0;
-					while (values[i].value) {
-						if (!strcmp(values[i].value, val)) {
-							opt->setfunc(val, opt->extra_param);
-							break;
-						}
-						i++;
-					}
-					if (!values[i].value) {
-						// TODO error option value not found
-					}
-					break;
-				}
+       		char *val = NULL;
+		cmdline_t *opt = NULL;
+		int flag = 1;
+         	if (argv[i][0] == '-') {
+			if (argv[i][1] == '-') {
+				rv = cmdline_parse_long(argv[i]+2, &opt, &val, &flag);
 			} else {
-				// TODO error cmdline parameter not found
+				rv = cmdline_parse_short(argv[i]+1, &opt, &val, flag);
 			}
-                } else {
+		} else if (argv[i][0] == '+') {
+			flag = 0;
+			rv = cmdline_parse_short(argv[i]+1, &opt, &val, flag);
+		} else {
 			// register file with snapshot (clone) of current parser configuration
                         infiles_register(argv[i], parser_current_config());
                 }   
+
+		param_enum_t *values = NULL;
+		if (opt != NULL) {
+			switch (opt->type) {
+			case PARTYPE_FLAG:
+				rv = opt->setflag(flag, opt->extra_param);
+				break;
+			case PARTYPE_PARAM:
+				// TODO: error if param is missing
+				rv = opt->setfunc(val, opt->extra_param);
+				break;
+			case PARTYPE_ENUM:
+				values = opt->values();
+				int i = 0;
+				while (values[i].value) {
+					if (!strcmp(values[i].value, val)) {
+						opt->setfunc(val, opt->extra_param);
+						break;
+					}
+					i++;
+				}
+				if (!values[i].value) {
+					// TODO error option value not found
+				}
+				break;
+			}
+		} else {
+			// TODO error cmdline parameter not found
+			printf("unknown cmdline parameter: %s\n", argv[i]);
+		}
 		i++;
         }   
 	return rv;

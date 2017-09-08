@@ -54,23 +54,23 @@ static err_t set_initial_lineno(int flag, void *params) {
 
 static cmdline_t params[] = {
 // TODO: unused, except for unit tests (so far)
-	{ "parse-initial-binary", PARTYPE_FLAG, NULL, set_initial_binary, NULL, 
+	{ "parse-initial-binary", NULL, PARTYPE_FLAG, NULL, set_initial_binary, NULL, 
 		"parse address and hex data values before the actual label and operation "
 		"(disables parse-initial-lineno)", NULL },
-	{ "parse-initial-lineno", PARTYPE_FLAG, NULL, set_initial_lineno, NULL, 
+	{ "parse-initial-lineno", NULL, PARTYPE_FLAG, NULL, set_initial_lineno, NULL, 
 		"parse a BASIC-style line number before the actual label and operation " 
 		"(disables parse-initial-binary)", NULL },
 /* TODO so far unused!
-	{ "parse-follow-includes", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.follow_includes, 
+	{ "parse-follow-includes", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.follow_includes, 
 		"Follow include statements (default in assembler, off by default in lint mode)", NULL },
-	{ "parse-xa-preproc", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.xa_preprocessor, 
+	{ "parse-xa-preproc", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.xa_preprocessor, 
 		"parse XA65 preprocessor statements (default off)", NULL },
-	{ "parse-convert-xapp", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.convert_xapp,
+	{ "parse-convert-xapp", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.convert_xapp,
 		"Convert XA65 preprocessor statements into standard pseudo-operations (lint mode only)", NULL },
-	{ "parse-colon-in-comments", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.colon_in_comments,
+	{ "parse-colon-in-comments", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.colon_in_comments,
 		"if set, allow colon in comments; by default colon starts new statement.", NULL },
 */
-	{ "parse-c-style", PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.cstyle_allowed,
+	{ "parse-c-style", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.cstyle_allowed,
 		"allow C-style hex and octal values (default off)", NULL },
 };
 
