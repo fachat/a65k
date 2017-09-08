@@ -1,7 +1,8 @@
 
 .PHONY: clean
 
-TESTS=arith4 tokenizer3 tokenizer2 tokenizer1a tokenizer1 infiles1 block1 cpu1 context1 operation1 arith1 arith2 arith3 cmdline1 parser1 pseudo1 
+TESTS=arith4 tokenizer3 tokenizer2 tokenizer1a tokenizer1 infiles1 block1 cpu1 context1 operation1 arith1 arith2 arith3 cmdline1 
+TESTS+=parser1 pseudo1 parser2
 
 SRCDIR=../../src
 

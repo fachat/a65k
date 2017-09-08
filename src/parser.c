@@ -152,7 +152,10 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 				stmt->param = basenode;
 
 				anode_t *first = ilist_get(stmt->param, 0);
-				if (brtype == AB_RND && first->type == A_BRACKET && first->val.subv.type == AB_RND && ilist_len(stmt->param) == 1) {
+				if (brtype == AB_RND 
+						&& first->type == A_BRACKET 
+						&& first->val.subv.type == AB_RND 
+						&& ilist_len(stmt->param) == 1) {
 					brtype = AB_DBLRND;
 					ilist_t *basenode = first->val.subv.value;
 					stmt->param = basenode;
@@ -344,6 +347,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					// line number parsing
 					stmt->lineno = tok->vals.literal.value;
 					state = P_COLON;
+					break;
 				}
 				// fall-through
 			default:

@@ -48,6 +48,9 @@ void do_print(const char *pattern, ...) {
 
 void print_debug_stmt(const statement_t *stmt) {
 
+	if (stmt->lineno >= 0) {
+		do_print("LINE: %d:", stmt->lineno);
+	}
 	do_print("BLK:%d ctx:%d (CPU: %s, isa:$%x)", 
 		stmt->blk->blockno, stmt->ctx->ctxno, stmt->ctx->cpu->name, stmt->ctx->cpu->isa);
 
