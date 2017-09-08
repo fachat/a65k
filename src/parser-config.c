@@ -67,9 +67,9 @@ static cmdline_t params[] = {
 		"parse XA65 preprocessor statements (default off)", NULL },
 	{ "parse-convert-xapp", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.convert_xapp,
 		"Convert XA65 preprocessor statements into standard pseudo-operations (lint mode only)", NULL },
+*/
 	{ "parse-colon-in-comments", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.colon_in_comments,
 		"if set, allow colon in comments; by default colon starts new statement.", NULL },
-*/
 	{ "parse-c-style", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.cstyle_allowed,
 		"allow C-style hex and octal values (default off)", NULL },
 };

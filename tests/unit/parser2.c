@@ -53,8 +53,8 @@ int main(int argc, char *argv[]) {
 
 	//parser_config_init();
 
-	char *pars[] =  { "a65k", "--parse-initial-lineno" };
-	cmdline_parse(2, pars);
+	char *pars[] =  { "a65k", "--parse-initial-lineno", "--no-parse-colon-in-comments"  };
+	cmdline_parse(3, pars);
 
 	const cpu_t *cpu = cpu_by_name("nmos");
 
@@ -64,7 +64,16 @@ int main(int argc, char *argv[]) {
 
 	position_t pos = { "bogusfile", 1 };
 
-	test(ctx, &pos, "1234 label adc #123");	
+	//test(ctx, &pos, "1234 label adc #123");	
+	//test(ctx, &pos, "1234: label adc #123");	
+	test(ctx, &pos, "1234: label adc #123:TAX:ADC#1");	
+	test(ctx, &pos, "1234: label adc #123 ;comment");	
+	test(ctx, &pos, "1234: label adc #123 ;comment :ADC #1");	
+
+	char *pars2[] =  { "a65k", "--parse-colon-in-comments" };
+	cmdline_parse(2, pars2);
+
+	test(ctx, &pos, "1234: label adc #123 ;comment :ADC #1");	
 }
 
 

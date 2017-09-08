@@ -594,7 +594,9 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 		return false;
 	}
 	
-}// set to next token; return true when there is a valid name token, that is used as prefix
+}
+
+// set to next token; return true when there is a valid name token, that is used as prefix
 bool_t tokenizer_next_prefix(tokenizer_t *tok) {
 
 	// move behind last token
@@ -619,6 +621,43 @@ bool_t tokenizer_next_prefix(tokenizer_t *tok) {
 	}
 
 	return parse_name(tok, ptr);
+}
+
+// set to next token; return true when there is a valid name token, that is used as prefix
+bool_t tokenizer_next_comment(tokenizer_t *tok, int allow_colon) {
+
+	// move behind last token
+	int ptr = tok->ptr + tok->len;
+
+	const char *line = tok->line;
+
+	// skip whitespace
+	while (line[ptr] != 0 && isspace(line[ptr])) {
+		ptr++;
+	}
+
+	tok->ptr = ptr;
+	tok->len = 0;
+
+	// are we done with the line yet?
+	if (line[ptr] == 0 || tok->type == T_END || tok->type == T_ERROR) {
+		if (tok->type != T_ERROR) {
+			tok->type = T_END;
+		}
+		return false;
+	}
+
+	tok->len = strlen(tok->line + ptr);
+	if (allow_colon) {
+		// TODO need escape handling?
+		for (int i = 0; i < tok->len; i++) {
+			if (line[tok->ptr + i] == ':') {
+				tok->len = i;
+			}
+		}
+	}
+
+	return true;
 }
 
 

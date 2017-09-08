@@ -93,7 +93,10 @@ void print_debug_stmt(const statement_t *stmt) {
 			}
 		}
 	}
-	
+
+	if (stmt->comment) {
+		do_print("COMMENT: %s", stmt->comment);
+	}	
 }
 
 static inline char prop(int o) {  return isprint(o) ? o : ' '; }

@@ -1,7 +1,7 @@
 /****************************************************************************
 
     parser
-    Copyright (C) 2015 Andre Fachat
+    Copyright (C) 2015-2017 Andre Fachat
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ typedef enum {
 	P_OP,		// has parsed label, accept "=" or operation
 	P_PARAM,	// after operation, parse parameters to the operation
 	P_COLON,	// after either label or line number, where a colon can be
+	P_END,		// expect end of line
 } pstate_t;
 
 
@@ -97,6 +98,9 @@ static statement_t *new_statement(const context_t *ctx) {
 	stmt->le_prefix = LE_NOT_SET;
 	stmt->um_prefix = 0;
 	stmt->nf_prefix = 0;
+
+	stmt->comment = NULL;
+
 	return stmt;
 }
 
@@ -290,6 +294,9 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 			}
 			// fall-through!
 		case P_COLON:
+			if (tok->type == T_END) {
+				break;
+			}
 			if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
 				// accept after label
 				// continue to next 
@@ -358,6 +365,15 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 			}
 			break;
 		case P_PARAM:
+                        if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+                                // accept after label
+                                // continue to next 
+                                stmt->type = S_LABEQPC;
+                                statement_push(stmt);
+                                stmt = new_statement(ctx);
+                                state = P_INIT;
+                                break;
+                        }
 			// TODO check CPU type if prefixes are allowed
 			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
 				// parse prefix
@@ -419,16 +435,39 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 						}
 						stmt->le_prefix = LE_1;
 						break;
+					default:
+						rv = E_SYNTAX;
+						break;
 					}
 				   }
 				} else {
 					rv = E_SYNTAX;
 				}
+				break;
 			} else {
 				// parse parameters
 				rv = param_parse(tok, stmt);
+
+				if (tok->type == T_TOKEN) {
+				  if (tok->vals.op == OP_SEMICOLON
+					|| (tok->vals.op == OP_DOUBLESLASH && cfg->cstyle_allowed)) {
+
+					if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
+						stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
+					}
+					state = P_COLON;
+					break;
+				  } else
+				  if (tok->vals.op == OP_COLON) {
+					statement_push(stmt);
+					stmt = new_statement(ctx);
+					state = P_INIT;
+					break;
+				  }
+				} else {
+					break;
+				}
 			}
-			break;
 		default:
 			error_syntax(pos);
 			goto end;

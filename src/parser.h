@@ -72,6 +72,8 @@ struct statement_s {
 	// S_PSEUDO
 	pseudo_t		*pseudo;	// pseudo opcode definition
 	list_t			*pparams;	// parameters for the pseudo opcode
+	// COMMENT
+	char			*comment;	// comment
 };
 
 

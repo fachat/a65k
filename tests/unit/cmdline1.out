@@ -29,6 +29,8 @@ names resp. '+' for short names
 	parse address and hex data values before the actual label and operation (disables parse-initial-lineno)
   --parse-initial-lineno
 	parse a BASIC-style line number before the actual label and operation (disables parse-initial-binary)
+  --parse-colon-in-comments
+	if set, allow colon in comments; by default colon starts new statement.
   --parse-c-style
 	allow C-style hex and octal values (default off)
 unknown cmdline parameter: -?
