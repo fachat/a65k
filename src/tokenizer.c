@@ -660,6 +660,10 @@ bool_t tokenizer_next_comment(tokenizer_t *tok, int allow_colon) {
 	return true;
 }
 
+void tokenizer_rewind(tokenizer_t *tok) {
+
+	tok->len = 0;
+}
 
 void tokenizer_free(tokenizer_t *tok) {
 	

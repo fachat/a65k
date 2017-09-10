@@ -82,6 +82,7 @@ void parser_module_init(void) {
 	parser_config_init();
 }
 
+
 static statement_t *new_statement(const context_t *ctx) {
 	statement_t *stmt = mem_alloc(&statement_memtype);
 	stmt->blk = p->blk;
@@ -103,6 +104,16 @@ static statement_t *new_statement(const context_t *ctx) {
 
 	return stmt;
 }
+
+static statement_t *new_statement_in_line(const context_t *ctx, statement_t *prev) {
+
+	statement_t *stmt = new_statement(ctx);
+
+	stmt->lineno = prev->lineno;
+
+	return stmt;
+}
+
 
 static void statement_push(statement_t *stmt) {
 	list_add(p->statements, stmt);
@@ -302,7 +313,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				// continue to next 
 				stmt->type = S_LABEQPC;
 				statement_push(stmt);
-				stmt = new_statement(ctx);
+				stmt = new_statement_in_line(ctx, stmt);
 				state = P_INIT;
 				break;
 			} 
@@ -328,7 +339,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 						// we already had a label
 						stmt->type = S_LABEQPC;
 						statement_push(stmt);
-						stmt = new_statement(ctx);
+						stmt = new_statement_in_line(ctx, stmt);
 					}
 					stmt->label = label;
 					// expect operation next (but accept labels too)
@@ -347,12 +358,28 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 						rv = E_SYNTAX;
 					}
 				}
+				if (tok->vals.op == OP_SEMICOLON
+					|| (tok->vals.op == OP_DOUBLESLASH && cfg->cstyle_allowed)) {
+
+					if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
+						stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
+					}
+					state = P_COLON;
+					break;
+				}
 				// TODO assign PC
 				break;
 			case T_LITERAL:
 				if (cfg->initial_lineno && (state == P_INIT) && (tok->vals.literal.type == LIT_DECIMAL)) {
 					// line number parsing
 					stmt->lineno = tok->vals.literal.value;
+
+					if (tokenizer_next(tok, 0)) {
+						if (tok->type != T_TOKEN || tok->vals.op != OP_COLON) {
+							// rewind
+							tokenizer_rewind(tok);
+						}
+					} 
 					state = P_COLON;
 					break;
 				}
@@ -370,7 +397,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
                                 // continue to next 
                                 stmt->type = S_LABEQPC;
                                 statement_push(stmt);
-                                stmt = new_statement(ctx);
+                                stmt = new_statement_in_line(ctx, stmt);
                                 state = P_INIT;
                                 break;
                         }
@@ -460,7 +487,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				  } else
 				  if (tok->vals.op == OP_COLON) {
 					statement_push(stmt);
-					stmt = new_statement(ctx);
+					stmt = new_statement_in_line(ctx, stmt);
 					state = P_INIT;
 					break;
 				  }

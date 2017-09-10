@@ -196,6 +196,9 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index);
 bool_t tokenizer_next_prefix(tokenizer_t *tok);
 bool_t tokenizer_next_comment(tokenizer_t *tok, int allow_colon);
 
+// clear token, so _next will return the same token again
+void tokenizer_rewind(tokenizer_t *tok);
+
 void tokenizer_free(tokenizer_t *tok);
 
 op_details_t *tokenizer_op_details(op_t op);
