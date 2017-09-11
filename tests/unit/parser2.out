@@ -1,8 +1,7 @@
 WRN:
 WRN:>>> 1234: label adc #123:TAX:ADC#1
+WRN:--------------- STMT ---------------
 WRN:LINE: 1234:
-WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
 WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
@@ -10,9 +9,13 @@ WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:PAR: 
 WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:--------------- STMT ---------------
+WRN:LINE: 1234:
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:OPR: name:TAX isa:$1 isrel:0 acw:0 idxw:0
 WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:--------------- STMT ---------------
+WRN:LINE: 1234:
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
 WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
@@ -21,9 +24,8 @@ WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
 WRN:
 WRN:>>> 1234: label adc #123 ;comment
+WRN:--------------- STMT ---------------
 WRN:LINE: 1234:
-WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
 WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
@@ -34,9 +36,8 @@ WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
 WRN:COMMENT: comment
 WRN:
 WRN:>>> 1234: label adc #123 ;comment :ADC #1
+WRN:--------------- STMT ---------------
 WRN:LINE: 1234:
-WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
 WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
@@ -46,10 +47,52 @@ WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
 WRN:COMMENT: comment :ADC #1
 WRN:
-WRN:>>> 1234: label adc #123 ;comment :ADC #1
-WRN:LINE: 1234:
+WRN:>>> label adc #123 ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:LAB: name:label ctx:0 pos:bogusfile:1
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:COMMENT: comment :ADC #1
+WRN:
+WRN:>>> adc #123 ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:COMMENT: comment :ADC #1
+WRN:
+WRN:>>> ;comment :ADC #1
+WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:COMMENT: comment :ADC #1
+WRN:
+WRN:>>> label ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:LAB: name:label ctx:0 pos:bogusfile:1
+WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:COMMENT: comment :ADC #1
+WRN:
+WRN:>>> :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:
+WRN:>>> 1234: label adc #123 ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:LINE: 1234:
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
 WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
@@ -58,6 +101,79 @@ WRN:PAR:
 WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
 WRN:COMMENT: comment 
+WRN:--------------- STMT ---------------
+WRN:LINE: 1234:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:
+WRN:>>> label adc #123 ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:LAB: name:label ctx:0 pos:bogusfile:1
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:COMMENT: comment 
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:
+WRN:>>> adc #123 ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)123/7b
+WRN:COMMENT: comment 
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:
+WRN:>>> ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:COMMENT: comment 
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:
+WRN:>>> label ;comment :ADC #1
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:LAB: name:label ctx:0 pos:bogusfile:1
+WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:COMMENT: comment 
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
+WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:
+WRN:>>> :ADC #1
+WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:OPR: name:ADC isa:$561 isrel:0 acw:0 idxw:0
 WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1

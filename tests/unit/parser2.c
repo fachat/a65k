@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "label adc #123 ;comment :ADC #1");	
 	test(ctx, &pos, "adc #123 ;comment :ADC #1");	
 	test(ctx, &pos, ";comment :ADC #1");	
+	test(ctx, &pos, "label ;comment :ADC #1");	
 	test(ctx, &pos, ":ADC #1");	
 
 	char *pars2[] =  { "a65k", "--parse-colon-in-comments" };
@@ -81,6 +82,7 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "label adc #123 ;comment :ADC #1");	
 	test(ctx, &pos, "adc #123 ;comment :ADC #1");	
 	test(ctx, &pos, ";comment :ADC #1");	
+	test(ctx, &pos, "label ;comment :ADC #1");	
 	test(ctx, &pos, ":ADC #1");	
 }
 

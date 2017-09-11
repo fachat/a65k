@@ -48,6 +48,8 @@ void do_print(const char *pattern, ...) {
 
 void print_debug_stmt(const statement_t *stmt) {
 
+	do_print("--------------- STMT ---------------");
+
 	if (stmt->lineno >= 0) {
 		do_print("LINE: %d:", stmt->lineno);
 	}
