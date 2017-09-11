@@ -508,6 +508,8 @@ static inline bool_t parse_token(tokenizer_t *tok, int ptr, int can_have_operato
 // set to next token; return true when there is a valid token
 bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 
+	bool_t rv = false;
+
 	// move behind last token
 	int ptr = tok->ptr + tok->len;
 
@@ -545,59 +547,63 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 				// hex, C-style
 				tok->ptr = ptr;
 				ptr += 2;
-				return parse_hex(tok, ptr, 1);
+				rv = parse_hex(tok, ptr, 1);
 			} else {
 				// octal
 				tok->ptr = ptr;
 				ptr += 1;
-				return parse_octal(tok, ptr, 1);
+				rv = parse_octal(tok, ptr, 1);
 			}
 		} else {
 			// dec
-			return parse_decimal(tok, ptr);
+			rv = parse_decimal(tok, ptr);
 		}
 	} else
 	if ((!can_have_operator) && (c == '%')) {
 		// binary
 		tok->ptr = ptr;
 		ptr++;
-		return parse_binary(tok, ptr);
+		rv = parse_binary(tok, ptr);
 	} else
 	if ((!can_have_operator) && (c == '$')) {
 		// hex
 		tok->ptr = ptr;
 		ptr++;
-		return parse_hex(tok, ptr, 0);
+		rv = parse_hex(tok, ptr, 0);
 	} else
 	if ((!can_have_operator) && (c == '&')) {
 		// octal
 		ptr++;
 		tok->ptr = ptr;
-		return parse_octal(tok, ptr, 0);
+		rv = parse_octal(tok, ptr, 0);
 	} else
 	if (is_string_delim(c)) {
 		// string literal
 		// c must be of one of quotetype_t enum!
-		return parse_string(tok, ptr);
+		rv = parse_string(tok, ptr);
 	} else
 	if (isalpha(c) || c == '_') {
 		// name
-		return parse_name(tok, ptr);
+		rv = parse_name(tok, ptr);
 	} else
 	if (ispunct(c)) {
 		// any other token
-		return parse_token(tok, ptr, can_have_operator, allow_index);
+		rv = parse_token(tok, ptr, can_have_operator, allow_index);
 	} else {
 		// non-printable - error
 		tok->vals.errno = E_TOK_UNKNOWN;
 		tok->type = T_ERROR;
-		return false;
+		rv = false;
 	}
-	
+
+	tok->is_valid = rv;
+	return rv;
 }
 
 // set to next token; return true when there is a valid name token, that is used as prefix
 bool_t tokenizer_next_prefix(tokenizer_t *tok) {
+
+	bool_t rv = false;
 
 	// move behind last token
 	int ptr = tok->ptr + tok->len;
@@ -617,10 +623,12 @@ bool_t tokenizer_next_prefix(tokenizer_t *tok) {
 		if (tok->type != T_ERROR) {
 			tok->type = T_END;
 		}
-		return false;
+		rv = false;
+	} else {
+		rv = parse_name(tok, ptr);
 	}
-
-	return parse_name(tok, ptr);
+	tok->is_valid = rv;
+	return rv;
 }
 
 // set to next token; return true when there is a valid name token, that is used as prefix
@@ -644,6 +652,7 @@ bool_t tokenizer_next_comment(tokenizer_t *tok, int allow_colon) {
 		if (tok->type != T_ERROR) {
 			tok->type = T_END;
 		}
+		tok->is_valid = false;
 		return false;
 	}
 
@@ -657,6 +666,7 @@ bool_t tokenizer_next_comment(tokenizer_t *tok, int allow_colon) {
 		}
 	}
 
+	tok->is_valid = true;
 	return true;
 }
 

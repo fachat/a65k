@@ -165,6 +165,7 @@ static inline int prio_of_operator(const op_t op) {
 typedef struct {
 	const char 	*line;		// line to tokenize
 	int		cstyle_allowed;	// config - C-style octal and hex allowed
+	bool_t		is_valid;	// true when valid, return value of last tokenizer_next() call
 	tok_t		type;		// type of token
 	int 		ptr;		// current pointer to token in line
 	int		len;		// length of current token (total, i.e. incl. quotes for a string)
