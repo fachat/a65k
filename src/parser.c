@@ -269,6 +269,75 @@ err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
 	}
 }
 
+static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
+
+	err_t rv = E_OK;
+
+	for (int i = 0; i < tok->len; i++) {
+		char c = tolower(tok->line[tok->ptr + i]);
+		switch(c) {
+		case 'u':
+			stmt->um_prefix = 1;
+			break;
+		case 'n':
+			stmt->nf_prefix = 1;
+			break;
+		case 'b':
+			if (stmt->rs_prefix != RS_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->rs_prefix = RS_BYTE;
+			break;
+		case 'w':
+			if (stmt->rs_prefix != RS_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->rs_prefix = RS_WORD;
+			break;
+		case 'l':
+			if (stmt->rs_prefix != RS_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->rs_prefix = RS_LONG;
+			break;
+		case 'q':
+			if (stmt->rs_prefix != RS_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->rs_prefix = RS_QUAD;
+			break;
+		case 'e':
+			if (stmt->le_prefix != LE_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->le_prefix = LE_E;
+			break;
+		case 's':
+			if (stmt->le_prefix != LE_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->le_prefix = LE_S;
+			break;
+		case '0':
+			if (stmt->le_prefix != LE_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->le_prefix = LE_0;
+			break;
+		case '1':
+			if (stmt->le_prefix != LE_NOT_SET) {
+				// TODO warn double prefix
+			}
+			stmt->le_prefix = LE_1;
+			break;
+		default:
+			rv = E_SYNTAX;
+			break;
+		}
+	}
+	return rv;
+}
+
 err_t parser_push(const context_t *ctx, const line_t *line) {
 
 	err_t rv = E_OK;
@@ -405,68 +474,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
 				// parse prefix
 				if (tokenizer_next_prefix(tok) && (tok->type == T_NAME)) {
-				   for (int i = 0; i < tok->len; i++) {
-					char c = tolower(tok->line[tok->ptr + i]);
-					switch(c) {
-					case 'u':
-						stmt->um_prefix = 1;
-						break;
-					case 'n':
-						stmt->nf_prefix = 1;
-						break;
-					case 'b':
-						if (stmt->rs_prefix != RS_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->rs_prefix = RS_BYTE;
-						break;
-					case 'w':
-						if (stmt->rs_prefix != RS_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->rs_prefix = RS_WORD;
-						break;
-					case 'l':
-						if (stmt->rs_prefix != RS_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->rs_prefix = RS_LONG;
-						break;
-					case 'q':
-						if (stmt->rs_prefix != RS_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->rs_prefix = RS_QUAD;
-						break;
-					case 'e':
-						if (stmt->le_prefix != LE_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->le_prefix = LE_E;
-						break;
-					case 's':
-						if (stmt->le_prefix != LE_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->le_prefix = LE_S;
-						break;
-					case '0':
-						if (stmt->le_prefix != LE_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->le_prefix = LE_0;
-						break;
-					case '1':
-						if (stmt->le_prefix != LE_NOT_SET) {
-							// TODO warn double prefix
-						}
-						stmt->le_prefix = LE_1;
-						break;
-					default:
-						rv = E_SYNTAX;
-						break;
-					}
-				   }
+					rv = parse_prefix(tok, stmt);
 				} else {
 					rv = E_SYNTAX;
 				}
