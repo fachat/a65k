@@ -128,7 +128,7 @@ void parser_reset() {
 /**
  * parse the operation parameter incl. addressing mode
  */
-err_t param_parse(tokenizer_t *tok, statement_t *stmt) {
+err_t parse_param(tokenizer_t *tok, statement_t *stmt) {
 
 	if (tok->type == T_TOKEN && tok->vals.op == OP_HASH) {
 
@@ -339,7 +339,6 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 }
 
 err_t parser_push(const context_t *ctx, const line_t *line) {
-
 	err_t rv = E_OK;
 
 	const parser_config_t *cfg = line->parsercfg;
@@ -356,170 +355,124 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 	const char *name = NULL;
 	label_t *label = NULL;
 
-	// allow the tokenizer to fold comma into ",x" etc addressing mode tokens
-	int allow_index = 0;
-
 	// tokenize the line
-	pstate_t state = P_INIT;
 	tokenizer_t *tok = tokenizer_create(line->line, cfg->cstyle_allowed);
-	while ((rv == E_OK) && tokenizer_next(tok, allow_index)) {
-		switch(state) {
-		case P_OP:
-			if (tok->type == T_TOKEN && tok->vals.op == OP_ASSIGN) {
-				// after label, that's a label value definition
-				stmt->type = S_LABDEF;
-				// next define the label from param
-				state = P_PARAM;
-				break;
-			}
-			// fall-through!
-		case P_COLON:
-			if (tok->type == T_END) {
-				break;
-			}
-			if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
-				// accept after label
-				// continue to next 
-				stmt->type = S_LABEQPC;
-				statement_push(stmt);
-				stmt = new_statement_in_line(ctx, stmt);
-				state = P_INIT;
-				break;
+
+	tokenizer_next(tok, 0);
+
+	while ((rv == E_OK) && tok->type != T_END && tok->is_valid) {
+
+		if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+			// ignore colon at beginning of line
+			tokenizer_next(tok, 0);
+		}
+
+		// initial line number
+		if (tok->type == T_LITERAL) {
+			if (cfg->initial_lineno && (tok->vals.literal.type == LIT_DECIMAL)) {
+				// line number parsing
+				stmt->lineno = tok->vals.literal.value;
+
+				tokenizer_next(tok, 0);
 			} 
-			// fall-through!
-		case P_INIT:
-			switch(tok->type) {
-			case T_NAME:
-				name = mem_alloc_strn(tok->line + tok->ptr, tok->len);
-				op = operation_find(name);
-				if (op != NULL) {
-					// check if the operation is compatible with the current CPU
-					if (0 == (ctx->cpu->isa & op->isa)) {
-						// TODO: config for either no message or error
-						warn_operation_not_for_cpu(pos, name, ctx->cpu->name);
-						op = NULL;
-					}
-				}
-				if (op == NULL) {
-					// label
-					// TODO: redefinition?
-					label = label_init(ctx, name, pos);
-					if (state == P_OP) {
-						// we already had a label
-						stmt->type = S_LABEQPC;
-						statement_push(stmt);
-						stmt = new_statement_in_line(ctx, stmt);
-					}
-					stmt->label = label;
-					// expect operation next (but accept labels too)
-					state = P_OP;
-				} else {
-					// operation
-					stmt->op = op;
-					state = P_PARAM;
-				}
-				break;
-			case T_TOKEN:
-				if (tok->vals.op == OP_DOT) {
-					if (tokenizer_next(tok, 0)) {
-						rv = parse_pseudo(tok, stmt);
-					} else {
-						rv = E_SYNTAX;
-					}
-				}
-				if (tok->vals.op == OP_SEMICOLON
-					|| (tok->vals.op == OP_DOUBLESLASH && cfg->cstyle_allowed)) {
 
-					if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
-						stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
-					}
-					state = P_COLON;
-					break;
-				}
-				// TODO assign PC
-				break;
-			case T_LITERAL:
-				if (cfg->initial_lineno && (state == P_INIT) && (tok->vals.literal.type == LIT_DECIMAL)) {
-					// line number parsing
-					stmt->lineno = tok->vals.literal.value;
-
-					if (tokenizer_next(tok, 0)) {
-						if (tok->type != T_TOKEN || tok->vals.op != OP_COLON) {
-							// rewind
-							tokenizer_rewind(tok);
-						}
-					} 
-					state = P_COLON;
-					break;
-				}
-				// fall-through
-			default:
-				// syntax error
-				error_syntax(pos);
-				rv = E_SYNTAX;
-				break;
+			if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+				// ignore colon directly after line number
+				tokenizer_next(tok, 0);
 			}
-			break;
-		case P_PARAM:
-                        if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
-                                // accept after label
-                                // continue to next 
-                                stmt->type = S_LABEQPC;
-                                statement_push(stmt);
-                                stmt = new_statement_in_line(ctx, stmt);
-                                state = P_INIT;
-                                break;
-                        }
-			// TODO check CPU type if prefixes are allowed
+		}
+
+		while (stmt->op == NULL && tok->type == T_NAME) {
+			name = mem_alloc_strn(tok->line + tok->ptr, tok->len);
+			op = operation_find(name);
+			if (op != NULL) {
+				// check if the operation is compatible with the current CPU
+				if (0 == (ctx->cpu->isa & op->isa)) {
+					// TODO: config for either no message or error
+					warn_operation_not_for_cpu(pos, name, ctx->cpu->name);
+					op = NULL;
+				}
+			}
+			if (op == NULL) {
+				// label
+				// TODO: redefinition?
+				label = label_init(ctx, name, pos);
+				if (stmt->label) {
+					// we already had a label
+					stmt->type = S_LABEQPC;
+					statement_push(stmt);
+					stmt = new_statement_in_line(ctx, stmt);
+				}
+				stmt->label = label;
+			} else {
+				// operation
+				stmt->op = op;
+			}
+			tokenizer_next(tok, 0);
+		}
+
+		if (stmt->op) {
 			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
 				// parse prefix
 				if (tokenizer_next_prefix(tok) && (tok->type == T_NAME)) {
 					rv = parse_prefix(tok, stmt);
 				} else {
 					rv = E_SYNTAX;
+					break;
 				}
-				break;
-			} else {
+				tokenizer_next(tok, 0);
+			}
+
+			if (tok->type != T_TOKEN 
+				|| (tok->vals.op != OP_SEMICOLON
+					&& (tok->vals.op != OP_DOUBLESLASH || cfg->cstyle_allowed)
+					&& (tok->vals.op != OP_COLON))) {
+
 				// parse parameters
-				rv = param_parse(tok, stmt);
+				rv = parse_param(tok, stmt);
 
-				if (tok->type == T_TOKEN) {
-				  if (tok->vals.op == OP_SEMICOLON
-					|| (tok->vals.op == OP_DOUBLESLASH && cfg->cstyle_allowed)) {
-
-					if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
-						stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
-					}
-					state = P_COLON;
-					break;
-				  } else
-				  if (tok->vals.op == OP_COLON) {
-					statement_push(stmt);
-					stmt = new_statement_in_line(ctx, stmt);
-					state = P_INIT;
-					break;
-				  }
-				} else {
+				if (rv != E_OK) {
 					break;
 				}
 			}
-		default:
-			error_syntax(pos);
-			goto end;
-			break;
-		};
-	}
-	statement_push(stmt);
-end:
-	if (rv != E_OK) {
-		loclog_error(line->position, "Syntax error at position %d in '%s'",
-			tok->ptr, tok->line);
+		} 
+
+		if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
+			if (tokenizer_next(tok, 0)) {
+				rv = parse_pseudo(tok, stmt);
+			} else {
+				rv = E_SYNTAX;
+				break;
+			}
+		}
+
+		if (tok->type == T_TOKEN && (tok->vals.op == OP_SEMICOLON
+				|| (tok->vals.op == OP_DOUBLESLASH && cfg->cstyle_allowed))) {
+
+			if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
+				stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
+
+				tokenizer_next(tok, 0);
+			}
+		}
+
+		if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+	
+			statement_push(stmt);
+			stmt = new_statement_in_line(ctx, stmt);
+
+			tokenizer_next(tok, 0);
+		}
 	}
 
+	if (rv == E_OK) {
+		statement_push(stmt);
+	}
 	tokenizer_free(tok);
 
 	return rv;
 }
+
 
 list_iterator_t *parser_get_statements(void) {
 
