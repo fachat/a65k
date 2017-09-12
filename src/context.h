@@ -35,7 +35,7 @@ typedef struct context_s context_t;
 
 
 struct context_s {
-	const segment_t	*segment;
+	segment_t	*segment;
 	const cpu_t	*cpu;
 	int		ctxno;		// repeatable debug output
 	int		cpu_width;	// CPU width, normally taken from *cpu, but can be modified with .width
@@ -45,7 +45,7 @@ struct context_s {
 };
 
 // create the initial context. Usually only called at beginning of parse
-const context_t *context_init(const segment_t *segment, const cpu_t *cpu);
+const context_t *context_init(segment_t *segment, const cpu_t *cpu);
 
 // duplicates context, so attributes can be modified. The new context becomes the 
 // current context.

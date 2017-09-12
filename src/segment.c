@@ -26,6 +26,7 @@
 #include "position.h"
 #include "cpu.h"
 #include "segment.h"
+#include "array_list.h"
 
 
 // default names for the xa65 default segments
@@ -52,7 +53,7 @@ void segment_module_init() {
 }
 
 // create a new segment or find an existing, matching one
-const segment_t *segment_new(const position_t *loc, const char *name, seg_type type, cpu_type cpu, bool_t readonly) {
+segment_t *segment_new(const position_t *loc, const char *name, seg_type type, cpu_type cpu, bool_t readonly) {
 
 	segment_t *existing = hash_get(segments, name);
 
@@ -63,9 +64,16 @@ const segment_t *segment_new(const position_t *loc, const char *name, seg_type t
 		existing->type = type;
 		existing->readonly = readonly;
 		existing->cpu_width = cpu_by_type(loc, cpu)->width;
+
+		existing->statements = array_list_init(4096);
 	}
 
 	return existing;
+}
+
+void segment_push_statement(segment_t *seg, statement_t *stmt) {
+
+	list_add(seg->statements, stmt);
 }
 
 

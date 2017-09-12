@@ -86,7 +86,7 @@ static void debug_output() {
 static void parse() {
 
 	const cpu_t *cpu = cpu_by_name(config()->initial_cpu_name);
-	const segment_t *segment = segment_new(NULL, "_initial", SEG_ANY, cpu->type, false);
+	segment_t *segment = segment_new(NULL, "_initial", SEG_ANY, cpu->type, false);
 	context_init(segment, cpu);
 
 	line_t *line;

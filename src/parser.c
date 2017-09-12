@@ -78,7 +78,7 @@ void parser_module_init(void) {
 	p = mem_alloc(&parser_memtype);
 	p->blk = NULL;
 	p->statements = array_list_init(10000);
-	
+
 	parser_config_init();
 }
 
@@ -115,14 +115,19 @@ static statement_t *new_statement_in_line(const context_t *ctx, statement_t *pre
 }
 
 
-static void statement_push(statement_t *stmt) {
-	list_add(p->statements, stmt);
+static void statement_push(const context_t *ctx, statement_t *stmt) {
+
+	// statements in parse order
+        list_add(p->statements, stmt);
+
+	// statements per segment/region
+	segment_push_statement(ctx->segment, stmt);
 }
 
 
 void parser_reset() {
-	// only for tests - ignore that we would have to mfree stuff before
-	p->statements = array_list_init(10000);
+        // only for tests - ignore that we would have to mfree stuff before
+        p->statements = array_list_init(10000);
 }
 
 /**
@@ -400,7 +405,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				if (stmt->label) {
 					// we already had a label
 					stmt->type = S_LABEQPC;
-					statement_push(stmt);
+					statement_push(ctx, stmt);
 					stmt = new_statement_in_line(ctx, stmt);
 				}
 				stmt->label = label;
@@ -458,7 +463,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 
 		if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
 	
-			statement_push(stmt);
+			statement_push(ctx, stmt);
 			stmt = new_statement_in_line(ctx, stmt);
 
 			tokenizer_next(tok, 0);
@@ -466,7 +471,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 	}
 
 	if (rv == E_OK) {
-		statement_push(stmt);
+		statement_push(ctx, stmt);
 	}
 	tokenizer_free(tok);
 

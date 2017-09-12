@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 
 	const cpu_t *cpu = cpu_by_name("nmos");
 
-	const segment_t *seg = segment_new(NULL, "test", SEG_ANY, cpu->type, true);
+	segment_t *seg = segment_new(NULL, "test", SEG_ANY, cpu->type, true);
 
 	const context_t *ctx = context_init(seg, cpu);
 
