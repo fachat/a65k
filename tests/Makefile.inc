@@ -1,4 +1,6 @@
 
+.SECONDARY:
+
 TESTBINS=$(addprefix bin/,$(TESTS))
 
 CFLAGS=-g -Wall -pedantic -O2 -std=c11 -DMALLOC_CHECK_=3 
@@ -13,15 +15,15 @@ OBJ=$(addprefix $(SRCDIR)/obj/,$(OBJFILES))
 # Enable verbose compile with make V=1
 ifeq ($(V),1)
   V1=
-  V2=@\#
+  V2=@echo
   DIFF=@cmp
 else
   V1=@
-  V2=@echo
+  V2=@\#
   DIFF=@diff -u
 endif
 
-all: subdirs bin $(TESTBINS) 
+all: subdirs bin $(TESTS) 
 
 bin: 
 	mkdir bin
@@ -29,12 +31,11 @@ bin:
 subdirs:
 	$(V1) if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do echo "dir: "$$i; (cd $$i; make); done; fi
 
-bin/%: %.c $(OBJ) $(DEPS)
-	$(V2) $<
+.SUFFIXES:
+
+bin/%: %.c $(OBJ) $(DEPS) bin
+	@echo $<
 	$(V1) $(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $< 
-	$(V1) ./$@ > $(notdir $@.x)
-	$(DIFF) `echo "$@" | sed -e 's%bin/%%g'`.out $(notdir $@.x)
-	$(V1) rm $(notdir $@.x)
 
 %: bin/%
 	$(V1) ./bin/$@ > $@.x
@@ -48,4 +49,3 @@ clean:
 	sh -c "test -d bin && rmdir bin"
 
  
-
