@@ -23,6 +23,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+typedef struct statement_s statement_t;
+
 #include "context.h"
 #include "label.h"
 #include "block.h"
@@ -41,7 +43,6 @@ typedef enum {
 } stype_t;
 
 
-typedef struct statement_s statement_t;
 
 /**
  * The statement_t struct is the main structure of the internal workings.

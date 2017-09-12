@@ -24,9 +24,13 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
+typedef struct segment_s segment_t;
+
 #include "types.h"
 #include "position.h"
 #include "cpu.h"
+#include "parser.h"
+#include "list.h"
 
 // default names for the xa65 default segments
 // can the compiler optimize that into a single text?
@@ -37,7 +41,6 @@ extern const char *SEG_TEXT_NAME;
 extern const char *SEG_DATA_NAME;
 extern const char *SEG_ZP_NAME;
 
-typedef struct segment_s segment_t;
 
 typedef enum {
 	SEG_ANY,	// "any" type of segment, like original 6502 assembler
@@ -53,6 +56,7 @@ struct segment_s {
 	seg_type	type;
 	bool_t		readonly;
 	int		cpu_width;	// for 65k; segment.cpu_width >= context.cpu_width
+	list_t		*statements;	// list of statements
 };
 
 void segment_module_init();
@@ -60,7 +64,7 @@ void segment_module_init();
 // create a new segment or find an existing, matching one; match is by name
 const segment_t *segment_new(const position_t *loc, const char *name, seg_type type, cpu_type cpu, bool_t readonly);
 
-
+void segment_push_statement(segment_t *seg, statement_t *stmt);
 
 #endif
 

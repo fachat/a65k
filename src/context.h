@@ -28,10 +28,11 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
+typedef struct context_s context_t;
+
 #include "segment.h"
 #include "cpu.h"
 
-typedef struct context_s context_t;
 
 struct context_s {
 	const segment_t	*segment;
