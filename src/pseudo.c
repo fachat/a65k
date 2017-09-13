@@ -47,7 +47,6 @@ static err_t arith_list_parse(tokenizer_t *tok, statement_t *stmt) {
 			break;
 		}
 	}
-printf("parse -> %d\n", rv);
 	return rv;
 }
 
@@ -72,7 +71,6 @@ void pseudo_module_init(void) {
 	pseudomap = hash_init_stringkey_nocase(n, n/2+1, name_from_pseudo);
 
 	for (int i = 0; i < n; i++) {
-		printf("hash put name=%s\n", pseudos[i].name);
 		if (hash_put(pseudomap, &pseudos[i]) != NULL) {
 			// TODO error, double entry should not happen
 			exit(1);

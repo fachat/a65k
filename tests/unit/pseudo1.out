@@ -1,9 +1,5 @@
-hash put name=byt
-hash put name=byte
-hash put name=word
 WRN:
 WRN:>>> label .word 1,2,3,4,5
-parse -> 0
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
@@ -21,7 +17,6 @@ WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)5/5
 WRN:
 WRN:>>> .byt 1,$2,"3",4,5
-parse -> 0
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
 WRN:PSEUDO: byt
