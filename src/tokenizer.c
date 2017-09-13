@@ -628,6 +628,9 @@ bool_t tokenizer_next_prefix(tokenizer_t *tok) {
 	} else {
 		rv = parse_name(tok, ptr);
 	}
+	if (tok->len == 0) {
+		rv = false;
+	}
 	tok->is_valid = rv;
 	return rv;
 }

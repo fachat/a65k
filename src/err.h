@@ -51,6 +51,12 @@ void error_module_init();
 #define	loclog_debug(loc, msg, ...)	loclog(LEV_DEBUG, loc, msg, __VA_ARGS__)
 #define	loclog_trace(loc, msg, ...)	loclog(LEV_TRACE, loc, msg, __VA_ARGS__)
 
+#define	toklog_error(loc, msg, ...)	toklog(LEV_ERROR, loc, msg, __VA_ARGS__)
+#define	toklog_warn(loc, msg, ...)	toklog(LEV_WARN, loc, msg, __VA_ARGS__)
+#define	toklog_info(loc, msg, ...)	toklog(LEV_INFO, loc, msg, __VA_ARGS__)
+#define	toklog_debug(loc, msg, ...)	toklog(LEV_DEBUG, loc, msg, __VA_ARGS__)
+#define	toklog_trace(loc, msg, ...)	toklog(LEV_TRACE, loc, msg, __VA_ARGS__)
+
 void loclog(err_level l, const position_t *pos, const char *msg, ...);
 
 void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...);

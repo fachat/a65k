@@ -277,7 +277,7 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 
 	err_t rv = E_OK;
 
-	for (int i = 0; i < tok->len; i++) {
+	for (int i = 0; i < tok->len && !rv; i++) {
 		char c = tolower(tok->line[tok->ptr + i]);
 		switch(c) {
 		case 'u':
@@ -344,6 +344,10 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 
 static inline void warn_operation_not_for_cpu(const position_t *loc, const char *op_name, const char *cpu_name) {
         loclog_warn(loc, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
+}
+
+static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
+        toklog_warn(tok, "Syntax error: %s", msg);
 }
 
 err_t parser_push(const context_t *ctx, const line_t *line) {
@@ -421,39 +425,43 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				// operation
 				stmt->op = op;
 				tokenizer_next(tok, 0);
+				if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
+					// parse prefix
+					if (tokenizer_next_prefix(tok) && (tok->type == T_NAME)) {
+						rv = parse_prefix(tok, stmt);
+					} else {
+						rv = E_SYNTAX;
+					}
+					if (rv) {
+						error_syntax(tok, "Expecting prefix notation after '.'");
+						break;
+					}
+					tokenizer_next(tok, 0);
+				}
+	
+				if (tok->type != T_TOKEN 
+					|| (tok->vals.op != OP_SEMICOLON
+						&& (tok->vals.op != OP_DOUBLESLASH || cfg->cstyle_allowed)
+						&& (tok->vals.op != OP_COLON))) {
+	
+					// parse parameters
+					rv = parse_param(tok, stmt);
+	
+					if (rv != E_OK) {
+						break;
+					}
+				}
 			}
 		}
 
-		if (stmt->op) {
-			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
-				// parse prefix
-				if (tokenizer_next_prefix(tok) && (tok->type == T_NAME)) {
-					rv = parse_prefix(tok, stmt);
-				} else {
-					rv = E_SYNTAX;
-					break;
-				}
-				tokenizer_next(tok, 0);
-			}
-
-			if (tok->type != T_TOKEN 
-				|| (tok->vals.op != OP_SEMICOLON
-					&& (tok->vals.op != OP_DOUBLESLASH || cfg->cstyle_allowed)
-					&& (tok->vals.op != OP_COLON))) {
-
-				// parse parameters
-				rv = parse_param(tok, stmt);
-
-				if (rv != E_OK) {
-					break;
-				}
-			}
-		} else 
-		if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
+		if ((!stmt->op) && tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
 			if (tokenizer_next(tok, 0)) {
 				rv = parse_pseudo(tok, stmt);
 			} else {
 				rv = E_SYNTAX;
+			}
+			if (rv) {
+				error_syntax(tok, "Expect pseudo opcode after '.'");
 				break;
 			}
 		}

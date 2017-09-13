@@ -49,17 +49,20 @@ void loclog(err_level l, const position_t *loc, const char *msg, ...) {
 	va_start(va, msg);
 
 	loclog_int(l, loc, msg, va);	
+
+	va_end(va);
 }
 
 void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...) {
 	va_list va;
 	va_start(va, msg);
 
-	loclog(l, tok->pos, msg, va);
+	loclog_int(l, tok->pos, msg, va);
 
 	log_x(l, "%s", tok->line);
-	log_x(l, "%*s", tok->ptr, "^");
+	log_x(l, "%*s", tok->ptr+1, "^");
 
+	va_end(va);
 }
 
 

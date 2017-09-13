@@ -1,0 +1,12 @@
+WRN:
+WRN:>>> 1234: label adc. #123 ;comment
+WRN:bogusfile:1 Syntax error: Expecting prefix notation after '.'
+WRN:1234: label adc. #123 ;comment
+WRN:                 ^
+WRN:err=1
+WRN:
+WRN:>>> 1234: label . adc #123 ;comment :ADC #1
+WRN:bogusfile:1 Syntax error: Expect pseudo opcode after '.'
+WRN:1234: label . adc #123 ;comment :ADC #1
+WRN:              ^
+WRN:err=1
