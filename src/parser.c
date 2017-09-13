@@ -367,7 +367,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 
 	while ((rv == E_OK) && tok->type != T_END && tok->is_valid) {
 
-		if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+		while (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
 			// ignore colon at beginning of line
 			tokenizer_next(tok, 0);
 		}
@@ -409,11 +409,16 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					stmt = new_statement_in_line(ctx, stmt);
 				}
 				stmt->label = label;
+		
+				tokenizer_next(tok, 0);
+				if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+					tokenizer_next(tok, 0);
+				}
 			} else {
 				// operation
 				stmt->op = op;
+				tokenizer_next(tok, 0);
 			}
-			tokenizer_next(tok, 0);
 		}
 
 		if (stmt->op) {
@@ -440,8 +445,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					break;
 				}
 			}
-		} 
-
+		} else 
 		if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
 			if (tokenizer_next(tok, 0)) {
 				rv = parse_pseudo(tok, stmt);
