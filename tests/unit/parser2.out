@@ -71,21 +71,18 @@ WRN:
 WRN:>>> ;comment :ADC #1
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:COMMENT: comment :ADC #1
 WRN:
 WRN:>>> label ;comment :ADC #1
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:COMMENT: comment :ADC #1
 WRN:
 WRN:>>> label: ;comment :ADC #1
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:COMMENT: comment :ADC #1
 WRN:
 WRN:>>> :ADC #1
@@ -164,7 +161,6 @@ WRN:
 WRN:>>> ;comment :ADC #1
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:COMMENT: comment 
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
@@ -178,7 +174,6 @@ WRN:>>> label ;comment :ADC #1
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:COMMENT: comment 
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
@@ -192,7 +187,6 @@ WRN:>>> label: ;comment :ADC #1
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:COMMENT: comment 
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)

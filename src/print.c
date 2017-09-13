@@ -72,10 +72,10 @@ void print_debug_stmt(const statement_t *stmt) {
 		const operation_t *o = stmt->op;
 		do_print("OPR: name:%s isa:$%x isrel:%d acw:%d idxw:%d", 
 			o->name, o->isa, o->abs_is_rel, o->check_ac_w, o->check_idx_w);
-	}
 
-	do_print("MOD: BASE: %d, SYN: %d, UM: %d, NF: %d, RS: %d, LE: %d", 
+		do_print("MOD: BASE: %d, SYN: %d, UM: %d, NF: %d, RS: %d, LE: %d", 
 			stmt->base, stmt->syn, stmt->um_prefix, stmt->nf_prefix, stmt->rs_prefix, stmt->le_prefix);
+	}
 
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;

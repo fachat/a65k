@@ -7,7 +7,6 @@ parse -> 0
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
 WRN:LAB: name:label ctx:0 pos:bogusfile:1
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:PSEUDO: word
 WRN:PARS:
 WRN:    A:len=1
@@ -25,7 +24,6 @@ WRN:>>> .byt 1,$2,"3",4,5
 parse -> 0
 WRN:--------------- STMT ---------------
 WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7)
-WRN:MOD: BASE: 0, SYN: 0, UM: 0, NF: 0, RS: -1, LE: -1
 WRN:PSEUDO: byt
 WRN:PARS:
 WRN:    A:len=1
