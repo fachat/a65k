@@ -242,6 +242,43 @@ const operation_t *operation_find(const char *name) {
 	return op;
 }
 
+static inline void error_illegal_opcode_size(const position_t *loc, int opsize_in_bytes) {
+        loclog_error(loc, "illegal opcode size %d", opsize_in_bytes);
+}
+
+static inline void error_parameter_width_not_allowed_for_isa(const position_t *loc, const char *cpu_name, int opsize_in_bytes) {
+        loclog_error(loc, "parameter width %d is not allowed for CPU type %s", opsize_in_bytes, cpu_name);
+}
+
+static inline void trace_am_not_allowed_for_isa(const position_t *loc, const char *am_name, const char *cpu_name, int am_isa, int cpu_isa) {
+        loclog_trace(loc, "addressing mode %s (%02x) is not allowed for cpu type %s (%02x)",
+                        am_name, am_isa, cpu_name, cpu_isa);
+}
+
+static inline void trace_am_not_allowed_for_width(const position_t *loc, const char *am_name, const char *cpu_name, int am_width, int cpu_width) {
+        loclog_trace(loc, "addressing mode %s (width %d) is not allowed for CPU %s width (%d)",
+                        am_name, am_width, cpu_name, cpu_width);
+}
+
+static inline void trace_narrow_operand_wide_ac(const position_t *loc, const char *op_name, const char *am_name, const char *cpu_name) {
+        loclog_trace(loc, "AC in opcode %s with addressing mode %s for CPU %s is wide (word), operand is narrow (byte)",
+                        op_name, am_name, cpu_name);
+}
+
+static inline void error_wide_operand_narrow_ac(const position_t *loc, const char *op_name, const char *am_name, const char *cpu_name) {
+        loclog_error(loc, "AC in opcode %s with addressing mode %s for CPU %s is narrow (byte), operand is wide (word)",
+                        op_name, am_name, cpu_name);
+}
+
+static inline void trace_narrow_operand_wide_idx(const position_t *loc, const char *op_name, const char *am_name, const char *cpu_name) {
+        loclog_trace(loc, "Index in opcode %s with addressing mode %s for CPU %s is wide (word), operand is narrow (byte)",
+                        op_name, am_name, cpu_name);
+}
+
+static inline void error_wide_operand_narrow_idx(const position_t *loc, const char *op_name, const char *am_name, const char *cpu_name) {
+        loclog_error(loc, "Index in opcode %s with addressing mode %s for CPU %s is narrow (byte), operand is wide (word)",
+                        op_name, am_name, cpu_name);
+}
 
 bool_t opcode_find(const position_t *loc, 
 		const context_t *ctx, 

@@ -343,6 +343,10 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 	return rv;
 }
 
+static inline void warn_operation_not_for_cpu(const position_t *loc, const char *op_name, const char *cpu_name) {
+        loclog_warn(loc, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
+}
+
 err_t parser_push(const context_t *ctx, const line_t *line) {
 	err_t rv = E_OK;
 

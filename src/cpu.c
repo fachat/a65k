@@ -139,6 +139,11 @@ const cpu_t *cpu_by_name(const char *name) {
 	return cpu;
 }
 
+static inline void error_illegal_cpu_type(const position_t *loc, int requested, int number_of_defined_cpus) {
+        loclog_error(loc, "illegal CPU type - requested type %d (of %d)", 
+                        requested, number_of_defined_cpus);
+}
+
 const cpu_t *cpu_by_type(const position_t *loc, cpu_type type) {
 
 	unsigned int num_cpus = sizeof(cpus)/sizeof(cpu_t);
