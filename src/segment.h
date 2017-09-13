@@ -66,5 +66,10 @@ segment_t *segment_new(const position_t *loc, const char *name, seg_type type, c
 
 void segment_push_statement(segment_t *seg, statement_t *stmt);
 
+// get all segments
+list_iterator_t *segment_get_iter();
+
+list_iterator_t *segment_get_statements(segment_t *seg);
+
 #endif
 

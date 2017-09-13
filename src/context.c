@@ -72,6 +72,8 @@ context_t *context_dup() {
 
 	memcpy(newctx, oldctx, sizeof(context_t));
 
+	newctx->ctxno = ctx_counter++;
+
 	current_context = newctx;
 
 	return current_context;

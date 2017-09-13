@@ -53,8 +53,9 @@ void print_debug_stmt(const statement_t *stmt) {
 	if (stmt->lineno >= 0) {
 		do_print("LINE: %d:", stmt->lineno);
 	}
-	do_print("BLK:%d ctx:%d (CPU: %s, isa:$%x)", 
-		stmt->blk->blockno, stmt->ctx->ctxno, stmt->ctx->cpu->name, stmt->ctx->cpu->isa);
+	do_print("BLK:%d ctx:%d (CPU: %s, isa:$%x), seg=%s", 
+		stmt->blk->blockno, stmt->ctx->ctxno, stmt->ctx->cpu->name, stmt->ctx->cpu->isa,
+		stmt->ctx->segment->name);
 
 	if (stmt->label != NULL) {
 		const label_t *l = stmt->label;

@@ -37,6 +37,7 @@ const char *SEG_DATA_NAME = "data";
 const char *SEG_ZP_NAME = "zp";
 
 static hash_t *segments = NULL;
+static list_t *seglist = NULL;
 
 static type_t segment_memtype = {
 	"segment_t",
@@ -50,6 +51,8 @@ static const char *segment_key_from_entry(const void *entry) {
 void segment_module_init() {
 
 	segments = hash_init_stringkey(5, 5, &segment_key_from_entry);
+
+	seglist = array_list_init(4);
 }
 
 // create a new segment or find an existing, matching one
@@ -66,6 +69,9 @@ segment_t *segment_new(const position_t *loc, const char *name, seg_type type, c
 		existing->cpu_width = cpu_by_type(loc, cpu)->width;
 
 		existing->statements = array_list_init(4096);
+
+		hash_put(segments, existing);
+		list_add(seglist, existing);
 	}
 
 	return existing;
@@ -76,4 +82,11 @@ void segment_push_statement(segment_t *seg, statement_t *stmt) {
 	list_add(seg->statements, stmt);
 }
 
+list_iterator_t *segment_get_iter() {
+	return list_iterator(seglist);
+}
+
+list_iterator_t *segment_get_statements(segment_t *seg) {
+	return list_iterator(seg->statements);
+}
 
