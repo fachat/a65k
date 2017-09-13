@@ -361,7 +361,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 	label_t *label = NULL;
 
 	// tokenize the line
-	tokenizer_t *tok = tokenizer_create(line->line, cfg->cstyle_allowed);
+	tokenizer_t *tok = tokenizer_create(line->position, line->line, cfg->cstyle_allowed);
 
 	tokenizer_next(tok, 0);
 

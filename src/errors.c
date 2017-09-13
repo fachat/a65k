@@ -24,6 +24,7 @@
 #include <stdlib.h>
 
 #include "position.h"
+#include "tokenizer.h"
 #include "log.h"
 #include "errors.h"
 
@@ -33,10 +34,7 @@ static char buf[MAX_BUF];
 void error_module_init() {
 }
 
-void loclog(err_level l, const position_t *loc, const char *msg, ...) {
-	va_list va;
-
-	va_start(va, msg);
+static void loclog_int(err_level l, const position_t *loc, const char *msg, va_list va) {
 	
 	vsnprintf(buf, MAX_BUF, msg, va);
 
@@ -44,6 +42,24 @@ void loclog(err_level l, const position_t *loc, const char *msg, ...) {
 	int lineno = (loc == NULL) ? 0 : loc->lineno;
 
 	log_x(l, "%s:%d %s", filename, lineno, buf);
+}
+
+void loclog(err_level l, const position_t *loc, const char *msg, ...) {
+	va_list va;
+	va_start(va, msg);
+
+	loclog_int(l, loc, msg, va);	
+}
+
+void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...) {
+	va_list va;
+	va_start(va, msg);
+
+	loclog(l, tok->pos, msg, va);
+
+	log_x(l, "%s", tok->line);
+	log_x(l, "%*s", tok->ptr, "^");
+
 }
 
 

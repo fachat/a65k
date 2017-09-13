@@ -12,7 +12,8 @@ void print(const char *val, int allow_index) {
 
 	do_print("---> %s%s", val, allow_index ? " (with index)":"");
 
-	tokenizer_t *tok = tokenizer_create(val, 0);
+	position_t pos = { "foo", 0 };
+	tokenizer_t *tok = tokenizer_create(&pos, val, 0);
 
 	const ilist_t *out = NULL;
 

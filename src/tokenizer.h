@@ -26,6 +26,7 @@
 #include <stdio.h>
 
 #include "types.h"
+#include "position.h"
 
 // token type
 typedef enum {
@@ -163,6 +164,7 @@ static inline int prio_of_operator(const op_t op) {
 }
 
 typedef struct {
+	const position_t *pos;		// position in file (for error prints)
 	const char 	*line;		// line to tokenize
 	int		cstyle_allowed;	// config - C-style octal and hex allowed
 	bool_t		is_valid;	// true when valid, return value of last tokenizer_next() call
@@ -188,7 +190,7 @@ typedef struct {
 void tokenizer_module_init(void);
 
 // initialize a tokenizer 
-tokenizer_t *tokenizer_create(const char *line, int cstyle_allowed);
+tokenizer_t *tokenizer_create(const position_t *pos, const char *line, int cstyle_allowed);
 
 // set to next token; return true when there is a valid token
 // if allow_index is true, comma is folded into ",x" etc addressig mode tokens

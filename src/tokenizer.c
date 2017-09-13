@@ -121,10 +121,11 @@ op_details_t *tokenizer_op_details(op_t op) {
 
 
 // initialize a tokenizer 
-tokenizer_t *tokenizer_create(const char *line, int cstyle_allowed) {
+tokenizer_t *tokenizer_create(const position_t *pos, const char *line, int cstyle_allowed) {
 	
 	tokenizer_t *tok = mem_alloc(&tokenizer_memtype);
 
+	tok->pos = pos;
 	tok->line = line;
 	tok->cstyle_allowed = cstyle_allowed;
 	tok->ptr = 0;

@@ -23,6 +23,8 @@
 #define ERRORS_H
 
 
+#include "tokenizer.h"
+
 void error_module_init();
 
 
@@ -32,11 +34,14 @@ void error_module_init();
 #define	loclog_debug(loc, msg, ...)	loclog(LEV_DEBUG, loc, msg, __VA_ARGS__)
 #define	loclog_trace(loc, msg, ...)	loclog(LEV_TRACE, loc, msg, __VA_ARGS__)
 
-void loclog(err_level l, const position_t *loc, const char *msg, ...);
+void loclog(err_level l, const position_t *pos, const char *msg, ...);
+
+void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...);
 
 
 // convenience methods
 
+#if 1
 static inline void error_illegal_opcode_size(const position_t *loc, int opsize_in_bytes) {
 	loclog_error(loc, "illegal opcode size %d", opsize_in_bytes);
 }
@@ -94,7 +99,7 @@ static inline void warn_operation_not_for_cpu(const position_t *loc, const char 
 static inline void error_syntax(const position_t *loc) {
 	loclog_error(loc, "%s error!", "Syntax");
 }
-
+#endif
 
 #endif
 

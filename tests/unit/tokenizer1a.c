@@ -54,7 +54,8 @@ void do_test(const char *teststr) {
 
 	printf("tokenizing line: %s\n", teststr);
 
-	tokenizer_t *tok = tokenizer_create(teststr, 0);
+	position_t pos = { "foo", 1 };
+	tokenizer_t *tok = tokenizer_create(&pos, teststr, 0);
 
 	while (tokenizer_next(tok, false)) {
 
