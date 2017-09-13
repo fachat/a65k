@@ -25,6 +25,9 @@
 #define ERR_H
 
 
+#include "log.h"
+#include "tokenizer.h"
+
 typedef enum {
 	E_OK			= 0,		// OK
 	E_SYNTAX		= 1,		// Syntax error, unexpected token
@@ -37,6 +40,20 @@ typedef enum {
 
 	E_ARITH_CLOSING		= 104,		// wrong closing bracket	
 } err_t;
+
+
+void error_module_init();
+
+
+#define	loclog_error(loc, msg, ...)	loclog(LEV_ERROR, loc, msg, __VA_ARGS__)
+#define	loclog_warn(loc, msg, ...)	loclog(LEV_WARN, loc, msg, __VA_ARGS__)
+#define	loclog_info(loc, msg, ...)	loclog(LEV_INFO, loc, msg, __VA_ARGS__)
+#define	loclog_debug(loc, msg, ...)	loclog(LEV_DEBUG, loc, msg, __VA_ARGS__)
+#define	loclog_trace(loc, msg, ...)	loclog(LEV_TRACE, loc, msg, __VA_ARGS__)
+
+void loclog(err_level l, const position_t *pos, const char *msg, ...);
+
+void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...);
 
 
 #endif

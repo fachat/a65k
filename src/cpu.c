@@ -29,7 +29,6 @@
 
 #include "infiles.h"
 #include "cpu.h"
-#include "errors.h"
 #include "err.h"
 #include "cmdline.h"
 

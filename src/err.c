@@ -1,6 +1,6 @@
 /****************************************************************************
 
-    error handling
+    logging 
     Copyright (C) 2015 Andre Fachat
 
     This program is free software; you can redistribute it and/or modify
@@ -19,25 +19,47 @@
 
 ****************************************************************************/
 
-#ifndef ERRORS_H
-#define ERRORS_H
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
 
-
+#include "position.h"
 #include "tokenizer.h"
+#include "log.h"
+#include "err.h"
 
-void error_module_init();
+#define	MAX_BUF	8192
+static char buf[MAX_BUF];
 
+void error_module_init() {
+}
 
-#define	loclog_error(loc, msg, ...)	loclog(LEV_ERROR, loc, msg, __VA_ARGS__)
-#define	loclog_warn(loc, msg, ...)	loclog(LEV_WARN, loc, msg, __VA_ARGS__)
-#define	loclog_info(loc, msg, ...)	loclog(LEV_INFO, loc, msg, __VA_ARGS__)
-#define	loclog_debug(loc, msg, ...)	loclog(LEV_DEBUG, loc, msg, __VA_ARGS__)
-#define	loclog_trace(loc, msg, ...)	loclog(LEV_TRACE, loc, msg, __VA_ARGS__)
+static void loclog_int(err_level l, const position_t *loc, const char *msg, va_list va) {
+	
+	vsnprintf(buf, MAX_BUF, msg, va);
 
-void loclog(err_level l, const position_t *pos, const char *msg, ...);
+	const char *filename = (loc == NULL) ? "<>" : loc->filename;
+	int lineno = (loc == NULL) ? 0 : loc->lineno;
 
-void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...);
+	log_x(l, "%s:%d %s", filename, lineno, buf);
+}
 
+void loclog(err_level l, const position_t *loc, const char *msg, ...) {
+	va_list va;
+	va_start(va, msg);
 
-#endif
+	loclog_int(l, loc, msg, va);	
+}
+
+void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...) {
+	va_list va;
+	va_start(va, msg);
+
+	loclog(l, tok->pos, msg, va);
+
+	log_x(l, "%s", tok->line);
+	log_x(l, "%*s", tok->ptr, "^");
+
+}
+
 

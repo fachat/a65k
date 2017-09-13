@@ -30,7 +30,6 @@
 #include "segment.h"
 #include "context.h"
 #include "operation.h"
-#include "errors.h"
 
 
 

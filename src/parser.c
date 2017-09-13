@@ -41,7 +41,6 @@
 #include "block.h"
 #include "tokenizer.h"
 #include "operation.h"
-#include "errors.h"
 #include "arith.h"
 #include "parser-config.h"
 
