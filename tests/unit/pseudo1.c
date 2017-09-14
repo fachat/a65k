@@ -64,6 +64,8 @@ int main(int argc, char *argv[]) {
 
 	test(ctx, &pos, "label .word 1,2,3,4,5");	
 	test(ctx, &pos, ".byt 1,$2,\"3\",4,5");	
+	test(ctx, &pos, ".( ; comment");	
+	test(ctx, &pos, ".) ; comment");	
 }
 
 

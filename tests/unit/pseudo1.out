@@ -31,3 +31,15 @@ WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)4/4
 WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)5/5
+WRN:
+WRN:>>> .( ; comment
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PSEUDO: (
+WRN:COMMENT: comment
+WRN:
+WRN:>>> .) ; comment
+WRN:--------------- STMT ---------------
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PSEUDO: )
+WRN:COMMENT: comment

@@ -55,6 +55,8 @@ static pseudo_t pseudos[] = {
 	{ "byt",	arith_list_parse,	NULL,		NULL },
 	{ "byte",	arith_list_parse,	NULL,		NULL },
 	{ "word",	arith_list_parse,	NULL,		NULL },
+	{ "(",		NULL,			NULL,		NULL },
+	{ ")",		NULL,			NULL,		NULL },
 };
 
 static hash_t *pseudomap = NULL;
@@ -86,7 +88,7 @@ err_t parse_pseudo(tokenizer_t *tok, statement_t *stmt) {
 	if (tok->type == T_NAME) {
 		name = mem_alloc_strn(tok->line + tok->ptr, tok->len);
 	} else
-	if (tok->type == T_TOKEN) {
+	if (tok->type == T_BRACKET) {
 		name = mem_alloc_str(tokenizer_op_details(tok->vals.op)->print);
 	}
 
