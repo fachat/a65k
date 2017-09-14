@@ -67,6 +67,9 @@ int main(int argc, char *argv[]) {
 
 	test(ctx, &pos, "1234: label adc. #123 ;comment");	
 	test(ctx, &pos, "1234: label . adc #123 ;comment :ADC #1");	
+
+	test(ctx, &pos, "REP #123; not for cpu");	
+	test(ctx, &pos, "REP #123:txa");	
 }
 
 

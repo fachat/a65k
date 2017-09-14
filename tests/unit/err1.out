@@ -10,3 +10,21 @@ WRN:bogusfile:1 Syntax error: Expect pseudo opcode after '.'
 WRN:1234: label . adc #123 ;comment :ADC #1
 WRN:              ^
 WRN:err=1
+WRN:
+WRN:>>> REP #123; not for cpu
+WRN:bogusfile:1 Operation name REP is not available for CPU nmos, assuming label!
+WRN:REP #123; not for cpu
+WRN:^
+WRN:bogusfile:1 Syntax error: Expecting opcode
+WRN:REP #123; not for cpu
+WRN:    ^
+WRN:err=1
+WRN:
+WRN:>>> REP #123:txa
+WRN:bogusfile:1 Operation name REP is not available for CPU nmos, assuming label!
+WRN:REP #123:txa
+WRN:^
+WRN:bogusfile:1 Syntax error: Expecting opcode
+WRN:REP #123:txa
+WRN:    ^
+WRN:err=1

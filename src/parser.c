@@ -342,8 +342,8 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 	return rv;
 }
 
-static inline void warn_operation_not_for_cpu(const position_t *loc, const char *op_name, const char *cpu_name) {
-        loclog_warn(loc, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
+static inline void warn_operation_not_for_cpu(const tokenizer_t *tok, const char *op_name, const char *cpu_name) {
+        toklog_warn(tok, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
 }
 
 static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
@@ -401,7 +401,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				// check if the operation is compatible with the current CPU
 				if (0 == (ctx->cpu->isa & op->isa)) {
 					// TODO: config for either no message or error
-					warn_operation_not_for_cpu(pos, name, ctx->cpu->name);
+					warn_operation_not_for_cpu(tok, name, ctx->cpu->name);
 					op = NULL;
 				}
 			}
@@ -454,34 +454,50 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 			}
 		}
 
-		if ((!stmt->op) && tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
-			if (tokenizer_next(tok, 0)) {
-				rv = parse_pseudo(tok, stmt);
-			} else {
+		if (!stmt->op) {
+			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
+				if (tokenizer_next(tok, 0)) {
+					rv = parse_pseudo(tok, stmt);
+				} else {
+					rv = E_SYNTAX;
+				}
+				if (rv) {
+					error_syntax(tok, "Expect pseudo opcode after '.'");
+					break;
+				}
+			} else
+			if (tok->vals.op != OP_SEMICOLON
+				&& (tok->vals.op != OP_DOUBLESLASH || cfg->cstyle_allowed)
+				&& (tok->vals.op != OP_COLON)) {
 				rv = E_SYNTAX;
-			}
-			if (rv) {
-				error_syntax(tok, "Expect pseudo opcode after '.'");
+				error_syntax(tok, "Expecting opcode");
 				break;
 			}
 		}
 
-		if (tok->type == T_TOKEN && (tok->vals.op == OP_SEMICOLON
+		if (tok->type == T_TOKEN) {
+			if ((tok->vals.op == OP_SEMICOLON
 				|| (tok->vals.op == OP_DOUBLESLASH && cfg->cstyle_allowed))) {
 
-			if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
-				stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
+				if (tokenizer_next_comment(tok, cfg->colon_in_comments)) {
+					stmt->comment = mem_alloc_strn(tok->line+tok->ptr, tok->len);
 
-				tokenizer_next(tok, 0);
-			}
+					tokenizer_next(tok, 0);
+				}
+			} 
 		}
 
-		if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+		if (tok->type == T_TOKEN) {
+			if (tok->vals.op == OP_COLON) {
 	
-			statement_push(ctx, stmt);
-			stmt = new_statement_in_line(ctx, stmt);
+				statement_push(ctx, stmt);
+				stmt = new_statement_in_line(ctx, stmt);
 
-			tokenizer_next(tok, 0);
+				tokenizer_next(tok, 0);
+			} else {
+				rv = E_SYNTAX;
+				error_syntax(tok, "Expecting comment or colon");
+			}
 		}
 	}
 
