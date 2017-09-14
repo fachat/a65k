@@ -347,7 +347,7 @@ static inline void warn_operation_not_for_cpu(const tokenizer_t *tok, const char
 }
 
 static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
-        toklog_warn(tok, "Syntax error: %s", msg);
+        toklog_error(tok, "Syntax error: %s", msg);
 }
 
 err_t parser_push(const context_t *ctx, const line_t *line) {
