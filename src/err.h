@@ -57,6 +57,7 @@ void error_module_init();
 #define	toklog_debug(loc, msg, ...)	toklog(LEV_DEBUG, loc, msg, __VA_ARGS__)
 #define	toklog_trace(loc, msg, ...)	toklog(LEV_TRACE, loc, msg, __VA_ARGS__)
 
+
 void loclog(err_level l, const position_t *pos, const char *msg, ...);
 
 void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...);

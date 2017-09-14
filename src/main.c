@@ -54,8 +54,8 @@ static err_t main_set_mode(const char *value, void *extra, int ival) {
 }
 
 static param_enum_t modes[] = {
-	{ "ass", 	"Assembler mode (default)", 0 },
-	{ "lint",	"Just format the code and print it on stdout", 1 },
+	{ "ass", 	"Assembler mode (default)" },
+	{ "lint",	"Just format the code and print it on stdout" },
 	{ NULL },
 };
 

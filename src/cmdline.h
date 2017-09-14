@@ -44,7 +44,6 @@ typedef enum {
 typedef struct {
 	const char	*value;
 	const char	*description;
-	int		ival;
 } param_enum_t;
 
 typedef struct {

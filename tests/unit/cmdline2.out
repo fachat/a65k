@@ -1,0 +1,7 @@
+set_inc(lint -> 1)
+set_inc(lint -> 1)
+set_inc(lint -> 1)
+ERR:unknown long cmdline parameter: opt
+ERR:Unknown or missing parameter for option testopt
+ERR:Unknown or missing parameter for option testopt
+ERR:Unknown or missing parameter for option testopt

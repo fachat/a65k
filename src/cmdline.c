@@ -172,6 +172,7 @@ static err_t cmdline_parse_long(char *name, cmdline_t **opt, char **val, int *fl
 		}
 	}
 	if (*opt == NULL) {
+		log_error("unknown long cmdline parameter: %s", name);
 		rv = E_ABORT;
 	}
 	return rv;
@@ -191,15 +192,17 @@ static err_t cmdline_parse_short(char *pname, cmdline_t **opt, char **val, int f
 		if (*opt != NULL) {
 			if ((*opt)->type == PARTYPE_FLAG) {
 				rv = (*opt)->setflag(flag, (*opt)->extra_param);
+				*opt = NULL; // done with this one
 			} else {
 				mem_free(name);
 				*val = pname+1;
 				return E_OK;
 			}
 		} else {
+			log_error("unknown short cmdline parameter: %s", pname);
 			rv = E_ABORT;
 		}
-	} while ((pname++)[0] != 0);
+	} while ((++pname)[0] != 0);
 
 	return rv;
 }
@@ -220,6 +223,16 @@ err_t cmdline_parse(int argc, char *argv[]) {
 				rv = cmdline_parse_long(argv[i]+2, &opt, &val, &flag);
 			} else {
 				rv = cmdline_parse_short(argv[i]+1, &opt, &val, flag);
+				if (val != NULL && *val == 0) {
+					// option needed, but value not set
+					if (i+1 < argc && argv[i+1][0] != '-') {
+						val = argv[i+1];
+						i++;
+					} else {
+						log_error("Missing parameter for option %s", opt->name ? opt->name : opt->shortname);
+						rv = E_ABORT;
+					}
+				}
 			}
 		} else if (argv[i][0] == '+') {
 			flag = 0;
@@ -236,8 +249,10 @@ err_t cmdline_parse(int argc, char *argv[]) {
 				rv = opt->setflag(flag, opt->extra_param);
 				break;
 			case PARTYPE_PARAM:
-				// TODO: error if param is missing
 				rv = opt->setfunc(val, opt->extra_param, -1);
+				if (rv) {
+					log_error("Missing parameter for option %s", opt->name ? opt->name : opt->shortname);
+				}
 				break;
 			case PARTYPE_ENUM:
 				values = opt->values();
@@ -250,13 +265,12 @@ err_t cmdline_parse(int argc, char *argv[]) {
 					i++;
 				}
 				if (!values[i].value) {
-					// TODO error option value not found
+					log_error("Unknown or missing parameter for option %s", 
+								opt->name ? opt->name : opt->shortname);
+					rv = E_ABORT;
 				}
 				break;
 			}
-		} else {
-			// TODO error cmdline parameter not found
-			printf("unknown cmdline parameter: %s\n", argv[i]);
 		}
 		i++;
         }   
