@@ -44,6 +44,7 @@ typedef enum {
 typedef struct {
 	const char	*value;
 	const char	*description;
+	int		ival;
 } param_enum_t;
 
 typedef struct {
@@ -56,7 +57,8 @@ typedef struct {
 	param_type_t	type;
 
 	// function to call when parsed and type is PARTYPE_PARAM, PARTYPE_ENUM
-	err_t 		(*setfunc)(const char *value, void *extra_param);
+	// ival is the index number of the option in case of PARTYPE_ENUM
+	err_t 		(*setfunc)(const char *value, void *extra_param, int ival);
 
 	// function to call when parsed and type is PARTYPE_FLAG
 	err_t 		(*setflag)(int flag, void *extra_param);

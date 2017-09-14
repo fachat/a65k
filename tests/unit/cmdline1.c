@@ -9,12 +9,12 @@ static err_t set_flag(int flag, void *extra) {
 	printf("set_flag(%d)\n",flag);
 	return E_OK;
 }
-static err_t set_inc(const char *val, void *extra) {
-	printf("set_inc(%s)\n",val);
+static err_t set_inc(const char *val, void *extra, int ival) {
+	printf("set_inc(%s -> %d)\n",val, ival);
 	return E_OK;
 }
-static err_t set_inc2(const char *val, void *extra) {
-	printf("set_inc2(%s)\n",val);
+static err_t set_inc2(const char *val, void *extra, int ival) {
+	printf("set_inc2(%s -> %d)\n",val, ival);
 	return E_OK;
 }
 

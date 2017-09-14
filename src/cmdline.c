@@ -237,14 +237,14 @@ err_t cmdline_parse(int argc, char *argv[]) {
 				break;
 			case PARTYPE_PARAM:
 				// TODO: error if param is missing
-				rv = opt->setfunc(val, opt->extra_param);
+				rv = opt->setfunc(val, opt->extra_param, -1);
 				break;
 			case PARTYPE_ENUM:
 				values = opt->values();
 				int i = 0;
 				while (values[i].value) {
 					if (!strcmp(values[i].value, val)) {
-						opt->setfunc(val, opt->extra_param);
+						opt->setfunc(val, opt->extra_param, i);
 						break;
 					}
 					i++;

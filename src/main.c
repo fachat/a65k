@@ -41,18 +41,21 @@
 #include "err.h"
 
 
-static err_t main_set_mode(const char *value, void *extra) {
+static bool_t is_lint = false;
+
+static err_t main_set_mode(const char *value, void *extra, int ival) {
 	(void) extra;
 
-	// TODO
-	printf("set mode: %s\n", value);
+	is_lint = ival == 1;
+
+	printf("set mode: %s -> %d\n", value, ival);
 
 	return E_OK;
 }
 
 static param_enum_t modes[] = {
-	{ "ass", 	"Assembler mode (default)" },
-	{ "lint",	"Just format the code and print it on stdout" },
+	{ "ass", 	"Assembler mode (default)", 0 },
+	{ "lint",	"Just format the code and print it on stdout", 1 },
 	{ NULL },
 };
 

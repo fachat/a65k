@@ -91,8 +91,9 @@ static const char *cpu_key_from_entry(const void *entry) {
 	return cpu->name;
 }
 
-static err_t set_cpu(const char *value, void *extra) {
+static err_t set_cpu(const char *value, void *extra, int ival) {
         (void) extra;
+	(void) ival;
 
         // TODO
         printf("set cpu: %s\n", value);
