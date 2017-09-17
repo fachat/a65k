@@ -83,6 +83,22 @@ static void debug_output() {
 }
 
 /**
+ * print prints out the structures 
+ */
+static void print_output() {
+
+	print_config_t *cfg = print_current_config();
+
+	list_iterator_t *stmts = parser_get_statements();
+	while (list_iterator_has_next(stmts)) {
+
+		statement_t *stmt = list_iterator_next(stmts);	
+
+		print_formatted_stmt(stmt, cfg);
+	}
+}
+
+/**
  * pass1 pulls in lines from the infiles component,
  * and pushes them through the next steps
  */
@@ -125,8 +141,12 @@ static void main_init() {
 	operation_module_init();
 	// segments
 	segment_module_init();
+	// pseudo opcodes
+	pseudo_module_init();
 	// parser
 	parser_module_init();
+	// print output
+	print_module_init();
 	// tokenizer
 	tokenizer_module_init();
 
@@ -152,6 +172,7 @@ int main(int argc, char *argv[]) {
 	// second pass
 
 	// print output
-	debug_output();
+	//debug_output();
+	print_output();
 }
 

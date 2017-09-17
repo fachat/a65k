@@ -1,7 +1,7 @@
 /****************************************************************************
 
-    print output
-    Copyright (C) 2012 Andre Fachat
+    printer config
+    Copyright (C) 2017 Andre Fachat
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,22 +19,41 @@
 
 ****************************************************************************/
 
+#include <string.h>
 
-#ifndef PRINT_H
-#define PRINT_H
-
-#include "parser.h"
+#include "mem.h"
+#include "err.h"
 #include "print-config.h"
+#include "cmdline.h"
 
-void print_module_init();
 
-void do_print(const char *pattern, ...);
+static type_t print_config_memtype = {
+        "print_config_t",
+        sizeof(print_config_t)
+};
 
-void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg);
+static print_config_t pconfig;
 
-void print_debug_stmt(const statement_t *stmt);
 
-void print_debug_arith(const ilist_t *anodes);
+static cmdline_t print_params[] = {
+	{ "print-lineno", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.lineno, 
+		"print (or leave space for) line numbers", NULL },
+};
 
-#endif
+void print_config_init() {
+
+	pconfig.lineno = 0;
+	
+	int n = sizeof(print_params) / sizeof(cmdline_t);
+	cmdline_register_mult(print_params, n);
+}
+
+print_config_t* print_current_config() {
+
+	print_config_t *clonedconf = mem_alloc(&print_config_memtype);
+
+	memcpy(clonedconf, &pconfig, sizeof(pconfig));
+
+	return clonedconf;
+}
 

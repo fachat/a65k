@@ -1,7 +1,7 @@
 /****************************************************************************
 
-    print output
-    Copyright (C) 2012 Andre Fachat
+    printer config
+    Copyright (C) 2017 Andre Fachat
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,21 +20,19 @@
 ****************************************************************************/
 
 
-#ifndef PRINT_H
-#define PRINT_H
+#ifndef PRINT_CONFIG_H
+#define PRINT_CONFIG_H
 
-#include "parser.h"
-#include "print-config.h"
 
-void print_module_init();
+typedef struct {
+	// print the line number, or reserve space for it if not parsed
+	int 	lineno;
+} print_config_t;
 
-void do_print(const char *pattern, ...);
+void print_config_init(); 
 
-void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg);
-
-void print_debug_stmt(const statement_t *stmt);
-
-void print_debug_arith(const ilist_t *anodes);
+// return a clone of the current configuration
+print_config_t *print_current_config();
 
 #endif
 

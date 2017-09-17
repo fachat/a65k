@@ -1,7 +1,7 @@
 /****************************************************************************
 
-    print output
-    Copyright (C) 2012,2017 Andre Fachat
+    print formatted output
+    Copyright (C) 2017 Andre Fachat
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,61 +29,41 @@
 
 #define	BUF_LEN		2048
 
-void print_module_init() {
-
-	print_config_init();
-}
-
 static void print_debug_arith_int(const ilist_t *anodes, int indlen);
 
-void do_print(const char *pattern, ...) {
-	va_list ap;
-	va_start(ap, pattern);
 
-	char buf[BUF_LEN];
+void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 
-	int r = vsnprintf(buf, BUF_LEN, pattern, ap);
-	if (r < 0 || r > BUF_LEN) {
-		// error
-		log_error("Error printing %d\n", r);
-		return;
+
+	if (cfg->lineno) {
+		if (stmt->lineno >= 0) {
+			do_print("% 5d ", stmt->lineno);
+		} else {
+			do_print("      ");
+		}
 	}
-	log_warn("%s", buf);
-}
-
-
-void print_debug_stmt(const statement_t *stmt) {
-
-	do_print("--------------- STMT ---------------");
-
-	if (stmt->lineno >= 0) {
-		do_print("LINE: %d:", stmt->lineno);
-	}
-	do_print("BLK:%d ctx:%d (CPU: %s, isa:$%x), seg=%s", 
-		stmt->blk->blockno, stmt->ctx->ctxno, stmt->ctx->cpu->name, stmt->ctx->cpu->isa,
-		stmt->ctx->segment->name);
 
 	if (stmt->label != NULL) {
 		const label_t *l = stmt->label;
-		do_print("LAB: name:%s ctx:%d pos:%s:%d", 
-			l->name, l->ctx->ctxno, l->position->filename, l->position->lineno);
+		do_print("% -10s ", l->name);
+	} else {
+		do_print("            ");
 	}
+#if 0
 	if (stmt->setlabel != NULL) {
 		const ilist_t *a = stmt->setlabel;
 		// TODO
 		do_print("SET:");
 		print_debug_arith_int(a, 4);
 	}
-
+#endif
 	if (stmt->op != NULL) {
 		const operation_t *o = stmt->op;
-		do_print("OPR: name:%s isa:$%x isrel:%d acw:%d idxw:%d", 
-			o->name, o->isa, o->abs_is_rel, o->check_ac_w, o->check_idx_w);
-
-		do_print("MOD: BASE: %d, SYN: %d, UM: %d, NF: %d, RS: %d, LE: %d", 
-			stmt->base, stmt->syn, stmt->um_prefix, stmt->nf_prefix, stmt->rs_prefix, stmt->le_prefix);
+		do_print("%s", o->name);
+	} else {
+		do_print("   ");
 	}
-
+#if 0
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;
 		do_print("PAR: ");
@@ -102,7 +82,7 @@ void print_debug_stmt(const statement_t *stmt) {
 			}
 		}
 	}
-
+#endif
 	if (stmt->comment) {
 		do_print("COMMENT: %s", stmt->comment);
 	}	
@@ -139,12 +119,5 @@ static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
 		}
 	}
 }
-
-void print_debug_arith(const ilist_t *anodes) {
-
-	print_debug_arith_int(anodes, 2);
-
-}
-
 
 
