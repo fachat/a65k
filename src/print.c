@@ -133,6 +133,11 @@ static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
 			do_print("  %stype=%c, modifier=%d (%c), op=%d(%c)", 
 				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
 			break;
+		case A_LABEL:
+			do_print("  %stype=%c, modifier=%d (%c), op=%d(%c), label=%s (resolved=%d)", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op),
+				n->val.lab.name, n->val.lab.label ? 1 : 0);
+			break;
 		default:
 			do_print("  UNHANDLED: %stype=%c, modifier=%d (%c), op=%d(%c)", 
 				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));

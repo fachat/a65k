@@ -24,11 +24,11 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+typedef struct block_s block_t;
+
 #include "block.h"
 #include "list.h"
 #include "hashmap.h"
-
-typedef struct block_s block_t;
 
 struct block_s {
 	// parent block

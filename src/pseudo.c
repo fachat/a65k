@@ -37,7 +37,7 @@ static err_t arith_list_parse(tokenizer_t *tok, statement_t *stmt) {
 	stmt->pparams = pparams;
 
 	ilist_t *nodep;
-	while ((rv = arith_parse(tok, 0, (const ilist_t**)&nodep)) == E_OK) {
+	while ((rv = arith_parse(tok, stmt->blk, 0, (const ilist_t**)&nodep)) == E_OK) {
 		list_add(pparams, nodep);
 
 		if (tok->type != T_TOKEN || tok->vals.op != OP_COMMA) {

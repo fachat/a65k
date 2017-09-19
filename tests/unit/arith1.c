@@ -17,7 +17,7 @@ void print(const char *val) {
 
 	const ilist_t *out = NULL;
 
-	arith_parse(tok, 0, &out);
+	arith_parse(tok, NULL, 0, &out);
 
 	print_debug_arith(out);
 	

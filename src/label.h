@@ -24,12 +24,14 @@
 #ifndef LABEL_H
 #define LABEL_H
 
+typedef struct label_s label_t;
+
 #include "context.h"
 #include "position.h"
 #include "mem.h"
 
 
-typedef struct {
+struct label_s {
 	// context
 	const context_t		*ctx;
 	// position in file where defined
@@ -37,7 +39,7 @@ typedef struct {
 	// name
 	const char 		*name;
 	// TODO value, state etc
-} label_t;
+};
 
 
 static type_t label_memtype = {

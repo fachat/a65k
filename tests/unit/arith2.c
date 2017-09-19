@@ -17,7 +17,7 @@ void print(const char *val, int allow_index) {
 
 	const ilist_t *out = NULL;
 
-	arith_parse(tok, allow_index, &out);
+	arith_parse(tok, NULL, allow_index, &out);
 
 	print_debug_arith(out);
 	

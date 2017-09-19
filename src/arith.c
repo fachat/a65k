@@ -32,7 +32,7 @@ typedef enum {
 	EXP_END
 } expect_t;
 
-static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode, op_t closing) {
+static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, op_t closing) {
 
 	err_t rv = E_OK;
 
@@ -60,7 +60,7 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 				if (tokenizer_next(tok, allow_index)) {
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
-					arith_parse(tok, allow_index, (const ilist_t**) &anode->val.subv.value);
+					arith_parse(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value);
 
 					if (tok->type != T_BRACKET) {
 						rv = E_SYNTAX;
@@ -70,7 +70,11 @@ static err_t arith_parse_int(tokenizer_t *tok, int allow_index, const ilist_t **
 				anode = ilist_add(list);
 				break;
 			case T_NAME:
-				// TODO
+				anode->type = A_LABEL;
+				anode->val.lab.name = mem_alloc_strn(tok->line + tok->ptr, tok->len);
+				anode->val.lab.label = block_find_label(blk, anode->val.lab.name);
+				expect = EXP_OP;
+				anode = ilist_add(list);
 				break;
 			case T_LITERAL:
 				// new node for literal value
@@ -196,9 +200,9 @@ exit:
 }
 
 
-err_t arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **ext_anode) {
+err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode) {
 
-	return arith_parse_int(tok, allow_index, ext_anode, OP_NONE);
+	return arith_parse_int(tok, blk, allow_index, ext_anode, OP_NONE);
 }
 
 

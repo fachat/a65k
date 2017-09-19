@@ -25,6 +25,8 @@
 #define ARITH_H
 
 #include "inline_list.h"
+#include "label.h"
+#include "block.h"
 #include "err.h"
 
 typedef signed long maxval_t;
@@ -108,7 +110,10 @@ struct anode_s {
 	    quotetype_t	type;
 	  } strv;
 	  // A_LABEL
-	  // TODO
+	  struct {
+	    const char 	*name;
+	    label_t 	*label;
+	  } lab;
 	  // A_BRACKET
 	  struct {
 	    ilist_t *value;
@@ -133,7 +138,7 @@ static inline anode_t *anode_init() {
 	return anode;
 }
 
-err_t arith_parse(tokenizer_t *tok, int allow_index, const ilist_t **anode);
+err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode);
 
 #endif
 
