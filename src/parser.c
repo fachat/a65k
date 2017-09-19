@@ -129,6 +129,23 @@ void parser_reset() {
         p->statements = array_list_init(10000);
 }
 
+static inline void error_double_prefix(const tokenizer_t *tok, char prefix, char conflict) {
+        toklog_error(tok, "Double prefix '%c' conflicting with previous '%c'", prefix, conflict);
+}
+
+static inline void warn_double_prefix(const tokenizer_t *tok, char prefix) {
+        toklog_warn(tok, "Double prefix '%c'", prefix);
+}
+
+static inline void warn_operation_not_for_cpu(const tokenizer_t *tok, const char *op_name, const char *cpu_name) {
+        toklog_warn(tok, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
+}
+
+static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
+        toklog_error(tok, "Syntax error: %s", msg);
+}
+
+
 /**
  * parse the operation parameter incl. addressing mode
  */
@@ -281,56 +298,70 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 		char c = tolower(tok->line[tok->ptr + i]);
 		switch(c) {
 		case 'u':
+			if (stmt->um_prefix) {
+				warn_double_prefix(tok, c);
+			}
 			stmt->um_prefix = 1;
 			break;
 		case 'n':
+			if (stmt->nf_prefix) {
+				warn_double_prefix(tok, c);
+			}
 			stmt->nf_prefix = 1;
 			break;
 		case 'b':
 			if (stmt->rs_prefix != RS_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_rs_char(stmt->rs_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->rs_prefix = RS_BYTE;
 			break;
 		case 'w':
 			if (stmt->rs_prefix != RS_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_rs_char(stmt->rs_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->rs_prefix = RS_WORD;
 			break;
 		case 'l':
 			if (stmt->rs_prefix != RS_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_rs_char(stmt->rs_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->rs_prefix = RS_LONG;
 			break;
 		case 'q':
 			if (stmt->rs_prefix != RS_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_rs_char(stmt->rs_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->rs_prefix = RS_QUAD;
 			break;
 		case 'e':
 			if (stmt->le_prefix != LE_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_le_char(stmt->le_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->le_prefix = LE_E;
 			break;
 		case 's':
 			if (stmt->le_prefix != LE_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_le_char(stmt->le_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->le_prefix = LE_S;
 			break;
 		case '0':
 			if (stmt->le_prefix != LE_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_le_char(stmt->le_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->le_prefix = LE_0;
 			break;
 		case '1':
 			if (stmt->le_prefix != LE_NOT_SET) {
-				// TODO warn double prefix
+				error_double_prefix(tok, c, prefix_le_char(stmt->le_prefix));
+				rv = E_SYNTAX;
 			}
 			stmt->le_prefix = LE_1;
 			break;
@@ -340,14 +371,6 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 		}
 	}
 	return rv;
-}
-
-static inline void warn_operation_not_for_cpu(const tokenizer_t *tok, const char *op_name, const char *cpu_name) {
-        toklog_warn(tok, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
-}
-
-static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
-        toklog_error(tok, "Syntax error: %s", msg);
 }
 
 err_t parser_push(const context_t *ctx, const line_t *line) {
@@ -430,10 +453,10 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					if (tokenizer_next_prefix(tok) && (tok->type == T_NAME)) {
 						rv = parse_prefix(tok, stmt);
 					} else {
+						error_syntax(tok, "Expecting prefix notation after '.'");
 						rv = E_SYNTAX;
 					}
 					if (rv) {
-						error_syntax(tok, "Expecting prefix notation after '.'");
 						break;
 					}
 					tokenizer_next(tok, 0);

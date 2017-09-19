@@ -87,6 +87,11 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "label ;comment :ADC #1");	
 	test(ctx, &pos, "label: ;comment :ADC #1");	
 	test(ctx, &pos, "::ADC #1");	
+
+	test(ctx, &pos, "ADC.bw #1");	
+	test(ctx, &pos, "ADC.uu #1");	
+	test(ctx, &pos, "ADC.nn #1");	
+	test(ctx, &pos, "ADC.01 #1");	
 }
 
 

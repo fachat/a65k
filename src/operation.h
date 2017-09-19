@@ -177,5 +177,37 @@ const operation_t *operation_find(const char *name);
 bool_t opcode_find(const position_t *loc, const context_t *ctx, const operation_t *op, syntax_type syntax, int opsize_in_bytes,
 	codepoint_t *returned_code);
 
+inline static char prefix_rs_char(rs_type p) {
+	switch (p) {
+	case RS_NOT_SET:
+		return '-';
+	case RS_BYTE:
+		return 'b';
+	case RS_WORD:
+		return 'w';
+	case RS_LONG:
+		return 'l';
+	case RS_QUAD:
+		return 'q';
+	}
+	return 'x';
+}
+
+inline static char prefix_le_char(rs_type p) {
+	switch (p) {
+	case LE_NOT_SET:
+		return '-';
+	case LE_0:
+		return '0';
+	case LE_1:
+		return '1';
+	case LE_S:
+		return 's';
+	case LE_E:
+		return 'e';
+	}
+	return 'x';
+}
+
 #endif
 
