@@ -145,6 +145,10 @@ static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
         toklog_error(tok, "Syntax error: %s", msg);
 }
 
+static inline void error_assign_without_label(const tokenizer_t *tok) {
+	toklog_error(tok, "%s", "Assign without label");
+}
+
 
 /**
  * parse the operation parameter incl. addressing mode
@@ -446,6 +450,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				}
 			} else {
 				// operation
+				stmt->type = S_OPCODE;
 				stmt->op = op;
 				tokenizer_next(tok, 0);
 				if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
@@ -481,11 +486,27 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 			if (tok->type == T_TOKEN && tok->vals.op == OP_DOT) {
 				if (tokenizer_next(tok, 0)) {
 					rv = parse_pseudo(tok, stmt);
+					stmt->type = S_PSEUDO;
 				} else {
 					rv = E_SYNTAX;
 				}
 				if (rv) {
 					error_syntax(tok, "Expect pseudo opcode after '.'");
+					break;
+				}
+			} else
+			if (tok->type == T_TOKEN && tokenizer_op_details(tok->vals.op)->is_assign) {
+				if (stmt->label == NULL) {
+					error_assign_without_label(tok);
+					rv = E_SYNTAX;
+					break;
+				}
+				stmt->type = S_LABDEF;
+				stmt->assign = tok->vals.op;
+				tokenizer_next(tok, 0);
+				// parse parameters
+				rv = parse_param(tok, stmt);
+				if (rv) {
 					break;
 				}
 			} else

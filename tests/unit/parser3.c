@@ -68,6 +68,7 @@ int main(int argc, char *argv[]) {
 	cmdline_parse(2, pars2);
 
 	test(ctx, &pos, "10020 LDA #$E0:STA Z0+1");	
+	test(ctx, &pos, "11010 SERI2 =$029B:SERI1 =$029C");	
 }
 
 

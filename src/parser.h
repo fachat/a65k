@@ -61,6 +61,7 @@ struct statement_s {
         const label_t           *label;		// TODO allow for multiple label definitions per line/statement
 	// S_LABDEF
 	const ilist_t		*setlabel;	// anode_t list for setting label to a value 
+	op_t			assign;		// assign operation
 	// S_OPCODE
        	const operation_t       *op;		// pointer to info about operation, like "ADC", "TAX", ...
 	op_t			base;		// base extension of the parameter, like ",B", ",s" if any, zero else

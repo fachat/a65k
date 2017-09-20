@@ -83,6 +83,9 @@ void print_debug_stmt(const statement_t *stmt) {
 		do_print("MOD: BASE: %d, SYN: %d, UM: %d, NF: %d, RS: %d, LE: %d", 
 			stmt->base, stmt->syn, stmt->um_prefix, stmt->nf_prefix, stmt->rs_prefix, stmt->le_prefix);
 	}
+	if (stmt->type == S_LABDEF) {
+		do_print("LDEF: %s", tokenizer_op_details(stmt->assign)->print);
+	}
 
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;
