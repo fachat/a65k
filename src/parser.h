@@ -36,6 +36,8 @@ typedef struct statement_s statement_t;
 #include "pseudo.h"
 
 typedef enum {
+	S_NONE,
+        S_PCDEF,                // set PC
         S_LABEQPC,              // set label to PC
         S_LABDEF,               // set label from parameter
 	S_OPCODE,		// opcode

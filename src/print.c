@@ -86,6 +86,12 @@ void print_debug_stmt(const statement_t *stmt) {
 	if (stmt->type == S_LABDEF) {
 		do_print("LDEF: %s", tokenizer_op_details(stmt->assign)->print);
 	}
+	if (stmt->type == S_PCDEF) {
+		do_print("PCDEF: %s", tokenizer_op_details(stmt->assign)->print);
+	}
+	if (stmt->type == S_LABEQPC) {
+		do_print("LABEQPC: %s", "=*");
+	}
 
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;

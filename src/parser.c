@@ -84,6 +84,8 @@ void parser_module_init(void) {
 
 static statement_t *new_statement(const context_t *ctx) {
 	statement_t *stmt = mem_alloc(&statement_memtype);
+
+	stmt->type = S_NONE;
 	stmt->blk = p->blk;
 	stmt->ctx = ctx;
 	stmt->op = NULL;
@@ -445,6 +447,10 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				stmt->label = label;
 		
 				tokenizer_next(tok, 0);
+				if (tok->type == T_END) {
+					stmt->type = S_LABEQPC;
+					break;
+				}
 				if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
 					tokenizer_next(tok, 0);
 				}
@@ -496,12 +502,16 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				}
 			} else
 			if (tok->type == T_TOKEN && tokenizer_op_details(tok->vals.op)->is_assign) {
-				if (stmt->label == NULL) {
+				if (stmt->label == NULL && tok->vals.op != OP_ASSIGNMULT) {
 					error_assign_without_label(tok);
 					rv = E_SYNTAX;
 					break;
 				}
-				stmt->type = S_LABDEF;
+				if (stmt->label == NULL && tok->vals.op == OP_ASSIGNMULT) {
+					stmt->type = S_PCDEF;
+				} else {
+					stmt->type = S_LABDEF;
+				}
 				stmt->assign = tok->vals.op;
 				tokenizer_next(tok, 0);
 				// parse parameters
@@ -510,7 +520,8 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					break;
 				}
 			} else
-			if (tok->vals.op != OP_SEMICOLON
+			if (tok->type != T_END
+				&& tok->vals.op != OP_SEMICOLON
 				&& (tok->vals.op != OP_DOUBLESLASH || cfg->cstyle_allowed)
 				&& (tok->vals.op != OP_COLON)) {
 				rv = E_SYNTAX;
