@@ -143,10 +143,6 @@ static inline void warn_operation_not_for_cpu(const tokenizer_t *tok, const char
         toklog_warn(tok, "Operation name %s is not available for CPU %s, assuming label!", op_name, cpu_name);
 }
 
-static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
-        toklog_error(tok, "Syntax error: %s", msg);
-}
-
 static inline void error_assign_without_label(const tokenizer_t *tok) {
 	toklog_error(tok, "%s", "Assign without label");
 }
@@ -497,7 +493,6 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 					rv = E_SYNTAX;
 				}
 				if (rv) {
-					error_syntax(tok, "Expect pseudo opcode after '.'");
 					break;
 				}
 			} else

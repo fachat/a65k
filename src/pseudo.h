@@ -29,12 +29,14 @@
 
 typedef struct statement_s statement_t;
 
-typedef struct {
+typedef struct pseudo_s pseudo_t;
+
+struct pseudo_s {
 	const char	*name;
-	err_t		(*parse)(tokenizer_t *tok, statement_t *stmt);
-	err_t		(*pass1)(statement_t *stmt);
-	err_t		(*pass2)(statement_t *stmt);
-} pseudo_t;
+	err_t		(*parse)(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt);
+	err_t		(*pass1)(const pseudo_t *pseudo, statement_t *stmt);
+	err_t		(*pass2)(const pseudo_t *pseudo, statement_t *stmt);
+};
 
 
 // init the pseudo opcodes

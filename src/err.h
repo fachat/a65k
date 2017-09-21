@@ -62,6 +62,9 @@ void loclog(err_level l, const position_t *pos, const char *msg, ...);
 
 void toklog(err_level l, const tokenizer_t *tok, const char *msg, ...);
 
+static inline void error_syntax(const tokenizer_t *tok, const char *msg) {
+        toklog_error(tok, "Syntax error: %s", msg);
+}
 
 #endif
 

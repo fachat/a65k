@@ -30,7 +30,11 @@
 #include "parser.h"
 #include "mem.h"
 
-static err_t arith_list_parse(tokenizer_t *tok, statement_t *stmt) {
+static inline void error_parse_syntax(const tokenizer_t *tok, const char *name) {
+        toklog_error(tok, "Could not parse parameter for pseudo opcode '%s'", name);
+}
+
+static err_t arith_list_parse(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt) {
 
 	err_t rv = E_OK;
 	list_t *pparams = array_list_init(8);
@@ -46,6 +50,9 @@ static err_t arith_list_parse(tokenizer_t *tok, statement_t *stmt) {
 		if (!tokenizer_next(tok, 0)) {
 			break;
 		}
+	}
+	if (rv) {
+		error_parse_syntax(tok, pseudo->name);
 	}
 	return rv;
 }
@@ -92,16 +99,17 @@ err_t parse_pseudo(tokenizer_t *tok, statement_t *stmt) {
 		name = mem_alloc_str(tokenizer_op_details(tok->vals.op)->print);
 	}
 
-	pseudo_t *p = hash_get(pseudomap, name);
+	const pseudo_t *p = hash_get(pseudomap, name);
 	if (p != NULL) {
 
 		stmt->pseudo = p;
 		tokenizer_next(tok, 0);
 
 		if (p->parse) {
-			rv = p->parse(tok, stmt);
+			rv = p->parse(p, tok, stmt);
 		}
 	} else {
+		error_syntax(tok, "Expect pseudo opcode after '.'");
 		rv = E_SYNTAX;
 	}
 
