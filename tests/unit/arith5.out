@@ -1,0 +1,13 @@
+WRN:---> 1+-2+!3+^4
+WRN:  A:len=4
+WRN:    type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:    type=u, modifier=0( ), op=43(+), unary=45(-)
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)2/2
+WRN:    type=u, modifier=0( ), op=43(+), unary=33(!)
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)3/3
+WRN:    type=u, modifier=0( ), op=43(+), unary=94(^)
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)4/4
+WRN:   > next is type x, 

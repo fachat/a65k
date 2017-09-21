@@ -65,6 +65,7 @@ typedef enum {
 	A_STRING	='s',	// string
 	A_LABEL		='l',	// label reference
 	A_INDEX		='i',	// index, ",x"
+	A_UNARY		='u',	// unary operator
 } a_type;
 
 typedef enum {
@@ -119,6 +120,11 @@ struct anode_s {
 	    ilist_t *value;
 	    asub_type	type;
 	  } subv;
+	  // A_UNARY
+	  struct {
+	    ilist_t *value;
+	    op_t op;
+	  } unary;
 	} val;
 };
 

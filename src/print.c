@@ -147,6 +147,12 @@ static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
 				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op),
 				n->val.lab.name, n->val.lab.label ? 1 : 0);
 			break;
+		case A_UNARY:
+			do_print("  %stype=%c, modifier=%d(%c), op=%d(%c), unary=%d(%c)", 
+				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op),
+				n->val.unary.op, prop(n->val.unary.op));
+			print_debug_arith_int(n->val.unary.value, indlen + 2);
+			break;
 		default:
 			do_print("  UNHANDLED: %stype=%c, modifier=%d (%c), op=%d(%c)", 
 				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));

@@ -39,8 +39,14 @@ static type_t tokenizer_memtype = {
 
 static op_details_t *sorted[256];
 
+// flag values:
+// - modifier
+// - unary
+// - binary
+// - index
+// - assign
 static op_details_t ops[] = {
-        { 	OP_EXCL,		"!",	1,	0,	0,	0,	0	},
+        { 	OP_EXCL,		"!",	1,	1,	0,	0,	0	},
         {	OP_AT,			"@",	1,	0,	0,	0,	0	},
         {	OP_XQUOTE,		"`",	0,	0,	0,	0,	0	},
         {	OP_SQUOTE,		"'",	0,	0,	0,	0,	0	},
@@ -74,7 +80,7 @@ static op_details_t ops[] = {
         {	OP_ASSIGNBITXOR,	"^=",	0,	0,	0,	0,	1	},
         {	OP_ASSIGNSHIFTLEFT,	"<<=",	0,	0,	0,	0,	1	},
         {	OP_ASSIGNSHIFTRIGHT,	">>=",	0,	0,	0,	0,	1	},
-        {	OP_BITXOR,		"^",	1,	0,	1,	0,	0	},
+        {	OP_BITXOR,		"^",	1,	1,	1,	0,	0	},
         {	OP_BITOR,		"|",	0,	0,	1,	0,	0	},
         {	OP_BITAND,		"&",	0,	0,	1,	0,	0	},
         {	OP_EQUAL,		"==",	0,	0,	1,	0,	0	},

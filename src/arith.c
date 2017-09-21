@@ -32,7 +32,15 @@ typedef enum {
 	EXP_END
 } expect_t;
 
-static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, op_t closing) {
+static inline void error_double_modifier(const tokenizer_t *tok, const char *newop, const char *oldop) {
+        toklog_error(tok, "Found multiple modifiers: got %s, was already %s", newop, oldop);
+}
+
+static inline void error_unary_no_val(const tokenizer_t *tok) {
+        toklog_error(tok, "%s", "Did not find value after unary operator");
+}
+
+static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, op_t closing, int val_only, int allow_mod) {
 
 	err_t rv = E_OK;
 
@@ -60,7 +68,7 @@ static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_ind
 				if (tokenizer_next(tok, allow_index)) {
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
-					arith_parse(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value);
+					arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, OP_NONE, 0, 0);
 
 					if (tok->type != T_BRACKET) {
 						rv = E_SYNTAX;
@@ -68,6 +76,7 @@ static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_ind
 				}
 				expect = EXP_OP;
 				anode = ilist_add(list);
+				allow_mod = 0;
 				break;
 			case T_NAME:
 				anode->type = A_LABEL;
@@ -75,6 +84,7 @@ static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_ind
 				anode->val.lab.label = block_find_label(blk, anode->val.lab.name);
 				expect = EXP_OP;
 				anode = ilist_add(list);
+				allow_mod = 0;
 				break;
 			case T_LITERAL:
 				// new node for literal value
@@ -83,30 +93,30 @@ static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_ind
 				anode->val.intv.value = tok->vals.literal.value;
 				expect = EXP_OP;
 				anode = ilist_add(list);
+				allow_mod = 0;
 				break;
 			case T_TOKEN:
 				// modifier?
-				if (tokenizer_op_details(tok->vals.op)->is_modifier) {
-					if (anode->modifier != AMOD_NONE) {
-						// TODO log error
+				if (allow_mod && tokenizer_op_details(tok->vals.op)->is_modifier) {
+					// conveniently mapped
+					anode->modifier = tok->vals.op;
+					allow_mod = 0;
+					break;
+				}
+				if (tokenizer_op_details(tok->vals.op)->is_unary) {
+					anode->val.unary.op = tok->vals.op;
+					if (tokenizer_next(tok, allow_index)) {
+						arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.unary.value, OP_NONE, 1, 0);
+						expect = EXP_OP;
+						anode->type = A_UNARY;
+						anode = ilist_add(list);
+						allow_mod = 0;
 					} else {
-						// conveniently mapped
-						anode->modifier = tok->vals.op;
+						error_unary_no_val(tok);
+						rv = E_SYNTAX;
 					}
 					break;
 				}
-				// unary operator, like inversion, negative
-/*
-				if (unary != OP_NONE) {
-					new_anode = anode_init(A_VALUE, anode);
-					new_anode->val.intv.type = LIT_NONE;
-					new_anode->op = unary;
-					unary = OP_NONE;
-					anode = new_anode;
-					new_anode = NULL;
-				}
-				unary = tok->vals.op;
-*/
 				rv = E_SYNTAX;
 				break;
 			case T_STRING:
@@ -186,7 +196,7 @@ end:
 			break;
 		}	
 	}
-	while ((rv == E_OK) && tokenizer_next(tok, allow_index));
+	while ((rv == E_OK) && (expect == EXP_VAL || !val_only) && tokenizer_next(tok, allow_index));
 exit:
 	if (anode->op == OP_NONE) {
 		ilist_pop(list);
@@ -202,7 +212,7 @@ exit:
 
 err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode) {
 
-	return arith_parse_int(tok, blk, allow_index, ext_anode, OP_NONE);
+	return arith_parse_int(tok, blk, allow_index, ext_anode, OP_NONE, 0, 1);
 }
 
 
