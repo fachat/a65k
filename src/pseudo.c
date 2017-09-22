@@ -34,7 +34,7 @@ static inline void error_parse_syntax(const tokenizer_t *tok, const char *name) 
         toklog_error(tok, "Could not parse parameter for pseudo opcode '%s'", name);
 }
 
-static err_t arith_list_parse(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt) {
+static err_t pseudo_list_parse(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt) {
 
 	err_t rv = E_OK;
 	list_t *pparams = array_list_init(8);
@@ -45,6 +45,7 @@ static err_t arith_list_parse(const pseudo_t *pseudo, tokenizer_t *tok, statemen
 		list_add(pparams, nodep);
 
 		if (tok->type != T_TOKEN || tok->vals.op != OP_COMMA) {
+			// break if not comma (separator)
 			break;
 		}
 		if (!tokenizer_next(tok, 0)) {
@@ -57,11 +58,40 @@ static err_t arith_list_parse(const pseudo_t *pseudo, tokenizer_t *tok, statemen
 	return rv;
 }
 
+static err_t pseudo_param_parse(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt) {
+
+	err_t rv = E_OK;
+	list_t *pparams = array_list_init(8);
+	stmt->pparams = pparams;
+
+	ilist_t *nodep;
+	if ((rv = arith_parse(tok, stmt->blk, 0, (const ilist_t**)&nodep)) == E_OK) {
+		list_add(pparams, nodep);
+	}
+
+	if (rv) {
+		error_parse_syntax(tok, pseudo->name);
+	}
+	return rv;
+}
+
+static err_t pseudo_end_parse(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt) {
+
+	(void) pseudo;
+	(void) stmt;
+
+	return E_END;
+}
 
 static pseudo_t pseudos[] = {
-	{ "byt",	arith_list_parse,	NULL,		NULL },
-	{ "byte",	arith_list_parse,	NULL,		NULL },
-	{ "word",	arith_list_parse,	NULL,		NULL },
+	{ "end",	pseudo_end_parse,	NULL,		NULL },
+	{ "if",		pseudo_param_parse,	NULL,		NULL },
+	{ "goto",	pseudo_param_parse,	NULL,		NULL },
+	{ "got",	pseudo_param_parse,	NULL,		NULL },
+	{ "asc",	pseudo_list_parse,	NULL,		NULL },
+	{ "byt",	pseudo_list_parse,	NULL,		NULL },
+	{ "byte",	pseudo_list_parse,	NULL,		NULL },
+	{ "word",	pseudo_list_parse,	NULL,		NULL },
 	{ "(",		NULL,			NULL,		NULL },
 	{ ")",		NULL,			NULL,		NULL },
 };
@@ -99,7 +129,7 @@ err_t parse_pseudo(tokenizer_t *tok, statement_t *stmt) {
 		name = mem_alloc_str(tokenizer_op_details(tok->vals.op)->print);
 	}
 
-	const pseudo_t *p = hash_get(pseudomap, name);
+	pseudo_t *p = hash_get(pseudomap, name);
 	if (p != NULL) {
 
 		stmt->pseudo = p;

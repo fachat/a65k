@@ -74,6 +74,8 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "12100 *=$ECD9:BC .BYT 11,0");	
 	test(ctx, &pos, "26040 PIEC");	
 	test(ctx, &pos, "22350 .BYT <-1,KT4-KT,KT6-KT");	
+	test(ctx, &pos, "12000 .IF MIKE-1:.GOTO 12600");	
+	test(ctx, &pos, "50000 .END; REM");	
 //	test(ctx, &pos, "28650 HC LDA #<-1:STA $C6");	
 }
 

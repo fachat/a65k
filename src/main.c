@@ -102,7 +102,10 @@ static void print_output() {
  * pass1 pulls in lines from the infiles component,
  * and pushes them through the next steps
  */
-static void parse() {
+static err_t parse() {
+
+	err_t rv = E_OK;
+	int err_cnt = 10;
 
 	const cpu_t *cpu = cpu_by_name(config()->initial_cpu_name);
 	segment_t *segment = segment_new(NULL, "_initial", SEG_ANY, cpu->type, false);
@@ -110,13 +113,20 @@ static void parse() {
 
 	line_t *line;
 
-	line = infiles_readline();
-	while (line != NULL) {
+	while (rv != E_END && (rv == E_OK || err_cnt > 0)) {
 	
-		parser_push(context(), line);
-
 		line = infiles_readline();
+
+		err_t rvx = parser_push(context(), line);
+
+		if (rvx != E_OK && rvx != E_END) {
+			err_cnt--;
+		}
+		if (rvx != E_OK) {
+			rv = rvx;
+		}
 	}
+	return rv;
 }
 
 

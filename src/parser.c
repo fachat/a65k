@@ -378,6 +378,10 @@ static err_t parse_prefix(tokenizer_t *tok, statement_t *stmt) {
 err_t parser_push(const context_t *ctx, const line_t *line) {
 	err_t rv = E_OK;
 
+	if (line == NULL) {
+		return E_END;
+	}
+
 	const parser_config_t *cfg = line->parsercfg;
 	position_t *pos = line->position;
 
@@ -551,7 +555,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 		}
 	}
 
-	if (rv == E_OK) {
+	if (rv == E_OK || rv == E_END) {
 		statement_push(ctx, stmt);
 	}
 	tokenizer_free(tok);
