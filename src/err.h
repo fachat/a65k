@@ -33,13 +33,14 @@ typedef enum {
 	E_SYNTAX		= 1,		// Syntax error, unexpected token
 	E_ABORT			= 2,		// Abort, e.g. after an illegal command line parameter
 	E_END			= 3,		// regular end
-
+/*
 	E_TOK_DIGITRANGE 	= 100,		// illegal digit when parsing an int value
 	E_TOK_EMPTY		= 101,		// empty token (e.g. "$" hex indicator, but no digits), or empty string
 	E_TOK_NONPRINT		= 102,		// illegal (non-printable) character in parsed string
 	E_TOK_UNKNOWN		= 103,		// unknown token
 
 	E_ARITH_CLOSING		= 104,		// wrong closing bracket	
+*/
 } err_t;
 
 

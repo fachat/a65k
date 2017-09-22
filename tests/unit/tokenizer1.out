@@ -30,6 +30,9 @@ TOK -> type=t, len=1, ptr=;
 END -> type=x, rest->
 tokenizing line: dec 0128
 TOK -> type=n, len=3, ptr=dec 0128
+ERR:foo:1 Illegal digit - got '8', expected base 8
+ERR:dec 0128
+ERR:    ^
 END -> type=e, rest->0128
 tokenizing line: dec 0127,
 TOK -> type=n, len=3, ptr=dec 0127,
@@ -66,9 +69,15 @@ TOK -> type=t, len=1, ptr=;
 END -> type=x, rest->
 tokenizing line: inc $12g4f;
 TOK -> type=n, len=3, ptr=inc $12g4f;
+ERR:foo:1 Illegal digit - got 'g', expected base 16
+ERR:inc $12g4f;
+ERR:    ^
 END -> type=e, rest->$12g4f;
 tokenizing line: inc 0x12g4f;
 TOK -> type=n, len=3, ptr=inc 0x12g4f;
+ERR:foo:1 Illegal digit - got 'g', expected base 16
+ERR:inc 0x12g4f;
+ERR:    ^
 END -> type=e, rest->0x12g4f;
 tokenizing line: .byt 'xsd&'
 TOK -> type=t, len=1, ptr=.byt 'xsd&'

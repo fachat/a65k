@@ -40,7 +40,18 @@ static inline void error_unary_no_val(const tokenizer_t *tok) {
         toklog_error(tok, "%s", "Did not find value after unary operator");
 }
 
-static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, op_t closing, int val_only, int allow_mod) {
+static inline void error_bracket_mismatch(const tokenizer_t *tok, op_t was, op_t expected) {
+        toklog_error(tok, "%s", "Opening and closing brackets don't match - got '%s' but expected '%s'.",
+			tokenizer_op_details(was)->print, tokenizer_op_details(expected)->print);
+}
+
+static err_t arith_parse_int(tokenizer_t *tok, 
+			const block_t *blk, 
+			int allow_index, 
+			const ilist_t **ext_anode, 
+			op_t closing, 
+			int val_only, 
+			int allow_mod) {
 
 	err_t rv = E_OK;
 
@@ -53,7 +64,6 @@ static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_ind
 
 	//op_t unary = OP_NONE;
 
-	//while (tokenizer_next(tok, allow_index)) {
 	do {
 		//printf("loop at: type=%c len=%d op=%d -> %s (n=%p, subv.type='%c')\n", 
 		//	tok->type, tok->len, tok->vals.op, tok->line+tok->ptr, anode, anode->val.subv.type);
@@ -73,6 +83,8 @@ static err_t arith_parse_int(tokenizer_t *tok, const block_t *blk, int allow_ind
 					if (tok->type != T_BRACKET) {
 						rv = E_SYNTAX;
 					}
+				} else {
+					rv = E_SYNTAX;
 				}
 				expect = EXP_OP;
 				anode = ilist_add(list);
@@ -186,7 +198,8 @@ end:
 			if (closing) {
 				if (tok->type == T_BRACKET) {
 					if (tok->vals.op != closing) {
-						rv = E_ARITH_CLOSING;
+						error_bracket_mismatch(tok, closing, tok->vals.op);
+						rv = E_SYNTAX;
 						goto exit;
 					}
 					
@@ -203,6 +216,9 @@ exit:
 	}
 	*ext_anode = list;
 
+	if ((!rv) && (!tok->is_valid)) {
+		rv = E_SYNTAX;
+	}
 	//printf("return at tok: type=%c len=%d -> %s (n=%p, subv.type='%c')\n", 
 	//	tok->type, tok->len, tok->line+tok->ptr, anode, anode->val.subv.type);
 

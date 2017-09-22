@@ -44,6 +44,9 @@ TOK -> type=t, len=1, ptr=;
 END -> type=x, rest->
 tokenizing line: inc 0x12df
 TOK -> type=n, len=3, ptr=inc 0x12df
+ERR:foo:1 Illegal digit - got 'x', expected base 10
+ERR:inc 0x12df
+ERR:    ^
 END -> type=e, rest->0x12df
 tokenizing line: inc $1234f
 TOK -> type=n, len=3, ptr=inc $1234f
@@ -51,6 +54,9 @@ TOK -> type=l, len=6, ptr=$1234f ltype=h, val=74575
 END -> type=x, rest->
 tokenizing line: inc 0x1234f,
 TOK -> type=n, len=3, ptr=inc 0x1234f,
+ERR:foo:1 Illegal digit - got 'x', expected base 10
+ERR:inc 0x1234f,
+ERR:    ^
 END -> type=e, rest->0x1234f,
 tokenizing line: inc $1234f,
 TOK -> type=n, len=3, ptr=inc $1234f,
@@ -64,9 +70,15 @@ TOK -> type=t, len=1, ptr=;
 END -> type=x, rest->
 tokenizing line: inc $12g4f;
 TOK -> type=n, len=3, ptr=inc $12g4f;
+ERR:foo:1 Illegal digit - got 'g', expected base 16
+ERR:inc $12g4f;
+ERR:    ^
 END -> type=e, rest->$12g4f;
 tokenizing line: inc 0x12g4f;
 TOK -> type=n, len=3, ptr=inc 0x12g4f;
+ERR:foo:1 Illegal digit - got 'x', expected base 10
+ERR:inc 0x12g4f;
+ERR:    ^
 END -> type=e, rest->0x12g4f;
 tokenizing line: .byt 'xsd&'
 TOK -> type=t, len=1, ptr=.byt 'xsd&'

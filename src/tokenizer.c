@@ -101,6 +101,23 @@ static op_details_t ops[] = {
         {	OP_PIND,		",p",	0,	0,	0,	1,	0	},
 };
 
+static inline void error_digit_range(tokenizer_t *tok, char val, int base) {
+	toklog_error(tok, "Illegal digit - got '%c', expected base %d", val, base);
+}
+
+static inline void error_empty_number(tokenizer_t *tok) {
+	toklog_error(tok, "%s", "Error parsing number - no digits");
+}
+
+static inline void error_parse_non_printable(tokenizer_t *tok) {
+	toklog_error(tok, "%s", "Error parsing number - unprintable character");
+}
+
+static inline void error_unknown_token(tokenizer_t *tok) {
+	toklog_error(tok, "%s", "Unknown token");
+}
+
+
 void tokenizer_module_init(void) {
 
 	memset(sorted, 0, 256 * sizeof(op_details_t*));
@@ -160,7 +177,7 @@ static bool_t parse_base(tokenizer_t *tok, int ptr, int base) {
 		}
 		if (c > (base-1)) {
 			// TODO: continue till end of number, so simple typo still allows detect further errors
-			tok->vals.errno = E_TOK_DIGITRANGE;
+			error_digit_range(tok, tok->line[ptr], base);
 			tok->type = T_ERROR;
 			return false;
 		}
@@ -172,7 +189,7 @@ static bool_t parse_base(tokenizer_t *tok, int ptr, int base) {
 
 	if (tok->len == 0) {
 		// syntax error
-		tok->vals.errno = E_TOK_EMPTY;
+		error_empty_number(tok);
 		tok->type = T_ERROR;
 		return false;
 	}
@@ -232,7 +249,7 @@ static inline bool_t parse_string(tokenizer_t *tok, int ptr) {
 	} else 
 	if (line[ptr] != 0) {
 		// non-printable char ends string
-		tok->vals.errno = E_TOK_NONPRINT;
+		error_parse_non_printable(tok);
 		tok->type = T_ERROR;
 		return false;
 	}
@@ -241,7 +258,7 @@ static inline bool_t parse_string(tokenizer_t *tok, int ptr) {
 
 	if (tok->vals.string.len == 0) {
 		// empty string
-		tok->vals.errno = E_TOK_EMPTY;
+		error_empty_number(tok);
 		tok->type = T_ERROR;
 		return false;
 	}
@@ -504,7 +521,7 @@ static inline bool_t parse_token(tokenizer_t *tok, int ptr, int can_have_operato
 		} 
 		return true;
 	default:
-		tok->vals.errno = E_TOK_UNKNOWN;
+		error_unknown_token(tok);
 		tok->type = T_ERROR;
 		return false;
 	}
@@ -598,7 +615,7 @@ bool_t tokenizer_next(tokenizer_t *tok, int allow_index) {
 		rv = parse_token(tok, ptr, can_have_operator, allow_index);
 	} else {
 		// non-printable - error
-		tok->vals.errno = E_TOK_UNKNOWN;
+		error_unknown_token(tok);
 		tok->type = T_ERROR;
 		rv = false;
 	}

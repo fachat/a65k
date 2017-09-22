@@ -7,6 +7,10 @@ WRN:  A:len=1
 WRN:    type=v, modifier=60 (<), op=0( ), val=(h)4660/1234
 WRN:   > next is type x, 
 WRN:---> <$x234
+ERR:foo:1 Illegal digit - got 'x', expected base 16
+ERR:<$x234
+ERR: ^
+WRN:err=1
 WRN:  A:len=0
 WRN:   > next is type e, $x234
 WRN:---> 0x234

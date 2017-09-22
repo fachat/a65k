@@ -77,6 +77,7 @@ static err_t pseudo_param_parse(const pseudo_t *pseudo, tokenizer_t *tok, statem
 
 static err_t pseudo_end_parse(const pseudo_t *pseudo, tokenizer_t *tok, statement_t *stmt) {
 
+	(void) tok;
 	(void) pseudo;
 	(void) stmt;
 

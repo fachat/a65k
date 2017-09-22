@@ -182,7 +182,6 @@ typedef struct {
 			littype_t	type;		// type of literal, for T_LITERAL
 		} literal;
 		op_t op;
-		int errno;
 	} vals;
 } tokenizer_t;
 
