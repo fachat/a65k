@@ -144,7 +144,16 @@ static inline anode_t *anode_init() {
 	return anode;
 }
 
-err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode);
+err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode, int allow_string);
+
+static inline err_t arith_parse_integer(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode) {
+	return arith_parse(tok, blk, allow_index,anode, 0);
+}
+
+static inline err_t arith_parse_strings(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode) {
+	return arith_parse(tok, blk, allow_index,anode, 1);
+}
+
 
 #endif
 

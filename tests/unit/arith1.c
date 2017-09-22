@@ -17,7 +17,7 @@ void print(const char *val) {
 
 	const ilist_t *out = NULL;
 
-	err_t rv = arith_parse(tok, NULL, 0, &out);
+	err_t rv = arith_parse(tok, NULL, 0, &out, 0);
 
 	if (rv) {
 		do_print("err=%d", rv);

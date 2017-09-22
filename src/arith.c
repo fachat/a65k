@@ -51,7 +51,8 @@ static err_t arith_parse_int(tokenizer_t *tok,
 			const ilist_t **ext_anode, 
 			op_t closing, 
 			int val_only, 
-			int allow_mod) {
+			int allow_mod,
+			int allow_string) {
 
 	err_t rv = E_OK;
 
@@ -78,7 +79,7 @@ static err_t arith_parse_int(tokenizer_t *tok,
 				if (tokenizer_next(tok, allow_index)) {
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
-					arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, OP_NONE, 0, 0);
+					arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, OP_NONE, 0, 0, allow_string);
 
 					if (tok->type != T_BRACKET) {
 						rv = E_SYNTAX;
@@ -118,7 +119,7 @@ static err_t arith_parse_int(tokenizer_t *tok,
 				if (tokenizer_op_details(tok->vals.op)->is_unary) {
 					anode->val.unary.op = tok->vals.op;
 					if (tokenizer_next(tok, allow_index)) {
-						arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.unary.value, OP_NONE, 1, 0);
+						arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.unary.value, OP_NONE, 1, 0, allow_string);
 						expect = EXP_OP;
 						anode->type = A_UNARY;
 						anode = ilist_add(list);
@@ -132,22 +133,33 @@ static err_t arith_parse_int(tokenizer_t *tok,
 				rv = E_SYNTAX;
 				break;
 			case T_STRING:
-				if (tok->vals.string.len == 1) {
-					anode->type = A_VALUE;
-					anode->val.intv.type = LIT_CHAR;
-					anode->val.intv.value = 0xff&tok->line[tok->vals.string.ptr];
-					expect = EXP_OP;
+				if (allow_string) {
+					anode->type = A_STRING;
+					anode->val.strv.type = tok->vals.string.type;
+					anode->val.strv.value = mem_alloc_strn(tok->line + tok->vals.string.ptr, 
+											tok->vals.string.len);
+					anode->val.strv.type = tok->vals.string.len;
 					anode = ilist_add(list);
-					break;
-				} else
-				if (tok->vals.string.len == 2) {
-					anode->type = A_VALUE;
-					anode->val.intv.type = LIT_TWOCHAR;
-					// TODO: byte order
-					anode->val.intv.value = (tok->line[tok->vals.string.ptr] << 8) + (tok->line[tok->vals.string.ptr+1]&0xff);
 					expect = EXP_OP;
-					anode = ilist_add(list);
 					break;
+				} else {
+					if (tok->vals.string.len == 1) {
+						anode->type = A_VALUE;
+						anode->val.intv.type = LIT_CHAR;
+						anode->val.intv.value = 0xff&tok->line[tok->vals.string.ptr];
+						expect = EXP_OP;
+						anode = ilist_add(list);
+						break;
+					} else
+					if (tok->vals.string.len == 2) {
+						anode->type = A_VALUE;
+						anode->val.intv.type = LIT_TWOCHAR;
+						// TODO: byte order
+						anode->val.intv.value = (tok->line[tok->vals.string.ptr] << 8) + (tok->line[tok->vals.string.ptr+1]&0xff);
+						expect = EXP_OP;
+						anode = ilist_add(list);
+						break;
+					}
 				}
 			case T_ERROR:
 				rv = E_SYNTAX;
@@ -226,9 +238,9 @@ exit:
 }
 
 
-err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode) {
+err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, int allow_string) {
 
-	return arith_parse_int(tok, blk, allow_index, ext_anode, OP_NONE, 0, 1);
+	return arith_parse_int(tok, blk, allow_index, ext_anode, OP_NONE, 0, 1, allow_string);
 }
 
 
