@@ -4,11 +4,11 @@
 
 #include "inline_list.h"
 #include "tokenizer.h"
-#include "print.h"
+#include "dbgprint.h"
 #include "arith.h"
 
 
-void print(const char *val, int allow_index) {
+void dprint(const char *val, int allow_index) {
 
 	do_print("---> %s%s", val, allow_index ? " (with index)":"");
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
 	tokenizer_module_init();
 
-	print("1+-2+!3+^4", 0);
+	dprint("1+-2+!3+^4", 0);
 
 }
 

@@ -3,7 +3,9 @@
 
 TESTS=
 
-SRCDIR=../src
+TARGET=dbgprint.o
+
+TESTROOT=.
 
 SUBDIRS=util unit
 

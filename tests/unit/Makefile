@@ -4,7 +4,7 @@
 TESTS=arith5 arith4 tokenizer3 tokenizer2 tokenizer1a tokenizer1 infiles1 block1 cpu1 context1 operation1 arith1 arith2 arith3 cmdline1 
 TESTS+=parser1 pseudo1 parser2 segment1 err1 cmdline2 parser3 print1
 
-SRCDIR=../../src
+TESTROOT=..
 
 SUBDIRS=
 

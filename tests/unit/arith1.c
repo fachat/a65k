@@ -4,11 +4,11 @@
 
 #include "inline_list.h"
 #include "tokenizer.h"
-#include "print.h"
+#include "dbgprint.h"
 #include "arith.h"
 
 
-void print(const char *val) {
+void dprint(const char *val) {
 
 	do_print("---> %s", val);
 
@@ -35,15 +35,15 @@ int main(int argc, char *argv[]) {
 
 	tokenizer_module_init();
 
-	print("<1234");
-	print("<$1234");
-	print("<$x234");
-	print("0x234");
+	dprint("<1234");
+	dprint("<$1234");
+	dprint("<$x234");
+	dprint("0x234");
 
-	print("123+234");
-	print("123+34*44");
+	dprint("123+234");
+	dprint("123+34*44");
 
-	print("(123+34)*44");
+	dprint("(123+34)*44");
 
 }
 

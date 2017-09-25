@@ -11,7 +11,7 @@
 #include "operation.h"
 #include "cmdline.h"
 #include "parser.h"
-#include "print.h"
+#include "dbgprint.h"
 #include "log.h"
 
 

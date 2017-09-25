@@ -70,7 +70,7 @@ static cmdline_t main_options[] = {
 
 /**
  * print prints out the structures 
- */
+ *
 static void debug_output() {
 
 	list_iterator_t *stmts = parser_get_statements();
@@ -81,6 +81,7 @@ static void debug_output() {
 		print_debug_stmt(stmt);
 	}
 }
+*/
 
 /**
  * print prints out the structures 

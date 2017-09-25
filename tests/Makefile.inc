@@ -1,13 +1,18 @@
 
 .SECONDARY:
 
+SRCDIR=$(TESTROOT)/../src
+
+TESTLIB=dbgprint.o
+TESTLIBOBJ=$(addprefix $(TESTROOT)/,$(TESTLIB))
+
 TESTBINS=$(addprefix bin/,$(TESTS))
 
 CFLAGS=-g -Wall -pedantic -O2 -std=c11 -DMALLOC_CHECK_=3 
 
 # Sorting include paths and defines simplifies checking them
-INCPATHS=. util base
-INCLUDES=$(addprefix -I$(SRCDIR)/,$(INCPATHS))
+INCPATHS=. util base 
+INCLUDES=$(addprefix -I$(SRCDIR)/,$(INCPATHS)) -I$(TESTROOT)
 DEPS=$(addprefix $(SRCDIR)/,$(addsuffix /*.h,$(INCPATHS)))
 
 OBJ=$(addprefix $(SRCDIR)/obj/,$(OBJFILES))
@@ -23,7 +28,7 @@ else
   DIFF=@diff -u
 endif
 
-all: subdirs bin $(TESTS) 
+all: $(TARGET) subdirs bin $(TESTS) 
 
 bin: 
 	mkdir bin
@@ -33,9 +38,9 @@ subdirs:
 
 .SUFFIXES:
 
-bin/%: %.c $(OBJ) $(DEPS) bin
+bin/%: %.c $(OBJ) $(TESTLIBOBJ) $(DEPS) bin
 	@echo $<
-	$(V1) $(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $< 
+	$(V1) $(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $(TESTLIBOBJ) $< 
 
 %: bin/%
 	$(V1) ./bin/$@ > $@.x
@@ -48,4 +53,6 @@ clean:
 	rm -f *.o $(TESTBINS)
 	sh -c "test -d bin && rmdir bin"
 
- 
+dbgprint.o: dbgprint.c 
+	$(CC) -c $(CFLAGS) $(INCLUDES) -o $@ $<
+

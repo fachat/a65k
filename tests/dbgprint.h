@@ -26,12 +26,11 @@
 #include "parser.h"
 #include "print-config.h"
 
-void print_module_init();
+void do_print(const char *pattern, ...);
 
-void print(const char *pattern, ...);
+void print_debug_stmt(const statement_t *stmt);
 
-void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg);
-
+void print_debug_arith(const ilist_t *anodes);
 
 #endif
 
