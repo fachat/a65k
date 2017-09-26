@@ -64,12 +64,6 @@ void print_debug_stmt(const statement_t *stmt) {
 		do_print("LAB: name:%s ctx:%d pos:%s:%d", 
 			l->name, l->ctx->ctxno, l->position->filename, l->position->lineno);
 	}
-	if (stmt->setlabel != NULL) {
-		const ilist_t *a = stmt->setlabel;
-		// TODO
-		do_print("SET:");
-		print_debug_arith_int(a, 4);
-	}
 
 	if (stmt->op != NULL) {
 		const operation_t *o = stmt->op;
