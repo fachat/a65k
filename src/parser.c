@@ -89,7 +89,6 @@ static statement_t *new_statement(const context_t *ctx) {
 	stmt->blk = p->blk;
 	stmt->ctx = ctx;
 	stmt->op = NULL;
-	stmt->setlabel = NULL;
 	stmt->label = NULL;
 	stmt->syn = SY_IMP;
 

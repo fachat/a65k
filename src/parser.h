@@ -61,8 +61,7 @@ struct statement_s {
         // optional
 	int			lineno;		// parsed BASIC-style line number
         const label_t           *label;		// TODO allow for multiple label definitions per line/statement
-	// S_LABDEF
-	const ilist_t		*setlabel;	// anode_t list for setting label to a value 
+	// S_LABDEF (see also param in S_OPCODE)
 	op_t			assign;		// assign operation
 	// S_OPCODE
        	const operation_t       *op;		// pointer to info about operation, like "ADC", "TAX", ...
@@ -72,7 +71,7 @@ struct statement_s {
 	bool_t			um_prefix;	// UM prefix
 	bool_t			nf_prefix;	// NF prefix
 	syntax_type		syn;		// addressing mode syntax, see SY_* constants
-       	ilist_t  	        *param;		// list of anode_t structs that describe the syntax tree for the parameter value
+       	ilist_t  	        *param;		// list of anode_t structs that describe the syntax tree for the parameter value (also for S_LABDEF)
 	// S_PSEUDO
 	pseudo_t		*pseudo;	// pseudo opcode definition
 	list_t			*pparams;	// parameters for the pseudo opcode

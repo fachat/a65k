@@ -29,11 +29,68 @@
 
 #define	BUF_LEN		2048
 
-static void print_arith_int(const ilist_t *anodes, int indlen);
+
+static inline char prop(int o) {  return isprint(o) ? o : ' '; }
+static inline int max(int a, int b) { return (a > b) ? a : b; }
+static const char* spaces = "                                                                         ";
+
+static void print_arith_int(const ilist_t *anodes) {
+
+	for (int i = 0; i < anodes->len; i++) {
+		const anode_t *n = ilist_get(anodes, i);
+		switch(n->type) {
+		case A_BRACKET:
+			print("  type=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
+				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
+			print_arith_int(n->val.subv.value);
+			break;
+		case A_VALUE:
+			switch(n->val.intv.type) {
+			case LIT_DECIMAL:
+				print("%d", n->val.intv.value);
+				break;
+			case LIT_OCTAL:
+				print("%o", n->val.intv.value);
+				break;
+			case LIT_BINARY:
+				// TODO: binary
+				print("%o", n->val.intv.value);
+				break;
+			case LIT_HEX:
+				print("$%x", n->val.intv.value);
+				break;
+			case LIT_OCTAL_C:
+				print("0%o", n->val.intv.value);
+				break;
+			case LIT_HEX_C:
+				print("0x%x", n->val.intv.value);
+				break;
+			case LIT_CHAR:
+				print("'%c'", n->val.intv.value);
+				break;
+			case LIT_TWOCHAR:
+				print("'%c%c'", n->val.intv.value & 0xff, (n->val.intv.value >> 8) & 0xff);
+				break;
+			case LIT_NONE:
+				print("-");
+				break;
+			}
+			break;
+		case A_INDEX:
+			print("  type=%c, modifier=%d (%c), op=%d(%c)", 
+				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
+			break;
+		default:
+			print("  UNHANDLED: type=%c, modifier=%d (%c), op=%d(%c)", 
+				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
+		}
+	}
+}
 
 
 void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 
+	int l = 0;
 
 	if (cfg->lineno) {
 		if (stmt->lineno >= 0) {
@@ -47,22 +104,32 @@ void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 		const label_t *l = stmt->label;
 		print("% -10s ", l->name);
 	} else {
-		print("            ");
+		print("           ");
 	}
-#if 0
-	if (stmt->setlabel != NULL) {
-		const ilist_t *a = stmt->setlabel;
-		// TODO
-		print("SET:");
-		print_debug_arith_int(a, 4);
+	l += 11;
+
+	ilist_t *a = NULL;
+	operation_t *o = NULL;
+	switch(stmt->type) {
+	case S_PCDEF:
+		break;
+	case S_LABEQPC:
+		break;
+	case S_LABDEF:
+		print("%s", tokenizer_op_details(stmt->assign)->print);
+		a = stmt->param;
+		print_arith_int(a);
+		break;
+	case S_OPCODE:
+		o = stmt->op;
+		print("%s ", o->name);
+		break;
+	case S_PSEUDO:
+	default:
+		print("    ");
+		break;
 	}
-#endif
-	if (stmt->op != NULL) {
-		const operation_t *o = stmt->op;
-		print("%s", o->name);
-	} else {
-		print("   ");
-	}
+	l += 4;
 #if 0
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;
@@ -88,38 +155,6 @@ void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 	}	
 
 	print("\n");
-}
-
-static inline char prop(int o) {  return isprint(o) ? o : ' '; }
-static inline int max(int a, int b) { return (a > b) ? a : b; }
-static const char* spaces = "                                                                         ";
-
-static void print_arith_int(const ilist_t *anodes, int indlen) {
-	const char* indent = spaces + max(0, strlen(spaces) - indlen);
-
-	print("%sA:len=%d", indent, anodes->len);
-	for (int i = 0; i < anodes->len; i++) {
-		const anode_t *n = ilist_get(anodes, i);
-		switch(n->type) {
-		case A_BRACKET:
-			print("  %stype=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
-				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
-			print_arith_int(n->val.subv.value, indlen + 2);
-			break;
-		case A_VALUE:
-			print("  %stype=%c, modifier=%d (%c), op=%d(%c), val=(%c)%d/%x", 
-				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op),
-				n->val.intv.type, n->val.intv.value, n->val.intv.value);
-			break;
-		case A_INDEX:
-			print("  %stype=%c, modifier=%d (%c), op=%d(%c)", 
-				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
-			break;
-		default:
-			print("  UNHANDLED: %stype=%c, modifier=%d (%c), op=%d(%c)", 
-				indent, n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
-		}
-	}
 }
 
 
