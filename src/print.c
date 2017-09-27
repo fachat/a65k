@@ -29,9 +29,15 @@
 
 #define	BUF_LEN		4096
 
+static char buf[BUF_LEN];
+
+static const char spaces[] = "                                        ";
+
 void print_module_init() {
 
 	print_config_init();
+
+	buf[0] = 0;
 }
 
 void print(const char *pattern, ...) {
@@ -39,15 +45,44 @@ void print(const char *pattern, ...) {
         va_list ap;
         va_start(ap, pattern);
 
-        char buf[BUF_LEN];
+	int buflen = print_getlen();
 
-        int r = vsnprintf(buf, BUF_LEN, pattern, ap);
+        int r = vsnprintf(buf + buflen, BUF_LEN - buflen, pattern, ap);
         if (r < 0 || r > BUF_LEN) {
                 // error
                 log_error("Error printing %d\n", r);
                 return;
         }
-        printf("%s", buf);
+}
+
+int print_getlen() {
+	return strlen(buf);;
+}
+
+void print_setcol(int col) {
+	
+	int buflen = print_getlen();
+
+	int todo = col - buflen;
+	int slen = strlen(spaces);
+
+	while (todo > 0) {
+		int step = slen - todo;
+		if (step < 0) {
+			step = 0;
+		}
+		print("%s", spaces + step);
+		todo -= slen + step;
+	}
+}
+
+void print_out() {
+        printf("%s\n", buf);
+	print_clr();
+}
+
+void print_clr() {
+	buf[0] = 0;
 }
 
 

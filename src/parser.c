@@ -448,9 +448,9 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 				tokenizer_next(tok, 0);
 				if (tok->type == T_END) {
 					stmt->type = S_LABEQPC;
-					break;
-				}
+				} else
 				if (tok->type == T_TOKEN && tok->vals.op == OP_COLON) {
+					// if we have a label with a colon, ignore colon
 					tokenizer_next(tok, 0);
 				}
 			} else {

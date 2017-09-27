@@ -32,7 +32,6 @@
 
 static inline char prop(int o) {  return isprint(o) ? o : ' '; }
 static inline int max(int a, int b) { return (a > b) ? a : b; }
-static const char* spaces = "                                                                         ";
 
 static void print_arith_int(const ilist_t *anodes) {
 
@@ -80,6 +79,9 @@ static void print_arith_int(const ilist_t *anodes) {
 			print("  type=%c, modifier=%d (%c), op=%d(%c)", 
 				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
 			break;
+		case A_LABEL:
+			print("%s", n->val.lab.name);
+			break;
 		default:
 			print("  UNHANDLED: type=%c, modifier=%d (%c), op=%d(%c)", 
 				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
@@ -98,11 +100,11 @@ void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 		} else {
 			print("      ");
 		}
+		l += 6;
 	}
 
 	if (stmt->label != NULL) {
-		const label_t *l = stmt->label;
-		print("% -10s ", l->name);
+		print("% -10s ", stmt->label->name);
 	} else {
 		print("           ");
 	}
@@ -114,6 +116,7 @@ void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 	case S_PCDEF:
 		break;
 	case S_LABEQPC:
+		print("=*");
 		break;
 	case S_LABDEF:
 		print("%s", tokenizer_op_details(stmt->assign)->print);
@@ -123,13 +126,19 @@ void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 	case S_OPCODE:
 		o = stmt->op;
 		print("%s ", o->name);
+		print("%s", op_syn_details(stmt->syn)->pre);
+		if (stmt->param) {
+			print_arith_int(stmt->param);
+		}
+		print("%s", op_syn_details(stmt->syn)->post);
 		break;
 	case S_PSEUDO:
+		break;
+	case S_NONE:
+		break;
 	default:
-		print("    ");
 		break;
 	}
-	l += 4;
 #if 0
 	if (stmt->param != NULL) {
 		const ilist_t *a = stmt->param;
@@ -151,10 +160,17 @@ void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg) {
 	}
 #endif
 	if (stmt->comment) {
-		print("COMMENT: %s", stmt->comment);
+		if (print_getlen() > l) {
+			print_setcol(30);
+		}
+		print("; %s", stmt->comment);
 	}	
 
-	print("\n");
+	if (print_getlen() > l) {
+		print_out();
+	} else {
+		print_clr();
+	}
 }
 
 

@@ -32,42 +32,39 @@
 #include "operation.h"
 
 
-
-// ordering by SY_*, then AM_*
-#define	AMODES_MAX 	5
-static amode_type sy_amode[SY_MAX][AMODES_MAX] = {
-	{ // SY_IMP
-		AM_IMP, 	AM_IMP, 	AM_IMP, 	AM_IMP,		AM_IMP 		},
-	{ // SY_IMM
-		AM_IMM8,	AM_IMM16,	AM_NONE, 	AM_IMM32,	AM_IMM64	},
-	{ // SY_ABS
-		AM_ABS8,	AM_ABS16,	AM_ABS24, 	AM_ABS32,	AM_ABS64	},
-	{ // SY_ABSX
-		AM_ABS8X,	AM_ABS16X,	AM_NONE, 	AM_ABS32X,	AM_ABS64X	},
-	{ // SY_ABSY
-		AM_ABS8Y,	AM_ABS16Y,	AM_NONE, 	AM_ABS32Y,	AM_ABS64Y	},
-	{ // SY_IND
-		AM_IND8,	AM_IND16,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_INDY
-		AM_IND8Y,	AM_IND16Y,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_XIND
-		AM_XIND8,	AM_XIND16,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_INDL
-		AM_IND8L,	AM_IND16L,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_INDYL
-		AM_IND8YL,	AM_IND16YL,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_XINDL
-		AM_XIND8L,	AM_XIND16L,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_INDQ
-		AM_IND8Q,	AM_IND16Q,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_INDYQ
-		AM_IND8YQ,	AM_IND16YQ,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_XINDQ
-		AM_XIND8Q,	AM_XIND16Q,	AM_NONE, 	AM_NONE	,	AM_NONE		},
-	{ // SY_MV
-		AM_MV,		AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		},
-	{ // SY_BBREL
-		AM_BBREL,	AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}
+static syntax_t sy_amode[SY_MAX] = {
+	{ 	"",	"",	{ 	// SY_IMP
+		AM_IMP, 	AM_IMP, 	AM_IMP, 	AM_IMP,		AM_IMP 		}},
+	{ 	"#",	"",	{ 	// SY_IMM
+		AM_IMM8,	AM_IMM16,	AM_NONE, 	AM_IMM32,	AM_IMM64	}},
+	{ 	"",	"",	{	// SY_ABS
+		AM_ABS8,	AM_ABS16,	AM_ABS24, 	AM_ABS32,	AM_ABS64	}},
+	{ 	"",	",X",	{	// SY_ABSX
+		AM_ABS8X,	AM_ABS16X,	AM_NONE, 	AM_ABS32X,	AM_ABS64X	}},
+	{ 	"",	",Y",	{	// SY_ABSY
+		AM_ABS8Y,	AM_ABS16Y,	AM_NONE, 	AM_ABS32Y,	AM_ABS64Y	}},
+	{ 	"(",	")",	{	// SY_IND
+		AM_IND8,	AM_IND16,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"(",	"),Y",	{	// SY_INDY
+		AM_IND8Y,	AM_IND16Y,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"(",	",X)",	{	// SY_XIND
+		AM_XIND8,	AM_XIND16,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[",	"]",	{	// SY_INDL
+		AM_IND8L,	AM_IND16L,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[",	"],Y",	{	// SY_INDYL
+		AM_IND8YL,	AM_IND16YL,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[",	",X]",	{	// SY_XINDL
+		AM_XIND8L,	AM_XIND16L,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[[",	"]]",	{	// SY_INDQ
+		AM_IND8Q,	AM_IND16Q,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[[",	"]],Y",	{	// SY_INDYQ
+		AM_IND8YQ,	AM_IND16YQ,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[[",	",X]]",	{	// SY_XINDQ
+		AM_XIND8Q,	AM_XIND16Q,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"",	"",	{	// SY_MV
+		AM_MV,		AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}},
+	{ 	"",	"",	{	// SY_BBREL
+		AM_BBREL,	AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}}
 };
 
 // corresponding parameter widts for table sy_amode
@@ -233,6 +230,9 @@ void operation_module_init() {
 	}
 }
 
+const syntax_t *op_syn_details(syntax_type syn) {
+	return &sy_amode[syn];
+}
 
 const operation_t *operation_find(const char *name) {
 
@@ -313,7 +313,7 @@ bool_t opcode_find(const position_t *loc,
 	}
 
 	// isa, syntax, param_width -> list of AM_* to check
-	amode_type *ams = sy_amode[syntax];
+	amode_type *ams = sy_amode[syntax].amode;
 
 	do {
 

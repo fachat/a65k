@@ -141,6 +141,14 @@ typedef enum {
 } le_type;
 
 
+// ordering by SY_*, then AM_*
+#define AMODES_MAX      5
+
+typedef struct {
+	const char	*pre;
+	const char	*post;
+	amode_type	amode[AMODES_MAX];
+} syntax_t;
 
 typedef struct {
 	//bool_t		is_valid;
@@ -176,6 +184,8 @@ const operation_t *operation_find(const char *name);
 
 bool_t opcode_find(const position_t *loc, const context_t *ctx, const operation_t *op, syntax_type syntax, int opsize_in_bytes,
 	codepoint_t *returned_code);
+
+const syntax_t *op_syn_details(syntax_type syn);
 
 inline static char prefix_rs_char(rs_type p) {
 	switch (p) {

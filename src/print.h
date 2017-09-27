@@ -32,6 +32,13 @@ void print(const char *pattern, ...);
 
 void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg);
 
+int print_getlen();
+
+void print_setcol(int col);
+
+void print_out();
+
+void print_clr();
 
 #endif
 
