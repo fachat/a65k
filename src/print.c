@@ -27,41 +27,55 @@
 #include "print.h"
 #include "arith.h"
 
-#define	BUF_LEN		4096
-
-static char buf[BUF_LEN];
 
 static const char spaces[] = "                                        ";
 
 void print_module_init() {
 
 	print_config_init();
-
-	buf[0] = 0;
 }
 
-void print(const char *pattern, ...) {
+static type_t printer_memtype = {
+        "printer_t",
+        sizeof(printer_t)
+};
+
+// initialize printer output channel
+printer_t *print_init(const char *headername) {
+
+	printer_t *prt = mem_alloc(&printer_memtype);
+
+	prt->header = headername;
+	prt->cfg = print_current_config();
+	print_clr(prt);
+
+	return prt;
+}
+
+
+void print(printer_t *prt, const char *pattern, ...) {
 
         va_list ap;
         va_start(ap, pattern);
 
-	int buflen = print_getlen();
+	int buflen = print_getlen(prt);
 
-        int r = vsnprintf(buf + buflen, BUF_LEN - buflen, pattern, ap);
+        int r = vsnprintf(prt->buf + buflen, BUF_LEN - buflen, pattern, ap);
         if (r < 0 || r > BUF_LEN) {
                 // error
                 log_error("Error printing %d\n", r);
                 return;
         }
+	prt->buflen += r;
 }
 
-int print_getlen() {
-	return strlen(buf);;
+int print_getlen(printer_t *prt) {
+	return prt->buflen;
 }
 
-void print_setcol(int col) {
+void print_setcol(printer_t *prt, int col) {
 	
-	int buflen = print_getlen();
+	int buflen = print_getlen(prt);
 
 	int todo = col - buflen;
 	int slen = strlen(spaces);
@@ -71,18 +85,19 @@ void print_setcol(int col) {
 		if (step < 0) {
 			step = 0;
 		}
-		print("%s", spaces + step);
+		print(prt, "%s", spaces + step);
 		todo -= slen + step;
 	}
 }
 
-void print_out() {
-        printf("%s\n", buf);
-	print_clr();
+void print_out(printer_t *prt) {
+        printf("%s\n", prt->buf);
+	print_clr(prt);
 }
 
-void print_clr() {
-	buf[0] = 0;
+void print_clr(printer_t *prt) {
+	prt->buf[0] = 0;
+	prt->buflen = 0;
 }
 
 

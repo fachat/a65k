@@ -38,6 +38,8 @@ static print_config_t pconfig;
 static cmdline_t print_params[] = {
 	{ "print-lineno", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.lineno, 
 		"print (or leave space for) line numbers", NULL },
+	{ "collapse-empty", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.collapse_empty, 
+		"collapse multiple empty lines into a single empty line.", NULL },
 };
 
 void print_config_init() {

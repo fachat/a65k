@@ -86,16 +86,16 @@ static void debug_output() {
 /**
  * print prints out the structures 
  */
-static void print_output() {
+static void print_output(const char *filename) {
 
-	print_config_t *cfg = print_current_config();
+	printer_t *prt = print_init(filename);
 
 	list_iterator_t *stmts = parser_get_statements();
 	while (list_iterator_has_next(stmts)) {
 
 		statement_t *stmt = list_iterator_next(stmts);	
 
-		print_formatted_stmt(stmt, cfg);
+		print_formatted_stmt(prt, stmt);
 	}
 }
 
@@ -184,6 +184,6 @@ int main(int argc, char *argv[]) {
 
 	// print output
 	//debug_output();
-	print_output();
+	print_output("filename");
 }
 

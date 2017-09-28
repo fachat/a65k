@@ -27,6 +27,8 @@
 typedef struct {
 	// print the line number, or reserve space for it if not parsed
 	int 	lineno;
+	// if true (default) collapse multiple empty lines into a single empty line
+	int 	collapse_empty;
 } print_config_t;
 
 void print_config_init(); 

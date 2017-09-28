@@ -26,19 +26,34 @@
 #include "parser.h"
 #include "print-config.h"
 
+#define	BUF_LEN		4096
+
+typedef struct {
+	const char		*header;
+	const print_config_t	*cfg;
+	char			buf[BUF_LEN];
+	int			buflen;
+} printer_t;
+
+// init print module
 void print_module_init();
 
-void print(const char *pattern, ...);
+// initialize printer output channel
+printer_t *print_init(const char *headername);
 
-void print_formatted_stmt(const statement_t *stmt, const print_config_t *cfg);
+// general print
+void print(printer_t *ptr, const char *pattern, ...);
 
-int print_getlen();
+// print a statement formatted
+void print_formatted_stmt(printer_t *cfg, const statement_t *stmt);
 
-void print_setcol(int col);
+int print_getlen(printer_t *prt);
 
-void print_out();
+void print_setcol(printer_t *prt, int col);
 
-void print_clr();
+void print_out(printer_t *prt);
+
+void print_clr(printer_t *prt);
 
 #endif
 
