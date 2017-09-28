@@ -68,34 +68,22 @@ static cmdline_t main_options[] = {
 		"Set the operation mode:", main_get_modes },
 };
 
-/**
- * print prints out the structures 
- *
-static void debug_output() {
-
-	list_iterator_t *stmts = parser_get_statements();
-	while (list_iterator_has_next(stmts)) {
-
-		statement_t *stmt = list_iterator_next(stmts);	
-
-		print_debug_stmt(stmt);
-	}
-}
-*/
 
 /**
  * print prints out the structures 
  */
-static void print_output(const char *filename) {
+static void print_output() {
 
-	printer_t *prt = print_init(filename);
+	printer_t *prt = print_init();
 
-	list_iterator_t *stmts = parser_get_statements();
-	while (list_iterator_has_next(stmts)) {
+	if (prt != NULL) {
+		list_iterator_t *stmts = parser_get_statements();
+		while (list_iterator_has_next(stmts)) {
 
-		statement_t *stmt = list_iterator_next(stmts);	
+			statement_t *stmt = list_iterator_next(stmts);	
 
-		print_formatted_stmt(prt, stmt);
+			print_formatted_stmt(prt, stmt);
+		}
 	}
 }
 
@@ -184,6 +172,6 @@ int main(int argc, char *argv[]) {
 
 	// print output
 	//debug_output();
-	print_output("filename");
+	print_output();
 }
 

@@ -74,6 +74,7 @@ typedef struct {
 
 // template method where extra_param is the pointer to an int variable to set
 err_t cmdline_set_flag(int flag, void *extra_param);
+err_t cmdline_set_param(const char *value, void *extra_param, int ival);
  
 void cmdline_register(const cmdline_t *param);
 

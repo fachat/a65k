@@ -97,9 +97,9 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 		if (stmt->lineno >= 0) {
 			print(prt, "% 5d ", stmt->lineno);
 		} else {
-			print(prt, "      ");
+			print(prt, "       ");
 		}
-		l += 6;
+		l += 7;
 	}
 
 	if (stmt->label != NULL) {
@@ -165,11 +165,7 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 		print(prt, "; %s", stmt->comment);
 	}	
 
-	if (print_getlen(prt) > l) {
-		print_out(prt);
-	} else {
-		print_clr(prt);
-	}
+	print_out(prt);
 }
 
 

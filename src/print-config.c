@@ -40,6 +40,8 @@ static cmdline_t print_params[] = {
 		"print (or leave space for) line numbers", NULL },
 	{ "collapse-empty", NULL, PARTYPE_FLAG, NULL, cmdline_set_flag, &pconfig.collapse_empty, 
 		"collapse multiple empty lines into a single empty line.", NULL },
+	{ "out", "o", PARTYPE_PARAM, cmdline_set_param, NULL, &pconfig.filename, 
+		"Set output filename", NULL },
 };
 
 void print_config_init() {

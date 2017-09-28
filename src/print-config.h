@@ -25,10 +25,12 @@
 
 
 typedef struct {
+	// output filename
+	const char 	*filename;
 	// print the line number, or reserve space for it if not parsed
-	int 	lineno;
+	int 		lineno;
 	// if true (default) collapse multiple empty lines into a single empty line
-	int 	collapse_empty;
+	int 		collapse_empty;
 } print_config_t;
 
 void print_config_init(); 

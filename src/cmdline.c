@@ -128,6 +128,11 @@ err_t cmdline_set_flag(int flag, void *extra_param) {
 	*((int*)extra_param) = flag;
 	return E_OK;
 }
+// template method where extra_param is the pointer to an string variable to set
+err_t cmdline_set_param(const char *param, void *extra_param, int ival) {
+	*((char**)extra_param) = param;
+	return E_OK;
+}
 
 void cmdline_register_mult(const cmdline_t *param, int num ) {
 	for (int i = 0; i < num; i++) {

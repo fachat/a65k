@@ -23,23 +23,30 @@
 #ifndef PRINT_H
 #define PRINT_H
 
+#include <stdio.h>
+
 #include "parser.h"
 #include "print-config.h"
 
 #define	BUF_LEN		4096
 
 typedef struct {
-	const char		*header;
+	FILE			*outfile;
+	const char		*filename;
 	const print_config_t	*cfg;
+	// output buffer
 	char			buf[BUF_LEN];
 	int			buflen;
+	// runtime flags
+	// last line was empty
+	int			was_empty;
 } printer_t;
 
 // init print module
 void print_module_init();
 
 // initialize printer output channel
-printer_t *print_init(const char *headername);
+printer_t *print_init();
 
 // general print
 void print(printer_t *ptr, const char *pattern, ...);
@@ -54,6 +61,8 @@ void print_setcol(printer_t *prt, int col);
 void print_out(printer_t *prt);
 
 void print_clr(printer_t *prt);
+
+void print_close(printer_t *prt);
 
 #endif
 

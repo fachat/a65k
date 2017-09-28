@@ -22,6 +22,7 @@
 #include <stdarg.h>
 #include <ctype.h>
 #include <string.h>
+#include <errno.h>
 
 #include "print-config.h"
 #include "print.h"
@@ -41,13 +42,27 @@ static type_t printer_memtype = {
 };
 
 // initialize printer output channel
-printer_t *print_init(const char *headername) {
+printer_t *print_init() {
+
+	print_config_t *cfg = print_current_config();
+
+	const char *filename = cfg->filename;
+	FILE *f = NULL;
+	if (filename != NULL && strlen(filename) > 0) {
+		f = fopen(filename, "w");
+		if (f == NULL) {
+			log_error("Could not open output file '%s' -> %s", filename, strerror(errno));
+			return NULL;
+		}
+	}
 
 	printer_t *prt = mem_alloc(&printer_memtype);
 
-	prt->header = headername;
-	prt->cfg = print_current_config();
+	prt->outfile = f;
+	prt->cfg = cfg;
 	print_clr(prt);
+
+	prt->was_empty = 0;
 
 	return prt;
 }
@@ -91,13 +106,34 @@ void print_setcol(printer_t *prt, int col) {
 }
 
 void print_out(printer_t *prt) {
-        printf("%s\n", prt->buf);
+
+	if (prt->buflen == 0) {
+		if (prt->cfg->collapse_empty && prt->was_empty) {
+			return;
+		}
+		prt->was_empty = 1;
+	} else {
+		prt->was_empty = 0;
+	}
+
+	if (prt->outfile == NULL) {
+        	printf("%s\n", prt->buf);
+	} else {
+        	fprintf(prt->outfile, "%s\n", prt->buf);
+	}
 	print_clr(prt);
 }
 
 void print_clr(printer_t *prt) {
 	prt->buf[0] = 0;
 	prt->buflen = 0;
+}
+
+void print_close(printer_t *prt) {
+
+	if (prt->outfile) {
+		fclose(prt->outfile);
+	}
 }
 
 
