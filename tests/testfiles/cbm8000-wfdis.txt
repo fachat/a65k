@@ -1,0 +1,2095 @@
+002a: basicVarsVec_lo     ?? 
+002b: basicVarsVec_hi     ?? 
+                    
+0040: penX_lo             ?? 
+0041: penX_hi             ?? 
+0042: penY_lo             ?? 
+0043: penY_hi             ?? 
+0046: bresenhamError_lo   ?? 
+0047: bresenhamError_hi   ?? 
+                    
+0090: irqVector_lo        ?? 
+0091: irqVector_hi        ?? 
+                    
+026f: keyboardBuffer      ?? 
+                    
+02f7: currentAddrHi       ?? 
+02f8: enableClipping      ?? 
+02f9: temp_enableClipping ?? 
+02fa: clipBottom_lo       ?? 
+02fb: clipBottom_hi       ?? 
+02fc: clipTop_lo          ?? 
+02fd: clipTop_hi          ?? 
+02fe: clipStrideX_lo      ?? 
+02ff: clipStrideX_hi      ?? 
+0300: clipStrideY_lo      ?? 
+0301: clipStrideY_hi      ?? 
+0308: srcX_lo             ?? 
+0309: srcX_hi             ?? 
+030a: srcY_lo             ?? 
+030b: srcY_hi             ?? 
+030c: destX_lo            ?? 
+030d: destX_hi            ?? 
+030e: destY_lo            ?? 
+030f: destY_hi            ?? 
+0312: printx_lo           ?? 
+0313: printx_hi           ?? 
+0314: printy_lo           ?? 
+0315: printy_hi           ?? 
+0316: ?offsetX_lo?        ?? 
+0317: ?offsetX_hi?        ?? 
+0318: ?offsetY_lo?        ?? 
+0319: ?offsetY_hi?        ?? 
+031a: clipLeftAdjusted_lo ?? 
+031b: clipLeftAdjusted_hi ?? 
+031c: clipBottomAdjusted_lo                         ?? 
+031d: clipBottomAdjusted_hi                         ?? 
+031e: ?clipOffsetX_lo?    ?? 
+031f: ?clipOffsetX_hi?    ?? 
+0320: ?clipOffsetY_lo?    ?? 
+0321: ?clipOffsetY_hi?    ?? 
+0322: clipLeft_lo         ?? 
+0323: clipLeft_hi         ?? 
+0324: clipRight_lo        ?? 
+0325: clipRight_hi        ?? 
+0326: clipTopRaw_lo       ?? 
+0327: clipTopRaw_hi       ?? 
+0328: clipBottomRaw_lo    ?? 
+0329: clipBottomRaw_hi    ?? 
+032a: clipWidth_lo        ?? 
+032b: clipWidth_hi        ?? 
+032c: clipHeight_lo       ?? 
+032d: clipHeight_hi       ?? 
+                    
+03bd: input1_lo           ?? 
+03be: input1_hi           ?? 
+03bf: input2_lo           ?? 
+03c0: input2_hi           ?? 
+03c1: multiplier_lo       ?? 
+03c2: multiplier_hi       ?? 
+03c3: ?scaleMinFp_lo?     ?? 
+03c4: ?scaleMinFp_hi?     ?? 
+03c5: ?scaleMaxFp_lo?     ?? 
+03c6: ?scaleMaxFp_hi?     ?? 
+                    
+                    ; Pointer to dynamic vars from BASIC
+03c7: dynVars_lo          ?? 
+03c8: dynVars_hi          ?? 
+03c9: multResult_lo       ?? 
+03ca: multResult_hi       ?? 
+03cb: ?fpSign?            ?? 
+03cc: tempIRQ_lo          ?? 
+03cd: tempIRQ_hi          ?? 
+                    
+03cf: keypress            ?? 
+03d1: originalIRQ_lo      ?? 
+03d2: originalIRQ_hi      ?? 
+03d4: ?deltaY_2?          ?? 
+03d5: ?deltaX_2?          ?? 
+                    
+                    ; bmi = visible
+03de: flagCrosshair       ?? 
+                    ; bpl = clear pixel
+03df: flagEraserMode      ?? 
+                    ; bpl = toggle pixel
+03e0: flagXorDrawMode     ?? 
+03e1: lengthX_lo          ?? 
+03e2: lengthX_hi          ?? 
+03e3: lengthY_lo          ?? 
+03e4: lengthY_hi          ?? 
+03e5: deltaX_lo           ?? 
+03e6: deltaX_hi           ?? 
+03e7: deltaY_lo           ?? 
+03e8: deltaY_hi           ?? 
+03e9: temp_penX_lo        ?? 
+03ea: temp_penX_hi        ?? 
+03eb: temp_penY_lo        ?? 
+03ec: temp_penY_hi        ?? 
+03ed: startX_lo           ?? 
+03ee: startX_hi           ?? 
+03ef: startY_lo           ?? 
+03f0: startY_hi           ?? 
+03f1: endX_lo             ?? 
+03f2: endX_hi             ?? 
+03f3: endY_lo             ?? 
+03f4: endY_hi             ?? 
+03f5: temp_crosshairX_lo  ?? 
+03f6: temp_crosshairX_hi  ?? 
+03f7: temp_crosshairY_lo  ?? 
+03f8: temp_crosshairY_hi  ?? 
+                    
+9000: L9000               jmp initialize
+9003: L9003               jmp graphicsOff
+9006: L9006               jmp clearScreen
+9009: L9009               jmp noninvertedScreen
+900c: L900c               jmp invertScreen
+900f: L900f               jmp ?graphicsOff 2?
+9012: L9012               jmp ?toggle bank?
+9015: L9015               jmp setClipWindow
+9018: L9018               jmp setPan
+901b: L901b               jmp setScale
+901e: L901e               jmp drawPoint
+9021: L9021               jmp erasePoint
+9024: L9024               jmp movePen
+9027: L9027               jmp lineTo
+902a: L902a               jmp eraseTo
+902d: L902d               jmp drawLine
+9030: L9030               jmp eraseLine
+                    
+9033: L9033               jmp enableLeftClip
+9036: L9036               jmp disableLeftClip
+9039: L9039               jmp enableRightClip
+903c: L903c               jmp disableRightClip
+903f: L903f               jmp enableBottomClip
+9042: L9042               jmp disableBottomClip
+9045: L9045               jmp enableTopClip
+9048: L9048               jmp disableTopClip
+                    
+                    ; Some interactive crosshair-drawing mode
+904b: L904b               jmp L97ca
+904e: L904e               jmp L97f5
+9051: L9051               jmp L99a7
+9054: L9054               jmp L9805
+                    ; Stuff that hits the IEEE bus
+9057: L9057               jmp L9d68
+905a: L905a               jmp L9d7d
+905d: L905d               jmp L9d9c
+9060: L9060               jmp L9dc5
+9063: L9063               jmp L9d62
+                    
+9066: L9066               jmp drawLineAgain
+                    
+9069:                     "{1b}T17{1b}Q{1b}>  "
+9073:                     "{1b}T16{1b}P{1b}>  "
+907d:                     "{1b}T16{1b}N{1b}>  "
+9087:                     "{1b}A{1b}N{1b}<  "
+                    
+908f: enableLeftClip      lda enableClipping
+9092:                     ora #$01
+9094:                     sta enableClipping
+9097:                     rts
+                    
+9098: disableLeftClip     lda enableClipping
+909b:                     and #$fe
+909d:                     sta enableClipping
+90a0:                     rts
+                    
+90a1: enableRightClip     lda enableClipping
+90a4:                     ora #$04
+90a6:                     sta enableClipping
+90a9:                     rts
+                    
+90aa: disableRightClip    lda enableClipping
+90ad:                     and #$fb
+90af:                     sta enableClipping
+90b2:                     rts
+                    
+90b3: enableBottomClip    lda enableClipping
+90b6:                     ora #$10
+90b8:                     sta enableClipping
+90bb:                     rts
+                    
+90bc: disableBottomClip   lda enableClipping
+90bf:                     and #$ef
+90c1:                     sta enableClipping
+90c4:                     rts
+                    
+90c5: enableTopClip       lda enableClipping
+90c8:                     ora #$40
+90ca:                     sta enableClipping
+90cd:                     rts
+                    
+90ce: disableTopClip      lda enableClipping
+90d1:                     and #$bf
+90d3:                     sta enableClipping
+90d6:                     rts
+                    
+90d7: drawPoint           lda #$ff
+90d9:                     sta flagEraserMode
+90dc:                     jsr movePen
+90df:                     jmp doDrawPoint
+                    
+90e2: erasePoint          lda #$01
+90e4:                     sta flagEraserMode
+90e7:                     jsr movePen
+90ea:                     jmp doDrawPoint
+                    
+90ed: drawLine            lda #$ff
+90ef:                     sta flagEraserMode
+90f2:                     jsr loadSrcAndDest
+90f5:                     jmp doDrawLine
+                    
+90f8: eraseLine           lda #$01
+90fa:                     sta flagEraserMode
+90fd:                     jsr loadSrcAndDest
+9100:                     jmp doDrawLine
+                    
+9103: drawLineAgain       lda #$ff
+9105:                     sta flagEraserMode
+9108:                     jmp doDrawLastLine
+                    
+910b: clearScreen         lda #$00
+                    ; X/Y gets stored from 0008 to 3e8f
+910d:                     ldx #$07
+910f:                     ldy #$00
+9111:                     sty gfxport_hi_e888
+                    
+9114: loop                inx
+9115:                     bne L911b
+                    ; e888 is only updated when X overflows
+9117:                      iny
+9118:                      sty gfxport_hi_e888
+911b: L911b               stx gfxport_lo_e882
+911e:                     sta gfxport_data_e88a
+9121:                     cpx #$8f
+9123:                     bne loop
+9125:                     cpy #$3e
+9127:                     bne loop
+                    
+                    ; Point back to default page
+9129:                     lda #$80
+912b:                     sta gfxport_hi_e888
+                    
+912e:                     rts
+                    
+912f: eraseTo             lda #$01
+9131:                     sta flagEraserMode
+9134:                     jsr loadDest
+9137:                     jmp L9142
+                    
+913a: lineTo              lda #$ff
+913c:                     sta flagEraserMode
+913f:                     jsr loadDest
+9142: L9142               jsr doDrawLine
+9145:                     lda destX_lo
+9148:                     sta srcX_lo
+914b:                     lda destX_hi
+914e:                     sta srcX_hi
+9151:                     lda destY_lo
+9154:                     sta srcY_lo
+9157:                     lda destY_hi
+915a:                     sta srcY_hi
+915d:                     rts
+                    
+915e: initialize          jsr CRTC_GFX?
+9161:                     lda #$0e
+9163:                     sta $e84c
+9166:                     lda #$80
+9168:                     sta currentAddrHi
+916b:                     sta gfxport_hi_e888
+916e:                     lda #$00
+9170:                     sta $02f6
+9173:                     sta enableClipping
+9176:                     sta clipLeft_lo
+9179:                     sta clipLeft_hi
+                    ; These intermediate raw values are pointless to set here
+917c:                     sta clipTopRaw_lo
+917f:                     sta clipTopRaw_hi
+9182:                     sta clipBottomRaw_hi
+                    ; Default right clip = 639
+9185:                     lda #$7f
+9187:                     sta clipRight_lo
+918a:                     lda #$02
+918c:                     sta clipRight_hi
+918f:                     lda #$c7
+9191:                     sta clipBottomRaw_lo
+9194:                     jmp init2
+                    
+9197: graphicsOff         lda #$00
+9199:                     sta gfxport_hi_e888
+919c:                     jsr CRTC_TEXT?
+919f:                     rts
+                    
+91a0: ?graphicsOff 2?     lda #$00
+91a2:                     jmp L91b4
+                    
+                    ; Bit 6 clear
+91a5: noninvertedScreen   lda #$80
+91a7:                     jmp L91b4
+                    
+                    ; Bit 6 set
+91aa: invertScreen        lda #$c0
+91ac:                     jmp L91b4
+                    
+                    ; Toggles the high bit of the address
+91af: ?toggle bank?       lda currentAddrHi
+91b2:                     eor #$80
+91b4: L91b4               sta currentAddrHi
+91b7:                     sta gfxport_hi_e888
+91ba:                     rts
+                    
+91bb: doDrawPoint         clc
+91bc:                     lda clipLeftAdjusted_lo
+91bf:                     adc srcX_lo
+91c2:                     sta penX_lo
+91c4:                     lda clipLeftAdjusted_hi
+91c7:                     adc srcX_hi
+91ca:                     sta penX_hi
+91cc:                     sec
+91cd:                     lda clipBottomAdjusted_lo
+91d0:                     sbc srcY_lo
+91d3:                     sta penY_lo
+91d5:                     lda clipBottomAdjusted_hi
+91d8:                     sbc srcY_hi
+91db:                     sta penY_hi
+91dd:                     lda #$ff
+91df:                     sta flagXorDrawMode
+91e2:                     jmp drawPixel
+                    
+91e5: doDrawLine          clc
+91e6:                     lda clipLeftAdjusted_lo
+91e9:                     adc srcX_lo
+91ec:                     sta startX_lo
+91ef:                     lda clipLeftAdjusted_hi
+91f2:                     adc srcX_hi
+91f5:                     sta startX_hi
+91f8:                     sec
+91f9:                     lda clipBottomAdjusted_lo
+91fc:                     sbc srcY_lo
+91ff:                     sta startY_lo
+9202:                     lda clipBottomAdjusted_hi
+9205:                     sbc srcY_hi
+9208:                     sta startY_hi
+920b:                     clc
+920c:                     lda clipLeftAdjusted_lo
+920f:                     adc destX_lo
+9212:                     sta endX_lo
+9215:                     lda clipLeftAdjusted_hi
+9218:                     adc destX_hi
+921b:                     sta endX_hi
+921e:                     sec
+921f:                     lda clipBottomAdjusted_lo
+9222:                     sbc destY_lo
+9225:                     sta endY_lo
+9228:                     lda clipBottomAdjusted_hi
+922b:                     sbc destY_hi
+922e:                     sta endY_hi
+9231: doDrawLastLine      lda #$ff
+9233:                     sta flagXorDrawMode
+                    
+                    ; Calculate y length
+9236:                     sec
+9237:                     lda endY_lo
+923a:                     sbc startY_lo
+923d:                     sta lengthY_lo
+9240:                     lda endY_hi
+9243:                     sbc startY_hi
+9246:                     sta lengthY_hi
+                    
+                    ; Set delta to sgn(lengthY)
+9249:                     lda #$ff
+924b:                     sta deltaY_lo
+924e:                     sta deltaY_hi
+9251:                     lda lengthY_lo
+9254:                     lda lengthY_hi
+9257:                     bmi L9263
+9259:                      lda #$01
+925b:                      sta deltaY_lo
+925e:                      lda #$00
+                    
+9260:                      sta deltaY_hi
+                    ; lengthY=abs(lengthY)
+9263: L9263               lda lengthY_lo
+9266:                     lda lengthY_hi
+9269:                     bpl L9280
+926b:                      clc
+926c:                      lda lengthY_lo
+926f:                      eor #$ff
+9271:                      adc #$01
+9273:                      sta lengthY_lo
+9276:                      lda lengthY_hi
+9279:                      eor #$ff
+927b:                      adc #$00
+927d:                      sta lengthY_hi
+                    
+                    ; Calculate length
+9280: L9280               sec
+9281:                     lda endX_lo
+9284:                     sbc startX_lo
+9287:                     sta lengthX_lo
+928a:                     lda endX_hi
+928d:                     sbc startX_hi
+9290:                     sta lengthX_hi
+                    
+                    ; Set delta to +1 or -1 based on the sign of the length
+9293:                     lda #$ff
+9295:                     sta deltaX_lo
+9298:                     sta deltaX_hi
+929b:                     lda lengthX_lo
+929e:                     lda lengthX_hi
+92a1:                     bmi L92ad
+92a3:                      lda #$01
+92a5:                      sta deltaX_lo
+92a8:                      lda #$00
+92aa:                      sta deltaX_hi
+                    
+                    ; Make lengthX positive
+92ad: L92ad               lda lengthX_lo
+92b0:                     lda lengthX_hi
+92b3:                     bpl L92ca
+                    ; Negate lengthX if necessary
+92b5:                      clc
+92b6:                      lda lengthX_lo
+92b9:                      eor #$ff
+92bb:                      adc #$01
+92bd:                      sta lengthX_lo
+92c0:                      lda lengthX_hi
+92c3:                      eor #$ff
+92c5:                      adc #$00
+92c7:                      sta lengthX_hi
+                    
+                    ; Find the greater of length X or Y
+92ca: L92ca               sec
+92cb:                     lda lengthX_lo
+92ce:                     sbc lengthY_lo
+92d1:                     lda lengthX_hi
+92d4:                     sbc lengthY_hi
+92d7:                     bmi longerY
+                    
+                    ; Initialize the error term to half the long length
+92d9: longerX             lda lengthX_hi
+92dc:                     lsr a
+92dd:                     sta bresenhamError_hi
+92df:                     lda lengthX_lo
+92e2:                     ror a
+92e3:                     sta bresenhamError_lo
+                    
+                    ; Set pen to start
+92e5:                     lda startY_lo
+92e8:                     sta penY_lo
+92ea:                     lda startY_hi
+92ed:                     sta penY_hi
+92ef:                     lda startX_lo
+92f2:                     sta penX_lo
+92f4:                     lda startX_hi
+92f7:                     sta penX_hi
+                    
+                    ; Check for error overlow...
+92f9: bresX_loop          lda lengthX_lo
+92fc:                     cmp bresenhamError_lo
+92fe:                     lda lengthX_hi
+9301:                     sbc bresenhamError_hi
+9303:                     bcs L9323
+                    ; Subtract error denominator and bump Y
+9305:                      sec
+9306:                      lda bresenhamError_lo
+9308:                      sbc lengthX_lo
+930b:                      sta bresenhamError_lo
+930d:                      lda bresenhamError_hi
+930f:                      sbc lengthX_hi
+9312:                      sta bresenhamError_hi
+                    
+                    ; penY += deltaY
+9314:                      clc
+9315:                      lda penY_lo
+9317:                      adc deltaY_lo
+931a:                      sta penY_lo
+931c:                      lda penY_hi
+931e:                      adc deltaY_hi
+9321:                      sta penY_hi
+                    
+                    ; accumulate a step of error
+9323: L9323               clc
+9324:                     lda bresenhamError_lo
+9326:                     adc lengthY_lo
+9329:                     sta bresenhamError_lo
+932b:                     lda bresenhamError_hi
+932d:                     adc lengthY_hi
+9330:                     sta bresenhamError_hi
+                    
+9332:                     jsr drawPixel
+                    
+                    ; check for end of line
+9335:                     lda penX_lo
+9337:                     cmp endX_lo
+933a:                     bne L9343
+933c:                     lda penX_hi
+933e:                     cmp endX_hi
+9341:                     beq leave
+                    
+                    ; penX += deltaX
+9343: L9343               clc
+9344:                     lda penX_lo
+9346:                     adc deltaX_lo
+9349:                     sta penX_lo
+934b:                     lda penX_hi
+934d:                     adc deltaX_hi
+9350:                     sta penX_hi
+9352:                     jmp bresX_loop
+                    
+9355: leave               rts
+                    
+9356: longerY             lda lengthY_hi
+9359:                     lsr a
+935a:                     sta bresenhamError_hi
+935c:                     lda lengthY_lo
+935f:                     ror a
+9360:                     sta bresenhamError_lo
+9362:                     lda startX_lo
+9365:                     sta penX_lo
+9367:                     lda startX_hi
+936a:                     sta penX_hi
+936c:                     lda startY_lo
+936f:                     sta penY_lo
+9371:                     lda startY_hi
+9374:                     sta penY_hi
+9376: bresY_loop          lda lengthY_lo
+9379:                     cmp bresenhamError_lo
+937b:                     lda lengthY_hi
+937e:                     sbc bresenhamError_hi
+9380:                     bcs L93a0
+9382:                     sec
+9383:                     lda bresenhamError_lo
+9385:                     sbc lengthY_lo
+9388:                     sta bresenhamError_lo
+938a:                     lda bresenhamError_hi
+938c:                     sbc lengthY_hi
+938f:                     sta bresenhamError_hi
+                    
+                    ; penX += deltaX
+9391:                     clc
+9392:                     lda penX_lo
+9394:                     adc deltaX_lo
+9397:                     sta penX_lo
+9399:                     lda penX_hi
+939b:                     adc deltaX_hi
+939e:                     sta penX_hi
+                    
+93a0: L93a0               clc
+93a1:                     lda bresenhamError_lo
+93a3:                     adc lengthX_lo
+93a6:                     sta bresenhamError_lo
+93a8:                     lda bresenhamError_hi
+93aa:                     adc lengthX_hi
+93ad:                     sta bresenhamError_hi
+93af:                     jsr drawPixel
+                    
+93b2:                     lda penY_lo
+93b4:                     cmp endY_lo
+93b7:                     bne L93c0
+93b9:                     lda penY_hi
+93bb:                     cmp endY_hi
+93be:                     beq leave
+                    
+                    ; penY += deltaY
+93c0: L93c0               clc
+93c1:                     lda penY_lo
+93c3:                     adc deltaY_lo
+93c6:                     sta penY_lo
+93c8:                     lda penY_hi
+93ca:                     adc deltaY_hi
+93cd:                     sta penY_hi
+93cf:                     jmp bresY_loop
+                    
+93d2: leave               rts
+                    
+                    ; Save original pen location, as we'll overwrite as we calc
+93d3: drawPixel           lda penX_lo
+93d5:                     sta temp_penX_lo
+93d8:                     lda penX_hi
+93da:                     sta temp_penX_hi
+93dd:                     lda penY_lo
+93df:                     sta temp_penY_lo
+93e2:                     lda penY_hi
+93e4:                     sta temp_penY_hi
+                    
+                    ; Check left clip
+93e7: L93e7               sec
+93e8:                     lda penX_lo
+93ea:                     sbc clipLeft_lo
+93ed:                     lda penX_hi
+93ef:                     sbc clipLeft_hi
+93f2:                     bpl L940d
+                    ; Bail if clipping enabled
+93f4:                     lda enableClipping
+93f7:                     and #$01
+93f9:                     beq leave
+                    ; Else, wrap by 1 screen and loop
+93fb:                     clc
+93fc:                     lda penX_lo
+93fe:                     adc clipStrideX_lo
+9401:                     sta penX_lo
+9403:                     lda penX_hi
+9405:                     adc clipStrideX_hi
+9408:                     sta penX_hi
+940a:                     jmp L93e7
+                    
+                    ; Check right clip
+940d: L940d               sec
+940e:                     lda clipRight_lo
+9411:                     sbc penX_lo
+9413:                     lda clipRight_hi
+9416:                     sbc penX_hi
+9418:                     bpl L9448
+941a:                     lda enableClipping
+941d:                     and #$04
+941f:                     beq leave
+9421:                     sec
+9422:                     lda penX_lo
+9424:                     sbc clipStrideX_lo
+9427:                     sta penX_lo
+9429:                     lda penX_hi
+942b:                     sbc clipStrideX_hi
+942e:                     sta penX_hi
+9430:                     jmp L940d
+                    
+                    ; The exit routine is in the middle, in branch range
+9433: leave               lda temp_penX_lo
+9436:                     sta penX_lo
+9438:                     lda temp_penX_hi
+943b:                     sta penX_hi
+943d:                     lda temp_penY_lo
+9440:                     sta penY_lo
+9442:                     lda temp_penY_hi
+9445:                     sta penY_hi
+9447:                     rts
+                    
+                    ; Check bottom clip (Y max)
+9448: L9448               sec
+9449:                     lda clipBottom_lo
+944c:                     sbc penY_lo
+944e:                     lda clipBottom_hi
+9451:                     sbc penY_hi
+9453:                     bpl L946e
+9455:                     lda enableClipping
+9458:                     and #$10
+945a:                     beq leave
+945c:                     sec
+945d:                     lda penY_lo
+945f:                     sbc clipStrideY_lo
+9462:                     sta penY_lo
+9464:                     lda penY_hi
+9466:                     sbc clipStrideY_hi
+9469:                     sta penY_hi
+946b:                     jmp L9448
+                    
+                    ; Check top clip (Y min)
+946e: L946e               sec
+946f:                     lda penY_lo
+9471:                     sbc clipTop_lo
+9474:                     lda penY_hi
+9476:                     sbc clipTop_hi
+9479:                     bpl L9494
+947b:                     lda enableClipping
+947e:                     and #$40
+9480:                     beq leave
+9482:                     clc
+9483:                     lda penY_lo
+9485:                     adc clipStrideY_lo
+9488:                     sta penY_lo
+948a:                     lda penY_hi
+948c:                     adc clipStrideY_hi
+948f:                     sta penY_hi
+9491:                     jmp L946e
+                    
+9494: L9494               jsr doDrawPixel
+9497:                     jmp leave
+                    
+949a: doDrawPixel         clc
+                    ; Add 8 to penX?
+949b:                     lda penX_lo
+949d:                     adc #$08
+949f:                     sta penX_lo
+94a1:                     lda penX_hi
+94a3:                     adc #$00
+94a5:                     sta penX_hi
+                    
+                    ; Offset within char line = Y&7 + X&f8
+94a7:                     lda penY_lo
+94a9:                     and #$07
+94ab:                     sta $44
+                    
+94ad:                     lda penX_lo
+94af:                     and #$f8
+94b1:                     ora $44
+94b3:                     sta $44
+                    
+                    ; Y char row * 80. Row is already *8
+94b5:                     lda penY_lo
+94b7:                     and #$f8
+94b9:                     lsr a
+                    ; 45 = 42 /2 = 42*128
+94ba:                     sta $45
+94bc:                     lsr a
+94bd:                     lsr a
+                    ; A = 42/8 + 42/2, or 42*160
+94be:                     adc $45
+94c0:                     lsr a
+                    ; 45 = (42/8 + 42/2)/2, or 42*80
+94c1:                     sta $45
+                    
+                    ; Add 45's low bit plus 64
+94c3:                     lda #$10
+94c5:                     ror a
+                    
+                    ; Add in the char-line offset
+94c6:                     adc $44
+94c8:                     sta gfxport_lo_e882
+94cb:                     sta $44
+                    
+94cd:                     lda $45
+94cf:                     adc penX_hi
+94d1:                     and #$3f
+94d3:                     eor currentAddrHi
+94d6:                     sta gfxport_hi_e888
+                    
+                    ; Get sub-char X coordinate
+94d9:                     lda penX_lo
+94db:                     and #$07
+94dd:                     tax
+                    
+94de:                     lda temp_penX_lo
+94e1:                     sta penX_lo
+94e3:                     lda temp_penX_hi
+94e6:                     sta penX_hi
+                    
+                    ; Dispatch on the draw mode
+94e8:                     lda flagEraserMode
+94eb:                     bpl doClearPixel
+94ed:                     lda flagXorDrawMode
+94f0:                     bpl doTogglePixel
+                    
+94f2: doSetPixel          lda bitTable,x
+94f5:                     ora gfxport_data_e88a
+94f8:                     sta gfxport_data_e88a
+94fb:                     rts
+                    
+94fc: doClearPixel        lda bitTable,x
+94ff:                     eor #$ff
+9501:                     and gfxport_data_e88a
+9504:                     sta gfxport_data_e88a
+9507:                     rts
+                    
+9508: doTogglePixel       lda bitTable,x
+950b:                     eor gfxport_data_e88a
+950e:                     sta gfxport_data_e88a
+9511:                     rts
+                    
+                    ; Relates an x pixel coordinate to a bit
+9512: bitTable            80 40 20 10 08 04 02 01 
+                    
+951a: init2               lda #$00
+951c:                     sta ?clipOffsetX_lo?
+951f:                     sta ?clipOffsetX_hi?
+9522:                     sta ?clipOffsetY_lo?
+9525:                     sta ?clipOffsetY_hi?
+9528:                     jsr recalcClipWindow
+                    
+                    ; caf2 = 1.0 constant
+952b:                     lda #$f2
+952d:                     ldy #$ca
+952f:                     jsr MOVFM
+                    ; store in 032e and 0334
+9532:                     ldx #$2e
+9534:                     ldy #$03
+9536:                     jsr MOVMF_no_round
+9539:                     ldx #$34
+953b:                     ldy #$03
+953d:                     jsr MOVMF_no_round
+                    
+9540:                     lda #$00
+9542:                     sta srcX_lo
+9545:                     sta srcX_hi
+9548:                     sta srcY_lo
+954b:                     sta srcY_hi
+954e:                     lda #$01
+9550:                     sta ?fpSign?
+                    
+                    ; c2d9 = 32768.0
+9553:                     lda #$d9
+9555:                     ldy #$c2
+9557:                     jsr MOVFM
+955a:                     jsr ABS
+                    ; store in 0302
+955d:                     ldx #$02
+955f:                     ldy #$03
+9561:                     jsr MOVMF_no_round
+9564:                     rts
+                    
+                    ; caf2 = 1.0
+9565: setClipWindow       lda #$f2
+9567:                     sta ?scaleMinFp_lo?
+956a:                     sta ?scaleMaxFp_lo?
+956d:                     lda #$ca
+956f:                     sta ?scaleMinFp_hi?
+9572:                     sta ?scaleMaxFp_hi?
+                    
+9575:                     jsr readInputCoord
+9578:                     lda input1_lo
+957b:                     sta clipTopRaw_lo
+957e:                     lda input1_hi
+9581:                     sta clipTopRaw_hi
+9584:                     lda input2_lo
+9587:                     sta clipBottomRaw_lo
+958a:                     lda input2_hi
+958d:                     sta clipBottomRaw_hi
+                    
+9590:                     jsr readInputCoord
+                    
+                    ; read clip x
+9593:                     lda input1_lo
+9596:                     sta clipLeft_lo
+9599:                     lda input1_hi
+959c:                     sta clipLeft_hi
+959f:                     lda input2_lo
+95a2:                     sta clipRight_lo
+95a5:                     lda input2_hi
+95a8:                     sta clipRight_hi
+                    
+                    ; calc clipWidth
+95ab: recalcClipWindow    sec
+95ac:                     lda clipRight_lo
+95af:                     sbc clipLeft_lo
+95b2:                     sta clipWidth_lo
+95b5:                     lda clipRight_hi
+95b8:                     sbc clipLeft_hi
+95bb:                     sta clipWidth_hi
+                    
+                    ; calc ?clipWidth2?
+95be:                     sec
+95bf:                     lda clipBottomRaw_lo
+95c2:                     sbc clipTopRaw_lo
+95c5:                     sta clipHeight_lo
+95c8:                     lda clipBottomRaw_hi
+95cb:                     sbc clipTopRaw_hi
+95ce:                     sta clipHeight_hi
+                    
+                    ; calc clipStrideX
+95d1:                     clc
+95d2:                     lda clipWidth_lo
+95d5:                     adc #$01
+95d7:                     sta clipStrideX_lo
+95da:                     lda clipWidth_hi
+95dd:                     adc #$00
+95df:                     sta clipStrideX_hi
+                    
+                    ; calc clipStrideY from ?clipWidth2?
+95e2:                     clc
+95e3:                     lda clipHeight_lo
+95e6:                     adc #$01
+95e8:                     sta clipStrideY_lo
+95eb:                     lda clipHeight_hi
+95ee:                     adc #$00
+95f0:                     sta clipStrideY_hi
+                    
+                    ; clipBottom = 199 - input value
+95f3:                     sec
+95f4:                     lda #$c7
+95f6:                     sbc clipTopRaw_lo
+95f9:                     sta clipBottom_lo
+95fc:                     lda #$00
+95fe:                     sbc clipTopRaw_hi
+9601:                     sta clipBottom_hi
+                    ; clipTop = 199 - input value
+9604:                     sec
+9605:                     lda #$c7
+9607:                     sbc clipBottomRaw_lo
+960a:                     sta clipTop_lo
+960d:                     lda #$00
+960f:                     sbc clipBottomRaw_hi
+9612:                     sta clipTop_hi
+9615:                     jmp recalcClipOffset
+                    
+                    ; caf2 = 1.0
+9618: setPan              lda #$f2
+961a:                     sta ?scaleMinFp_lo?
+961d:                     sta ?scaleMaxFp_lo?
+9620:                     lda #$ca
+9622:                     sta ?scaleMinFp_hi?
+9625:                     sta ?scaleMaxFp_hi?
+                    
+9628:                     jsr readInputCoord
+962b:                     lda input1_lo
+962e:                     sta ?clipOffsetX_lo?
+9631:                     lda input1_hi
+9634:                     sta ?clipOffsetX_hi?
+9637:                     lda input2_lo
+963a:                     sta ?clipOffsetY_lo?
+963d:                     lda input2_hi
+9640:                     sta ?clipOffsetY_hi?
+                    
+9643: recalcClipOffset    clc
+9644:                     lda clipLeft_lo
+9647:                     adc ?clipOffsetX_lo?
+964a:                     sta clipLeftAdjusted_lo
+964d:                     lda clipLeft_hi
+9650:                     adc ?clipOffsetX_hi?
+9653:                     sta clipLeftAdjusted_hi
+9656:                     sec
+9657:                     lda clipBottom_lo
+965a:                     sbc ?clipOffsetY_lo?
+965d:                     sta clipBottomAdjusted_lo
+9660:                     lda clipBottom_hi
+9663:                     sbc ?clipOffsetY_hi?
+9666:                     sta clipBottomAdjusted_hi
+9669:                     rts
+                    
+966a: setScale            jsr getBasicVars
+966d:                     lda dynVars_lo
+9670:                     ldy dynVars_hi
+9673:                     jsr MOVFM
+9676:                     ldx #$34
+9678:                     ldy #$03
+967a:                     jsr MOVMF_no_round
+967d:                     clc
+967e:                     lda dynVars_lo
+9681:                     adc #$06
+9683:                     sta dynVars_lo
+9686:                     lda dynVars_hi
+9689:                     adc #$00
+968b:                     sta dynVars_hi
+968e:                     lda dynVars_lo
+9691:                     ldy dynVars_hi
+9694:                     jsr MOVFM
+9697:                     ldx #$2e
+9699:                     ldy #$03
+969b:                     jsr MOVMF_no_round
+969e:                     rts
+                    
+969f: movePen             jsr readScaledInput
+96a2:                     lda input1_lo
+96a5:                     sta srcX_lo
+96a8:                     lda input1_hi
+96ab:                     sta srcX_hi
+96ae:                     lda input2_lo
+96b1:                     sta srcY_lo
+96b4:                     lda input2_hi
+96b7:                     sta srcY_hi
+96ba:                     rts
+                    
+96bb: loadDest            jsr readScaledInput
+96be:                     lda input1_lo
+96c1:                     sta destX_lo
+96c4:                     lda input1_hi
+96c7:                     sta destX_hi
+96ca:                     lda input2_lo
+96cd:                     sta destY_lo
+96d0:                     lda input2_hi
+96d3:                     sta destY_hi
+96d6:                     rts
+                    
+96d7: loadSrcAndDest      jsr loadDest
+96da:                     jsr movePen
+96dd:                     rts
+                    
+                    ; 032e
+96de: readScaledInput     lda #$2e
+96e0:                     sta ?scaleMinFp_lo?
+96e3:                     lda #$03
+96e5:                     sta ?scaleMinFp_hi?
+                    ; 0334
+96e8:                     lda #$34
+96ea:                     sta ?scaleMaxFp_lo?
+96ed:                     lda #$03
+96ef:                     sta ?scaleMaxFp_hi?
+                    
+                    ; From here, the scale factors could be 1.0, or the user scale factors
+96f2: readInputCoord      jsr getBasicVars
+96f5:                     lda ?scaleMaxFp_lo?
+96f8:                     sta multiplier_lo
+96fb:                     lda ?scaleMaxFp_hi?
+96fe:                     sta multiplier_hi
+9701:                     jsr multiplyAndClamp
+9704:                     lda multResult_lo
+9707:                     sta input2_lo
+970a:                     lda multResult_hi
+970d:                     sta input2_hi
+                    
+9710:                     clc
+9711:                     lda dynVars_lo
+9714:                     adc #$06
+9716:                     sta dynVars_lo
+9719:                     lda dynVars_hi
+971c:                     adc #$00
+971e:                     sta dynVars_hi
+                    
+9721:                     lda ?scaleMinFp_lo?
+9724:                     sta multiplier_lo
+9727:                     lda ?scaleMinFp_hi?
+972a:                     sta multiplier_hi
+972d:                     jsr multiplyAndClamp
+9730:                     lda multResult_lo
+9733:                     sta input1_lo
+9736:                     lda multResult_hi
+9739:                     sta input1_hi
+973c:                     rts
+                    
+                    ; Set dynVars to the old start of basic vars
+973d: getBasicVars        lda basicVarsVec_lo
+973f:                     sta dynVars_lo
+9742:                     lda basicVarsVec_hi
+9744:                     sta dynVars_hi
+                    ; Move the start of basic variables up 12 bytes
+9747:                     clc
+9748:                     lda basicVarsVec_lo
+974a:                     adc #$0c
+974c:                     sta basicVarsVec_lo
+974e:                     lda basicVarsVec_hi
+9750:                     adc #$00
+9752:                     sta basicVarsVec_hi
+9754:                     rts
+                    
+                    ; Multiplies (dynVars) by (multiplier), into integer (multResult)
+9755: multiplyAndClamp    lda dynVars_lo
+9758:                     ldy dynVars_hi
+975b:                     jsr MOVFM
+975e:                     lda multiplier_lo
+9761:                     ldy multiplier_hi
+9764:                     jsr FMULT
+9767:                     jsr SIGN
+976a:                     sta ?fpSign?
+976d:                     jsr ABS
+                    ; cb16 = -0.5, but this is cb17 so it probably drops sign byte for +0.5
+9770:                     lda #$17
+9772:                     ldy #$cb
+9774:                     jsr FADD
+                    ; Compare to 32768
+9777:                     lda #$02
+9779:                     ldy #$03
+977b:                     jsr FCOMP
+977e:                     bmi $978d
+                    ; clamp to 7fff
+9780:                      lda #$ff
+9782:                      sta multResult_lo
+9785:                      lda #$7f
+9787:                      sta multResult_hi
+978a:                      jmp L9796
+978d:                     jsr GETADR
+9790:                     sty multResult_lo
+9793:                     sta multResult_hi
+                    
+                    ; Apply sign
+9796: L9796               lda ?fpSign?
+9799:                     bpl L97b0
+979b:                      clc
+979c:                      lda multResult_lo
+979f:                      eor #$ff
+97a1:                      adc #$01
+97a3:                      sta multResult_lo
+97a6:                      lda multResult_hi
+97a9:                      eor #$ff
+97ab:                      adc #$00
+97ad:                      sta multResult_hi
+                    ; ...and declare it positive now
+97b0: L97b0               lda #$01
+97b2:                     sta ?fpSign?
+97b5:                     rts
+                    
+97b6: irqHandler          pha
+                    ; This was likely overwritten with filler to avoid reflowing addresses
+97b7:                     txa
+97b8:                     txa
+97b9:                     txa
+97ba:                     pha
+97bb:                     tya
+97bc:                     pha
+97bd:                     jsr drawCrosshair
+97c0:                     lda #$00
+97c2:                     pla
+97c3:                     tay
+97c4:                     pla
+97c5:                     tax
+97c6:                     pla
+                    ; Jump to default KERNAL IRQ handler
+97c7:                     jmp $e455
+                    
+97ca: L97ca               lda clipBottom_lo
+97cd:                     sta ?offsetY_lo?
+97d0:                     sta penY_lo
+97d2:                     lda clipBottom_hi
+97d5:                     sta ?offsetY_hi?
+97d8:                     sta penY_hi
+97da:                     lda clipLeft_lo
+97dd:                     sta ?offsetX_lo?
+97e0:                     sta penX_lo
+97e2:                     lda clipLeft_hi
+97e5:                     sta ?offsetX_hi?
+97e8:                     sta penX_hi
+97ea:                     lda #$00
+97ec:                     sta $03ce
+97ef:                     jsr CLRSCRN
+97f2:                     jmp L97fa
+                    
+97f5: L97f5               lda #$01
+97f7:                     sta $03ce
+97fa: L97fa               lda #$01
+97fc:                     sta $03db
+97ff:                     sta $03dc
+9802:                     jmp L9824
+                    
+9805: L9805               lda penX_lo
+9807:                     sta ?offsetX_lo?
+980a:                     lda penX_hi
+980c:                     sta ?offsetX_hi?
+980f:                     lda penY_lo
+9811:                     sta ?offsetY_lo?
+9814:                     lda penY_hi
+9816:                     sta ?offsetY_hi?
+9819:                     lda #$ff
+981b:                     sta $03ce
+981e:                     sta $03db
+9821:                     sta $03dc
+                    
+9824: L9824               sei
+                    ; Save whatever IRQ we had installed
+9825:                     lda irqVector_lo
+9827:                     sta tempIRQ_lo
+982a:                     lda irqVector_hi
+982c:                     sta tempIRQ_hi
+                    ; Reinstall $e455, default rom vector
+982f:                     lda #$55
+9831:                     sta irqVector_lo
+9833:                     lda #$e4
+9835:                     sta irqVector_hi
+                    
+9837:                     lda #$01
+9839:                     sta $03dd
+983c:                     sta ?deltaY_2?
+983f:                     sta $03d3
+9842:                     sta flagXorDrawMode
+9845:                     lda #$02
+9847:                     sta ?deltaX_2?
+984a:                     lda #$ff
+984c:                     sta flagCrosshair
+984f:                     sta flagEraserMode
+9852:                     cli
+                    
+                    ; Timing loop
+9853:                     ldy #$c8
+9855: L9855               ldx #$c7
+9857: L9857               dex
+9858:                     bne L9857
+985a:                     dey
+985b:                     bne L9855
+                    
+985d:                     jsr drawCrosshair
+9860:                     jmp L991a
+                    
+                    ; Disable clipping for the crosshair
+9863: drawCrosshair       lda enableClipping
+9866:                     sta temp_enableClipping
+9869:                     lda #$00
+986b:                     sta enableClipping
+                    
+986e:                     lda penX_lo
+9870:                     sta temp_crosshairX_lo
+9873:                     lda penX_hi
+9875:                     sta temp_crosshairX_hi
+9878:                     lda penY_lo
+987a:                     sta temp_crosshairY_lo
+987d:                     lda penY_hi
+987f:                     sta temp_crosshairY_hi
+9882:                     jsr drawPixel
+                    
+                    ; Go 8 pixels in a direction
+9885:                     ldy #$07
+9887: L9887                clc
+9888:                      lda penY_lo
+988a:                      adc #$01
+988c:                      sta penY_lo
+988e:                      lda penY_hi
+9890:                      adc #$00
+9892:                      sta penY_hi
+9894:                      jsr drawPixel
+9897:                      dey
+9898:                     bne L9887
+                    ; ...then restore original coordinate
+989a:                     lda temp_crosshairY_lo
+989d:                     sta penY_lo
+989f:                     lda temp_crosshairY_hi
+98a2:                     sta penY_hi
+                    
+                    ; for the remaining 3 directions
+98a4:                     ldy #$07
+98a6: L98a6                sec
+98a7:                      lda penY_lo
+98a9:                      sbc #$01
+98ab:                      sta penY_lo
+98ad:                      lda penY_hi
+98af:                      sbc #$00
+98b1:                      sta penY_hi
+98b3:                      jsr drawPixel
+98b6:                      dey
+98b7:                     bne L98a6
+98b9:                     lda temp_crosshairY_lo
+98bc:                     sta penY_lo
+98be:                     lda temp_crosshairY_hi
+98c1:                     sta penY_hi
+                    
+98c3:                     ldy #$07
+98c5: L98c5                clc
+98c6:                      lda penX_lo
+98c8:                      adc #$02
+98ca:                      sta penX_lo
+98cc:                      lda penX_hi
+98ce:                      adc #$00
+98d0:                      sta penX_hi
+98d2:                      jsr drawPixel
+98d5:                      dey
+98d6:                     bne L98c5
+98d8:                     lda temp_crosshairX_lo
+98db:                     sta penX_lo
+98dd:                     lda temp_crosshairX_hi
+98e0:                     sta penX_hi
+                    
+98e2:                     ldy #$07
+98e4: L98e4                sec
+98e5:                      lda penX_lo
+98e7:                      sbc #$02
+98e9:                      sta penX_lo
+98eb:                      lda penX_hi
+98ed:                      sbc #$00
+98ef:                      sta penX_hi
+98f1:                      jsr drawPixel
+98f4:                      dey
+98f5:                     bne L98e4
+98f7:                     lda temp_crosshairX_lo
+98fa:                     sta penX_lo
+98fc:                     lda temp_crosshairX_hi
+98ff:                     sta penX_hi
+9901:                     lda temp_crosshairY_lo
+9904:                     sta penY_lo
+9906:                     lda temp_crosshairY_hi
+9909:                     sta penY_hi
+                    
+                    ; Toggle the enable flag, as we just drew it
+990b:                     lda flagCrosshair
+990e:                     eor #$fe
+9910:                     sta flagCrosshair
+                    
+                    ; Restore the clip
+9913:                     lda temp_enableClipping
+9916:                     sta enableClipping
+9919:                     rts
+                    
+991a: L991a               lda $97
+991c:                     sta $03da
+991f:                     cmp #$ff
+9921:                     beq L9926
+9923:                     jmp L99d5
+                    
+9926: L9926               ldx #$02
+9928:                     stx ?deltaX_2?
+992b:                     ldx #$01
+992d:                     stx $03dd
+9930:                     stx ?deltaY_2?
+9933:                     lda #$0c
+9935:                     sta $03d6
+9938:                     lda #$08
+993a:                     sta $03d7
+993d:                     sei
+993e:                     lda irqVector_lo
+9940:                     sta originalIRQ_lo
+9943:                     lda irqVector_hi
+9945:                     sta originalIRQ_hi
+9948:                     lda #$b6
+994a:                     sta irqVector_lo
+994c:                     lda #$97
+994e:                     sta irqVector_hi
+9950:                     cli
+                    ; Not sure what this GETIN accomplishes, vs the one at 99b1
+9951:                     jsr GETIN
+9954: L9954               lda $03db
+9957:                     bmi L99b1
+9959:                     lda $03dc
+995c:                     bmi L99b1
+995e:                     lda $03dd
+9961:                     bmi L99b1
+9963:                     sei
+9964:                     lda originalIRQ_lo
+9967:                     sta irqVector_lo
+9969:                     lda originalIRQ_hi
+996c:                     sta irqVector_hi
+996e:                     cli
+996f:                     sec
+9970:                     lda penX_lo
+9972:                     sbc clipLeftAdjusted_lo
+9975:                     sta printx_lo
+9978:                     lda penX_hi
+997a:                     sbc clipLeftAdjusted_hi
+997d:                     sta printx_hi
+9980:                     sec
+9981:                     lda clipBottomAdjusted_lo
+9984:                     sbc penY_lo
+9986:                     sta printy_lo
+9989:                     lda clipBottomAdjusted_hi
+998c:                     sbc penY_hi
+998e:                     sta printy_hi
+9991:                     lda #$ff
+9993:                     sta $03dc
+9996:                     lda $03ce
+9999:                     beq L99a4
+                    ; Clean up and exit
+999b:                      lda flagCrosshair
+999e:                      bpl L99a3
+99a0:                       jsr drawCrosshair
+99a3: L99a3                rts
+                    
+99a4: L99a4               jsr printXY
+                    ; Install crosshair render on IRQ
+99a7: L99a7               sei
+99a8:                     lda #$b6
+99aa:                     sta irqVector_lo
+99ac:                     lda #$97
+99ae:                     sta irqVector_hi
+99b0:                     cli
+                    
+99b1: L99b1               jsr GETIN
+99b4:                     sta keypress
+99b7:                     beq L9954
+99b9:                     sei
+99ba:                     lda originalIRQ_lo
+99bd:                     sta irqVector_lo
+99bf:                     lda originalIRQ_hi
+99c2:                     sta irqVector_hi
+99c4:                     lda flagCrosshair
+99c7:                     bpl L99cc
+99c9:                     jsr drawCrosshair
+99cc: L99cc               lda $97
+99ce:                     sta $03da
+99d1:                     cli
+99d2:                     jmp L991a
+                    
+99d5: L99d5               ldx #$00
+99d7:                     lda $03da
+99da:                     cmp keypressTable,x
+99dd:                     bne L99e2
+99df:                     jmp movePenRightY
+                    
+99e2: L99e2               inx
+99e3:                     cmp keypressTable,x
+99e6:                     bne L99eb
+99e8:                     jmp movePenLeftY
+                    
+99eb: L99eb               inx
+99ec:                     cmp keypressTable,x
+99ef:                     bne L99f4
+99f1:                     jmp movePenUp
+                    
+99f4: L99f4               inx
+99f5:                     cmp keypressTable,x
+99f8:                     bne L99fd
+99fa:                     jmp movePenDown
+                    
+99fd: L99fd               inx
+99fe:                     cmp keypressTable,x
+9a01:                     bne L9a06
+9a03:                     jmp movePenRightUp
+                    
+9a06: L9a06               inx
+9a07:                     cmp keypressTable,x
+9a0a:                     bne L9a0f
+9a0c:                     jmp movePenLeftUp
+                    
+9a0f: L9a0f               inx
+9a10:                     cmp keypressTable,x
+9a13:                     bne L9a18
+9a15:                     jmp movePenLeftDown
+                    
+9a18: L9a18               inx
+9a19:                     cmp keypressTable,x
+9a1c:                     bne L9a21
+9a1e:                     jmp movePenRightDown
+                    
+9a21: L9a21               inx
+9a22:                     cmp keypressTable,x
+9a25:                     bne L9a2a
+9a27:                     jmp movePenHome
+                    
+9a2a: L9a2a               inx
+9a2b:                     cmp keypressTable,x
+9a2e:                     bne L9a33
+9a30:                     jmp L9cb0
+                    
+9a33: L9a33               inx
+9a34:                     cmp keypressTable,x
+9a37:                     bne L9a3c
+9a39:                     jmp L9cbb
+                    
+9a3c: L9a3c               lda $03ce
+9a3f:                     beq L9a53
+9a41:                     lda #$01
+9a43:                     sta $9e
+9a45:                     lda keypress
+9a48:                     sta keyboardBuffer
+9a4b:                     lda $03db
+9a4e:                     bmi L9a60
+9a50:                     jmp L9a76
+                    
+9a53: L9a53               lda $03da
+9a56:                     cmp #$45
+9a58:                     beq L9a70
+9a5a:                     jsr L9d1e
+9a5d:                     jmp L9a6a
+                    
+9a60: L9a60               lda $03da
+9a63:                     cmp #$0d
+9a65:                     bne L9a76
+9a67:                     jsr L9d1e
+9a6a: L9a6a               jsr drawCrosshair
+9a6d:                     jmp L991a
+                    
+9a70: L9a70               jsr GETIN
+9a73:                     jsr CLRSCRN
+9a76: L9a76               jsr drawCrosshair
+9a79:                     sei
+9a7a:                     lda tempIRQ_lo
+9a7d:                     sta irqVector_lo
+9a7f:                     lda tempIRQ_hi
+9a82:                     sta irqVector_hi
+9a84:                     cli
+9a85:                     rts
+                    
+9a86: movePenHome         jsr S9cd1
+9a89:                     lda ?offsetX_lo?
+9a8c:                     sta penX_lo
+9a8e:                     lda ?offsetX_hi?
+9a91:                     sta penX_hi
+9a93:                     lda ?offsetY_lo?
+9a96:                     sta penY_lo
+9a98:                     lda ?offsetY_hi?
+9a9b:                     sta penY_hi
+9a9d:                     jmp L9a6a
+                    
+9aa0: movePenDown         jsr S9cd1
+9aa3:                     clc
+9aa4:                     lda penY_lo
+9aa6:                     adc ?deltaY_2?
+9aa9:                     sta penY_lo
+9aab:                     lda penY_hi
+9aad:                     adc #$00
+9aaf:                     sta penY_hi
+                    
+9ab1:                     sec
+9ab2:                     lda clipBottom_lo
+9ab5:                     sbc penY_lo
+9ab7:                     lda clipBottom_hi
+9aba:                     sbc penY_hi
+9abc:                     bmi L9ac1
+9abe:                     jmp L9a6a
+9ac1: L9ac1               lda clipTop_lo
+9ac4:                     sta penY_lo
+9ac6:                     lda clipTop_hi
+9ac9:                     sta penY_hi
+9acb:                     jmp L9a6a
+                    
+9ace: movePenUp           jsr S9cd1
+9ad1:                     sec
+9ad2:                     lda penY_lo
+9ad4:                     sbc ?deltaY_2?
+9ad7:                     sta penY_lo
+9ad9:                     lda penY_hi
+9adb:                     sbc #$00
+9add:                     sta penY_hi
+                    
+9adf:                     sec
+9ae0:                     lda penY_lo
+9ae2:                     sbc clipTop_lo
+9ae5:                     lda penY_hi
+9ae7:                     sbc clipTop_hi
+9aea:                     bmi L9aef
+9aec:                     jmp L9a6a
+9aef: L9aef               lda clipBottom_lo
+9af2:                     sta penY_lo
+9af4:                     lda clipBottom_hi
+9af7:                     sta penY_hi
+9af9:                     jmp L9a6a
+                    
+9afc: movePenLeftY        jsr S9cd1
+9aff:                     sec
+9b00:                     lda penX_lo
+9b02:                     sbc ?deltaY_2?
+9b05:                     sta penX_lo
+9b07:                     lda penX_hi
+9b09:                     sbc #$00
+9b0b:                     sta penX_hi
+                    
+9b0d:                     sec
+9b0e:                     lda penX_lo
+9b10:                     sbc clipLeft_lo
+9b13:                     lda penX_hi
+9b15:                     sbc clipLeft_hi
+9b18:                     bmi L9b1d
+9b1a:                     jmp L9a6a
+9b1d: L9b1d               lda clipRight_lo
+9b20:                     sta penX_lo
+9b22:                     lda clipRight_hi
+9b25:                     sta penX_hi
+9b27:                     jmp L9a6a
+                    
+9b2a: movePenRightY       jsr S9cd1
+9b2d:                     clc
+9b2e:                     lda penX_lo
+9b30:                     adc ?deltaY_2?
+9b33:                     sta penX_lo
+9b35:                     lda penX_hi
+9b37:                     adc #$00
+9b39:                     sta penX_hi
+                    
+9b3b:                     sec
+9b3c:                     lda clipRight_lo
+9b3f:                     sbc penX_lo
+9b41:                     lda clipRight_hi
+9b44:                     sbc penX_hi
+9b46:                     bmi L9b4b
+9b48:                     jmp L9a6a
+9b4b: L9b4b               lda clipLeft_lo
+9b4e:                     sta penX_lo
+9b50:                     lda clipLeft_hi
+9b53:                     sta penX_hi
+9b55:                     jmp L9a6a
+                    
+9b58: movePenLeftDown     jsr S9cd1
+9b5b:                     sec
+9b5c:                     lda penX_lo
+9b5e:                     sbc ?deltaX_2?
+9b61:                     sta penX_lo
+9b63:                     lda penX_hi
+9b65:                     sbc #$00
+9b67:                     sta penX_hi
+9b69:                     clc
+9b6a:                     lda penY_lo
+9b6c:                     adc ?deltaY_2?
+9b6f:                     sta penY_lo
+9b71:                     lda penY_hi
+9b73:                     adc #$00
+9b75:                     sta penY_hi
+                    
+9b77:                     sec
+9b78:                     lda penX_lo
+9b7a:                     sbc clipLeft_lo
+9b7d:                     lda penX_hi
+9b7f:                     sbc clipLeft_hi
+9b82:                     bmi L9b87
+9b84:                     jmp L9b91
+9b87: L9b87               lda clipRight_lo
+9b8a:                     sta penX_lo
+9b8c:                     lda clipRight_hi
+9b8f:                     sta penX_hi
+                    
+9b91: L9b91               sec
+9b92:                     lda clipBottom_lo
+9b95:                     sbc penY_lo
+9b97:                     lda clipBottom_hi
+9b9a:                     sbc penY_hi
+9b9c:                     bmi L9ba1
+9b9e:                     jmp L9a6a
+9ba1: L9ba1               lda clipTop_lo
+9ba4:                     sta penY_lo
+9ba6:                     lda clipTop_hi
+9ba9:                     sta penY_hi
+9bab:                     jmp L9a6a
+                    
+9bae: movePenRightDown    jsr S9cd1
+9bb1:                     clc
+9bb2:                     lda penX_lo
+9bb4:                     adc ?deltaX_2?
+9bb7:                     sta penX_lo
+9bb9:                     lda penX_hi
+9bbb:                     adc #$00
+9bbd:                     sta penX_hi
+9bbf:                     clc
+9bc0:                     lda penY_lo
+9bc2:                     adc ?deltaY_2?
+9bc5:                     sta penY_lo
+9bc7:                     lda penY_hi
+9bc9:                     adc #$00
+9bcb:                     sta penY_hi
+                    
+                    ; Wrap right->left
+9bcd:                     sec
+9bce:                     lda clipRight_lo
+9bd1:                     sbc penX_lo
+9bd3:                     lda clipRight_hi
+9bd6:                     sbc penX_hi
+9bd8:                     bmi L9bdd
+9bda:                     jmp L9be7
+9bdd: L9bdd               lda clipLeft_lo
+9be0:                     sta penX_lo
+9be2:                     lda clipLeft_hi
+9be5:                     sta penX_hi
+                    ; Wrap bottom->top
+9be7: L9be7               sec
+9be8:                     lda clipBottom_lo
+9beb:                     sbc penY_lo
+9bed:                     lda clipBottom_hi
+9bf0:                     sbc penY_hi
+9bf2:                     bmi L9bf7
+9bf4:                     jmp L9a6a
+9bf7: L9bf7               lda clipTop_lo
+9bfa:                     sta penY_lo
+9bfc:                     lda clipTop_hi
+9bff:                     sta penY_hi
+9c01:                     jmp L9a6a
+                    
+9c04: movePenLeftUp       jsr S9cd1
+9c07:                     sec
+9c08:                     lda penX_lo
+9c0a:                     sbc ?deltaX_2?
+9c0d:                     sta penX_lo
+9c0f:                     lda penX_hi
+9c11:                     sbc #$00
+9c13:                     sta penX_hi
+9c15:                     sec
+9c16:                     lda penY_lo
+9c18:                     sbc ?deltaY_2?
+9c1b:                     sta penY_lo
+9c1d:                     lda penY_hi
+9c1f:                     sbc #$00
+9c21:                     sta penY_hi
+                    
+                    ; Wrap left->right
+9c23:                     sec
+9c24:                     lda penX_lo
+9c26:                     sbc clipLeft_lo
+9c29:                     lda penX_hi
+9c2b:                     sbc clipLeft_hi
+9c2e:                     bmi L9c33
+9c30:                     jmp L9c3d
+9c33: L9c33               lda clipRight_lo
+9c36:                     sta penX_lo
+9c38:                     lda clipRight_hi
+9c3b:                     sta penX_hi
+                    ; Wrap top->bottom
+9c3d: L9c3d               sec
+9c3e:                     lda penY_lo
+9c40:                     sbc clipTop_lo
+9c43:                     lda penY_hi
+9c45:                     sbc clipTop_hi
+9c48:                     bmi L9c4d
+9c4a:                     jmp L9a6a
+9c4d: L9c4d               lda clipBottom_lo
+9c50:                     sta penY_lo
+9c52:                     lda clipBottom_hi
+9c55:                     sta penY_hi
+9c57:                     jmp L9a6a
+                    
+9c5a: movePenRightUp      jsr S9cd1
+9c5d:                     clc
+9c5e:                     lda penX_lo
+9c60:                     adc ?deltaX_2?
+9c63:                     sta penX_lo
+9c65:                     lda penX_hi
+9c67:                     adc #$00
+9c69:                     sta penX_hi
+9c6b:                     sec
+9c6c:                     lda penY_lo
+9c6e:                     sbc ?deltaY_2?
+9c71:                     sta penY_lo
+9c73:                     lda penY_hi
+9c75:                     sbc #$00
+9c77:                     sta penY_hi
+                    
+9c79:                     sec
+9c7a:                     lda clipRight_lo
+9c7d:                     sbc penX_lo
+9c7f:                     lda clipRight_hi
+9c82:                     sbc penX_hi
+9c84:                     bmi L9c89
+9c86:                     jmp L9c93
+9c89: L9c89               lda clipLeft_lo
+9c8c:                     sta penX_lo
+9c8e:                     lda clipLeft_hi
+9c91:                     sta penX_hi
+                    
+9c93: L9c93               sec
+9c94:                     lda penY_lo
+9c96:                     sbc clipTop_lo
+9c99:                     lda penY_hi
+9c9b:                     sbc clipTop_hi
+9c9e:                     bmi L9ca3
+9ca0:                     jmp L9a6a
+9ca3: L9ca3               lda clipBottom_lo
+9ca6:                     sta penY_lo
+9ca8:                     lda clipBottom_hi
+9cab:                     sta penY_hi
+9cad:                     jmp L9a6a
+                    
+9cb0: L9cb0               lda #$01
+9cb2:                     sta $03d3
+9cb5:                     jsr L9d1e
+9cb8:                     jmp L9a6a
+                    
+9cbb: L9cbb               lda #$ff
+9cbd:                     sta $03d3
+9cc0:                     jsr L9d1e
+9cc3:                     jmp L9a6a
+                    
+9cc6: keypressTable       b6 b4 b8 b2 b9 b7 b1 b3 b5 b0 ae 
+                    
+9cd1: S9cd1               lda $03d3
+9cd4:                     bmi L9d05
+9cd6:                     lda $03d6
+9cd9:                     beq L9ce0
+9cdb:                     dec $03d6
+9cde:                     bne L9d05
+9ce0: L9ce0               lda $03d7
+9ce3:                     beq L9cea
+9ce5:                     dec $03d7
+9ce8:                     bne L9d05
+9cea: L9cea               lda ?deltaY_2?
+9ced:                     cmp #$0a
+9cef:                     beq L9d05
+9cf1:                     clc
+9cf2:                     lda ?deltaY_2?
+9cf5:                     adc #$01
+9cf7:                     sta ?deltaY_2?
+9cfa:                     adc ?deltaY_2?
+9cfd:                     sta ?deltaX_2?
+9d00:                     lda #$08
+9d02:                     sta $03d7
+9d05: L9d05               ldx $03dd
+9d08:                     bmi L9d1e
+9d0a:                     ldx #$ff
+9d0c:                     stx $03dd
+9d0f:                     ldx #$01
+9d11:                     stx $03dc
+9d14:                     ldy #$82
+9d16: L9d16               ldx #$c7
+9d18: L9d18               dex
+9d19:                     bne L9d18
+9d1b:                     dey
+9d1c:                     bne L9d16
+9d1e: L9d1e               jsr GETIN
+9d21:                     jsr drawCrosshair
+9d24:                     rts
+                    
+                    ; Print X and Y
+9d25: printXY             jsr CLRSCRN
+9d28:                     ldx #$05
+9d2a:                     lda #$58
+9d2c:                     sta $1f
+9d2e:                     lda #$9d
+9d30:                     sta $20
+9d32:                     jsr OUTSTR_lenX
+                    
+9d35:                     ldx printx_lo
+9d38:                     lda printx_hi
+9d3b:                     jsr NUMPRT
+9d3e:                     jsr EOLPRT
+                    
+9d41:                     ldx #$05
+9d43:                     lda #$5d
+9d45:                     sta $1f
+9d47:                     lda #$9d
+9d49:                     sta $20
+9d4b:                     jsr OUTSTR_lenX
+                    
+9d4e:                     ldx printy_lo
+9d51:                     lda printy_hi
+9d54:                     jsr NUMPRT
+9d57:                     rts
+                    
+9d58: txt_x               "♣ :  "
+9d5d: txt_y               "│ :  "
+                    
+9d62: L9d62               lda #$ff
+9d64:                     sta $02f6
+9d67:                     rts
+                    
+9d68: L9d68               lda #$ff
+9d6a:                     sta $0393
+9d6d:                     sta $0394
+9d70:                     lda #$08
+9d72:                     sta $038e
+9d75:                     lda #$19
+9d77:                     sta $038f
+9d7a:                     jmp L9db8
+                    
+9d7d: L9d7d               lda #$ff
+9d7f:                     sta $0393
+9d82:                     sta $0394
+9d85:                     lda #$08
+9d87:                     sta $038e
+9d8a:                     lda #$19
+9d8c:                     sta $038f
+9d8f:                     lda #$73
+9d91:                     sta $0397
+9d94:                     lda #$90
+9d96:                     sta $0398
+9d99:                     jmp L9df0
+                    
+9d9c: L9d9c               lda #$01
+9d9e:                     sta $0393
+9da1:                     sta $0394
+9da4:                     lda #$00
+9da6:                     sta $0392
+9da9:                     lda #$00
+9dab:                     sta $0390
+9dae:                     lda #$10
+9db0:                     sta $038e
+9db3:                     lda #$32
+9db5:                     sta $038f
+9db8: L9db8               lda #$69
+9dba:                     sta $0397
+9dbd:                     lda #$90
+9dbf:                     sta $0398
+9dc2:                     jmp L9df0
+                    
+9dc5: L9dc5               lda #$ff
+9dc7:                     sta $0393
+9dca:                     lda #$01
+9dcc:                     sta $0394
+9dcf:                     lda #$00
+9dd1:                     sta $0392
+9dd4:                     lda #$00
+9dd6:                     sta $0390
+9dd9:                     lda #$08
+9ddb:                     sta $038e
+9dde:                     lda #$32
+9de0:                     sta $038f
+9de3:                     lda #$7d
+9de5:                     sta $0397
+9de8:                     lda #$90
+9dea:                     sta $0398
+9ded:                     jmp L9df0
+                    
+9df0: L9df0               lda #$1b
+9df2:                     sta $03a4
+9df5:                     lda #$30
+9df7:                     sta $03a6
+9dfa:                     sta $03a7
+9dfd:                     sta $03a9
+9e00:                     lda #$38
+9e02:                     sta $03a8
+9e05:                     lda #$53
+9e07:                     sta $03a5
+9e0a:                     lda #$87
+9e0c:                     sta $0399
+9e0f:                     lda #$90
+9e11:                     sta $039a
+9e14:                     lda #$00
+9e16:                     sta $039b
+9e19:                     lda #$10
+9e1b:                     sta $0395
+9e1e:                     lda #$80
+9e20:                     sta $0396
+9e23:                     lda #$0d
+9e25:                     sta $038a
+9e28:                     lda #$0a
+9e2a:                     sta $038b
+9e2d:                     lda #$04
+9e2f:                     sta $d2
+9e31:                     sta $d4
+9e33:                     sta $d3
+9e35:                     lda #$00
+9e37:                     sta $d1
+9e39:                     jsr NOPEN
+9e3c:                     lda #$00
+9e3e:                     sta $96
+9e40:                     jsr LISTNK
+9e43:                     lda $d3
+9e45:                     jsr PUTBYTEONBUS?
+9e48:                     ldx $d2
+9e4a:                     jsr CHKOUT
+9e4d:                     jsr S9e9b
+9e50:                     jsr S9ebb
+9e53:                     lda $038f
+9e56:                     sta $038d
+9e59: L9e59               lda $038e
+9e5c:                     sta $038c
+9e5f: L9e5f               jsr S9ec9
+9e62:                     jsr S9e8d
+9e65:                     dec $038c
+9e68:                     beq L9e6d
+9e6a:                     jmp L9e5f
+                    
+9e6d: L9e6d               jsr S9ebb
+9e70:                     dec $038d
+9e73:                     beq L9e78
+9e75:                     jmp L9e59
+                    
+9e78: L9e78               jsr S9eab
+9e7b:                     jsr S9ebb
+9e7e:                     jsr CLRCH
+9e81:                     jsr UNLSTN?
+9e84:                     jsr NCLOSE
+9e87:                     lda #$00
+9e89:                     sta $02f6
+9e8c:                     rts
+                    
+9e8d: S9e8d               ldx #$56
+9e8f:                     lda #$a4
+9e91:                     sta $1f
+9e93:                     lda #$03
+9e95:                     sta $20
+9e97:                     jsr OUTSTR_lenX
+9e9a:                     rts
+                    
+9e9b: S9e9b               ldx #$0a
+9e9d:                     lda $0397
+9ea0:                     sta $1f
+9ea2:                     lda $0398
+9ea5:                     sta $20
+9ea7:                     jsr OUTSTR_lenX
+9eaa:                     rts
+                    
+9eab: S9eab               ldx #$08
+9ead:                     lda $0399
+9eb0:                     sta $1f
+9eb2:                     lda $039a
+9eb5:                     sta $20
+9eb7:                     jsr OUTSTR_lenX
+9eba:                     rts
+                    
+9ebb: S9ebb               ldx #$02
+9ebd:                     lda #$8a
+9ebf:                     sta $1f
+9ec1:                     lda #$03
+9ec3:                     sta $20
+9ec5:                     jsr OUTSTR_lenX
+9ec8:                     rts
+                    
+9ec9: S9ec9               lda $0394
+9ecc:                     bmi L9ed1
+9ece:                     jmp L9ee1
+                    
+9ed1: L9ed1               ldy #$06
+9ed3: L9ed3               jsr S9f73
+9ed6:                     jsr S9f35
+9ed9:                     cpy #$56
+9edb:                     beq L9ee0
+9edd:                     jmp L9ed3
+                    
+9ee0: L9ee0               rts
+                    
+9ee1: L9ee1               ldy #$06
+9ee3: L9ee3               jsr S9f81
+9ee6:                     jsr S9f35
+9ee9:                     clc
+9eea:                     lda $0392
+9eed:                     adc #$01
+9eef:                     sta $0392
+9ef2:                     cmp #$50
+9ef4:                     beq L9f0a
+9ef6:                     clc
+9ef7:                     lda $0395
+9efa:                     adc #$04
+9efc:                     sta $0395
+9eff:                     lda $0396
+9f02:                     adc #$00
+9f04:                     sta $0396
+9f07:                     jmp L9f2d
+                    
+9f0a: L9f0a               lda $0390
+9f0d:                     bmi L9f20
+9f0f:                     sec
+9f10:                     lda $0395
+9f13:                     sbc #$78
+9f15:                     sta $0395
+9f18:                     lda $0396
+9f1b:                     sbc #$02
+9f1d:                     sta $0396
+9f20: L9f20               lda #$00
+9f22:                     sta $0392
+9f25:                     lda $0390
+9f28:                     eor #$ff
+9f2a:                     sta $0390
+9f2d: L9f2d               cpy #$56
+9f2f:                     beq L9f34
+9f31:                     jmp L9ee3
+                    
+9f34: L9f34               rts
+                    
+9f35: S9f35               lda #$00
+9f37:                     sta $0391
+9f3a: L9f3a               ldx #$00
+9f3c: L9f3c               asl $039c,x
+9f3f:                     ror $039b
+9f42:                     inx
+9f43:                     cpx #$08
+9f45:                     beq L9f4a
+9f47:                     jmp L9f3c
+                    
+9f4a: L9f4a               lda $039b
+9f4d:                     eor $02f6
+9f50:                     sta $03a4,y
+9f53:                     iny
+9f54:                     lda $0393
+9f57:                     bmi L9f62
+9f59:                     lda #$00
+9f5b:                     eor $02f6
+9f5e:                     sta $03a4,y
+9f61:                     iny
+9f62: L9f62               clc
+9f63:                     lda $0391
+9f66:                     adc #$01
+9f68:                     sta $0391
+9f6b:                     cmp #$08
+9f6d:                     beq L9f72
+9f6f:                     jmp L9f3a
+                    
+9f72: L9f72               rts
+                    
+9f73: S9f73               ldx #$00
+9f75: L9f75               jsr S9f95
+9f78:                     inx
+9f79:                     cpx #$08
+9f7b:                     beq L9f80
+9f7d:                     jmp L9f75
+                    
+9f80: L9f80               rts
+                    
+9f81: S9f81               ldx #$00
+9f83: L9f83               lda #$00
+9f85:                     sta $039c,x
+9f88:                     inx
+9f89:                     jsr S9f95
+9f8c:                     inx
+9f8d:                     cpx #$08
+9f8f:                     beq L9f94
+9f91:                     jmp L9f83
+                    
+9f94: L9f94               rts
+                    
+9f95: S9f95               lda $0395
+9f98:                     sta gfxport_lo_e882
+9f9b:                     lda $0396
+9f9e:                     sta gfxport_hi_e888
+9fa1:                     lda gfxport_data_e88a
+9fa4:                     sta $039c,x
+9fa7:                     clc
+9fa8:                     lda $0395
+9fab:                     adc #$01
+9fad:                     sta $0395
+9fb0:                     lda $0396
+9fb3:                     adc #$00
+9fb5:                     sta $0396
+9fb8:                     rts
+                    
+9fb9:                     "WALTER12.3.85"
+9fc6:                     "STA VORZEI{Return}"
+9fd1:                     "LDA #$D9{Return}"
+9fda:                     "LDY #$C2{Return}"
+9fe3:                     "JSR MEMFAC{Return}"
+9fee:                     "JSR ABS{Return}"
+9ff6:                     "LDX #<MAXI"
+                    
+bb24: OUTSTR_lenX         ?? 
+c92d: GETADR              ?? 
+c99d: FADD                ?? 
+cb5e: FMULT               ?? 
+ccd8: MOVFM               ?? 
+cd0d: MOVMF_no_round      ?? 
+cd61: SIGN                ?? 
+cd8e: ABS                 ?? 
+cd91: FCOMP               ?? 
+cf83: NUMPRT              ?? 
+d534: EOLPRT              ?? 
+e015: CLRSCRN             ?? 
+                    
+e018: CRTC_TEXT?          ?? 
+e01b: CRTC_GFX?           ?? 
+                    
+e882: gfxport_lo_e882     ?? 
+e888: gfxport_hi_e888     ?? 
+e88a: gfxport_data_e88a   ?? 
+                    
+f0d5: LISTNK              ?? 
+f143: PUTBYTEONBUS?       ?? 
+f1d9: UNLSTN?             ?? 
+f2e0: NCLOSE              ?? 
+f563: NOPEN               ?? 
+ffc9: CHKOUT              ?? 
+ffcc: CLRCH               ?? 
+ffe4: GETIN               ?? 
