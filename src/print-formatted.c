@@ -118,9 +118,27 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 	case S_OPCODE:
 		o = stmt->op;
 		print(prt, PRT_OPERATION, "%s", o->name);
+		if (stmt->um_prefix || stmt->nf_prefix || stmt->rs_prefix || stmt->le_prefix) {
+			print(prt, PRT_OPERATION, ".");
+			if (stmt->um_prefix) {
+				print(prt, PRT_OPERATION, "%c", prefix_um_char(stmt->um_prefix));
+			}
+			if (stmt->nf_prefix) {
+				print(prt, PRT_OPERATION, "%c", prefix_nf_char(stmt->nf_prefix));
+			}
+			if (stmt->le_prefix) {
+				print(prt, PRT_OPERATION, "%c", prefix_le_char(stmt->le_prefix));
+			}
+			if (stmt->rs_prefix) {
+				print(prt, PRT_OPERATION, "%c", prefix_rs_char(stmt->rs_prefix));
+			}
+		}
 		print(prt, PRT_PARAM, "%s", op_syn_details(stmt->syn)->pre);
 		if (stmt->param) {
 			print_arith_int(prt, stmt->param);
+			if (stmt->base) {
+				print(prt, PRT_PARAM, "%s", tokenizer_op_details(stmt->base)->print);
+			}
 		}
 		print(prt, PRT_PARAM, "%s", op_syn_details(stmt->syn)->post);
 		break;
@@ -152,7 +170,7 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 	}
 #endif
 	if (stmt->comment) {
-		print(prt, PRT_COMMENT, "%s", stmt->comment);
+		print(prt, PRT_COMMENT, "; %s", stmt->comment);
 	}	
 
 	print_out(prt);

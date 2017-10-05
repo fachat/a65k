@@ -38,7 +38,7 @@ static const int widths[] = {
 	9,	// PRT_DATA
 	11,	// PRT_LABEL
 	4,	// PRT_OPERATION
-	12,	// PRT_PARAM
+	20,	// PRT_PARAM
 	30	// PRT_COMMENT
 };
 
@@ -96,6 +96,10 @@ static void print_setcol(printer_t *prt, int col) {
 
 	int todo = col - buflen;
 	int slen = strlen(spaces);
+
+	if (todo <= 0) {
+		todo = 1;
+	}
 
 	while (todo > 0) {
 		int step = slen - todo;

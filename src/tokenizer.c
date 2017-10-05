@@ -93,12 +93,12 @@ static op_details_t ops[] = {
         {	OP_BITINV,		"~",	1,	0,	1,	0,	0	},
         {	OP_MOD,			"%",	1,	0,	1,	0,	0	},
         {	OP_DOUBLESLASH,		"//",	0,	0,	0,	0,	0	},
-        {	OP_XIND,		",x",	0,	0,	0,	1,	0	},
-        {	OP_YIND,		",y",	0,	0,	0,	1,	0	},
-        {	OP_ZIND,		",z",	0,	0,	0,	1,	0	},
-        {	OP_SIND,		",s",	0,	0,	0,	1,	0	},
-        {	OP_BIND,		",b",	0,	0,	0,	1,	0	},
-        {	OP_PIND,		",p",	0,	0,	0,	1,	0	},
+        {	OP_XIND,		",X",	0,	0,	0,	1,	0	},
+        {	OP_YIND,		",Y",	0,	0,	0,	1,	0	},
+        {	OP_ZIND,		",Z",	0,	0,	0,	1,	0	},
+        {	OP_SIND,		",S",	0,	0,	0,	1,	0	},
+        {	OP_BIND,		",B",	0,	0,	0,	1,	0	},
+        {	OP_PIND,		",P",	0,	0,	0,	1,	0	},
 };
 
 static inline void error_digit_range(tokenizer_t *tok, char val, int base) {

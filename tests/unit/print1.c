@@ -66,29 +66,36 @@ int main(int argc, char *argv[]) {
 	position_t pos = { "bogusfile", 1 };
 
 	test(ctx, cfg, &pos, "label adc #123");	
-/*
-	test(ctx, &pos, "lda 123");	
-	test(ctx, &pos, "ldx (12),y");	
-	test(ctx, &pos, "lda ($12,s,x)");	
-	test(ctx, &pos, "lda (12,s),y");	
+	test(ctx, cfg, &pos, "lda 123");	
+	test(ctx, cfg, &pos, "lda 123,s");	
+	test(ctx, cfg, &pos, "lda 123,p");	
+	test(ctx, cfg, &pos, "lda 123,b");	
+	test(ctx, cfg, &pos, "ldx (12),y");	
+	test(ctx, cfg, &pos, "lda ($12,s,x)");	
+	test(ctx, cfg, &pos, "lda ($ff,s),z");	
 
-	test(ctx, &pos, "ldx [12],y");	
-	test(ctx, &pos, "lda [$12,s,x]");	
-	test(ctx, &pos, "lda [12,s],y");	
+	test(ctx, cfg, &pos, "ldx [12],y");	
+	test(ctx, cfg, &pos, "lda [$12,s,x]");	
+	test(ctx, cfg, &pos, "lda [12,s],y");	
+	test(ctx, cfg, &pos, "lda [$ff,s],z");	
 
-	test(ctx, &pos, "ldx [[12]],y");	
-	test(ctx, &pos, "lda [[$12,s,x]]");	
-	test(ctx, &pos, "lda [[12,s]],y");	
+	test(ctx, cfg, &pos, "ldx [[12]],y");	
+	test(ctx, cfg, &pos, "lda [[$12,s,x]]");	
+	test(ctx, cfg, &pos, "lda [[12,s]],y");	
+	test(ctx, cfg, &pos, "lda [[$ff,s]],z");	
 
-	test(ctx, &pos, "ldx ((12)),y");	
-	test(ctx, &pos, "lda (($12,s,x))");	
-	test(ctx, &pos, "lda ((12,s)),y");	
+	test(ctx, cfg, &pos, "ldx ((12)),y");	
+	test(ctx, cfg, &pos, "lda (($12,s,x))");	
+	test(ctx, cfg, &pos, "lda ((12,s)),y");	
+	test(ctx, cfg, &pos, "lda (($ff,s)),z");	
 
-	test(ctx, &pos, "ldx.0 123");	
-	test(ctx, &pos, "lda.1u 123");	
-	test(ctx, &pos, "lda.ne 123");	
-	test(ctx, &pos, "lda.sw 123");	
-*/
+	test(ctx, cfg, &pos, "ldx.0 123");	
+	test(ctx, cfg, &pos, "lda.1u 123");	
+	test(ctx, cfg, &pos, "lda.ne 123");	
+	test(ctx, cfg, &pos, "lda.sw 123");	
+	test(ctx, cfg, &pos, "lda 123; comment");	
+	test(ctx, cfg, &pos, "lda.sw 123; comment");	
+	test(ctx, cfg, &pos, "lda.un1w (($ff,s)),z;comment test");	
 }
 
 

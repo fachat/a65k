@@ -131,19 +131,19 @@ typedef enum {
 } pg_type;
 
 typedef enum {
-	RS_NOT_SET	= -1,	// not set
-        RS_BYTE         = 0,    // byte width 
-        RS_WORD         = 1,    // word (2 byte) width
-        RS_LONG         = 2,    // long (4 byte) width
-        RS_QUAD         = 3     // quad (8 byte) width
+	RS_NOT_SET	= 0,	// not set
+        RS_BYTE         = 1,    // byte width 
+        RS_WORD         = 2,    // word (2 byte) width
+        RS_LONG         = 3,    // long (4 byte) width
+        RS_QUAD         = 4     // quad (8 byte) width
 } rs_type;
 
 typedef enum {
-	LE_NOT_SET	= -1,	// not set
-        LE_E            = 0,    // no extension
-        LE_S            = 1,    // sign extensions
-        LE_0            = 2,    // extend with 0
-        LE_1            = 3     // extend with 1
+	LE_NOT_SET	= 0,	// not set
+        LE_E            = 1,    // no extension
+        LE_S            = 2,    // sign extensions
+        LE_0            = 3,    // extend with 0
+        LE_1            = 4     // extend with 1
 } le_type;
 
 
@@ -193,18 +193,26 @@ bool_t opcode_find(const position_t *loc, const context_t *ctx, const operation_
 
 const syntax_t *op_syn_details(syntax_type syn);
 
+inline static char prefix_um_char(bool_t um) {
+	return um ? 'U' : '-';
+}
+
+inline static char prefix_nf_char(bool_t nf) {
+	return nf ? 'N' : '-';
+}
+
 inline static char prefix_rs_char(rs_type p) {
 	switch (p) {
 	case RS_NOT_SET:
 		return '-';
 	case RS_BYTE:
-		return 'b';
+		return 'B';
 	case RS_WORD:
-		return 'w';
+		return 'W';
 	case RS_LONG:
-		return 'l';
+		return 'L';
 	case RS_QUAD:
-		return 'q';
+		return 'Q';
 	}
 	return 'x';
 }
@@ -218,9 +226,9 @@ inline static char prefix_le_char(rs_type p) {
 	case LE_1:
 		return '1';
 	case LE_S:
-		return 's';
+		return 'S';
 	case LE_E:
-		return 'e';
+		return 'E';
 	}
 	return 'x';
 }
