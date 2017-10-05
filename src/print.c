@@ -116,6 +116,10 @@ void print(printer_t *prt, print_col_t col_no, const char *pattern, ...) {
 
 	if (col_no != prt->current_col) {
 		// target fixed width column
+		if (col_no == PRT_COMMENT && prt->current_col == PRT_LINENO) {
+			// shift comment to left if only comment on line
+			col_no = PRT_LABEL;
+		}
 		int trg = prt->col_width[col_no];
 		print_setcol(prt, trg);
 		prt->current_col = col_no;

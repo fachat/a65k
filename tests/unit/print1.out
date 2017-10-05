@@ -1,0 +1,84 @@
+WRN:
+WRN:>>> label adc #123
+                    label      ADC #123
+WRN:
+WRN:>>> lda 123
+                               LDA 123
+WRN:
+WRN:>>> lda 123,s
+                               LDA 123,S
+WRN:
+WRN:>>> lda 123,p
+                               LDA 123,P
+WRN:
+WRN:>>> lda 123,b
+                               LDA 123,B
+WRN:
+WRN:>>> ldx (12),y
+                               LDX (12),Y
+WRN:
+WRN:>>> lda ($12,s,x)
+                               LDA ($12,S,X)
+WRN:
+WRN:>>> lda ($ff,s),z
+                               LDA ($ff,S),Z
+WRN:
+WRN:>>> ldx [12],y
+                               LDX [12],Y
+WRN:
+WRN:>>> lda [$12,s,x]
+                               LDA [$12,S,X]
+WRN:
+WRN:>>> lda [12,s],y
+                               LDA [12,S],Y
+WRN:
+WRN:>>> lda [$ff,s],z
+                               LDA [$ff,S],Z
+WRN:
+WRN:>>> ldx [[12]],y
+                               LDX [[12]],Y
+WRN:
+WRN:>>> lda [[$12,s,x]]
+                               LDA [[$12,S,X]]
+WRN:
+WRN:>>> lda [[12,s]],y
+                               LDA [[12,S]],Y
+WRN:
+WRN:>>> lda [[$ff,s]],z
+                               LDA [[$ff,S]],Z
+WRN:
+WRN:>>> ldx ((12)),y
+                               LDX ((12)),Y
+WRN:
+WRN:>>> lda (($12,s,x))
+                               LDA (($12,S,X))
+WRN:
+WRN:>>> lda ((12,s)),y
+                               LDA ((12,S)),Y
+WRN:
+WRN:>>> lda (($ff,s)),z
+                               LDA (($ff,S)),Z
+WRN:
+WRN:>>> ldx.0 123
+                               LDX.0 123
+WRN:
+WRN:>>> lda.1u 123
+                               LDA.U1 123
+WRN:
+WRN:>>> lda.ne 123
+                               LDA.NE 123
+WRN:
+WRN:>>> lda.sw 123
+                               LDA.SW 123
+WRN:
+WRN:>>> ;comment
+                    ; comment
+WRN:
+WRN:>>> lda 123; comment
+                               LDA 123                 ; comment
+WRN:
+WRN:>>> lda.sw 123; comment
+                               LDA.SW 123              ; comment
+WRN:
+WRN:>>> lda.un1w (($ff,s)),z;comment test
+                               LDA.UN1W (($ff,S)),Z    ; comment test

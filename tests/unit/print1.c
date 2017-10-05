@@ -93,6 +93,7 @@ int main(int argc, char *argv[]) {
 	test(ctx, cfg, &pos, "lda.1u 123");	
 	test(ctx, cfg, &pos, "lda.ne 123");	
 	test(ctx, cfg, &pos, "lda.sw 123");	
+	test(ctx, cfg, &pos, ";comment");	
 	test(ctx, cfg, &pos, "lda 123; comment");	
 	test(ctx, cfg, &pos, "lda.sw 123; comment");	
 	test(ctx, cfg, &pos, "lda.un1w (($ff,s)),z;comment test");	
