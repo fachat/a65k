@@ -37,51 +37,51 @@ static void print_arith_int(printer_t *prt, const ilist_t *anodes) {
 		const anode_t *n = ilist_get(anodes, i);
 		switch(n->type) {
 		case A_BRACKET:
-			print(prt, "  type=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
+			print(prt, PRT_PARAM, "  type=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
 				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
 			print_arith_int(prt, n->val.subv.value);
 			break;
 		case A_VALUE:
 			switch(n->val.intv.type) {
 			case LIT_DECIMAL:
-				print(prt, "%d", n->val.intv.value);
+				print(prt, PRT_PARAM, "%d", n->val.intv.value);
 				break;
 			case LIT_OCTAL:
-				print(prt, "%o", n->val.intv.value);
+				print(prt, PRT_PARAM, "%o", n->val.intv.value);
 				break;
 			case LIT_BINARY:
 				// TODO: binary
-				print(prt, "%o", n->val.intv.value);
+				print(prt, PRT_PARAM, "%o", n->val.intv.value);
 				break;
 			case LIT_HEX:
-				print(prt, "$%x", n->val.intv.value);
+				print(prt, PRT_PARAM, "$%x", n->val.intv.value);
 				break;
 			case LIT_OCTAL_C:
-				print(prt, "0%o", n->val.intv.value);
+				print(prt, PRT_PARAM, "0%o", n->val.intv.value);
 				break;
 			case LIT_HEX_C:
-				print(prt, "0x%x", n->val.intv.value);
+				print(prt, PRT_PARAM, "0x%x", n->val.intv.value);
 				break;
 			case LIT_CHAR:
-				print(prt, "'%c'", n->val.intv.value);
+				print(prt, PRT_PARAM, "'%c'", n->val.intv.value);
 				break;
 			case LIT_TWOCHAR:
-				print(prt, "'%c%c'", n->val.intv.value & 0xff, (n->val.intv.value >> 8) & 0xff);
+				print(prt, PRT_PARAM, "'%c%c'", n->val.intv.value & 0xff, (n->val.intv.value >> 8) & 0xff);
 				break;
 			case LIT_NONE:
-				print(prt, "-");
+				print(prt, PRT_PARAM, "-");
 				break;
 			}
 			break;
 		case A_INDEX:
-			print(prt, "  type=%c, modifier=%d (%c), op=%d(%c)", 
+			print(prt, PRT_PARAM, "  type=%c, modifier=%d (%c), op=%d(%c)", 
 				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
 			break;
 		case A_LABEL:
-			print(prt, "%s", n->val.lab.name);
+			print(prt, PRT_PARAM, "%s", n->val.lab.name);
 			break;
 		default:
-			print(prt, "  UNHANDLED: type=%c, modifier=%d (%c), op=%d(%c)", 
+			print(prt, PRT_PARAM, "  UNHANDLED: type=%c, modifier=%d (%c), op=%d(%c)", 
 				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
 		}
 	}
@@ -91,23 +91,16 @@ static void print_arith_int(printer_t *prt, const ilist_t *anodes) {
 void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 
 	const print_config_t *cfg = prt->cfg;
-	int l = 0;
 
 	if (cfg->lineno) {
 		if (stmt->lineno >= 0) {
-			print(prt, "% 5d ", stmt->lineno);
-		} else {
-			print(prt, "       ");
+			print(prt, PRT_LINENO, "%5d", stmt->lineno);
 		}
-		l += 7;
 	}
 
 	if (stmt->label != NULL) {
-		print(prt, "% -10s ", stmt->label->name);
-	} else {
-		print(prt, "           ");
+		print(prt, PRT_LABEL, "% -10s", stmt->label->name);
 	}
-	l += 11;
 
 	ilist_t *a = NULL;
 	operation_t *o = NULL;
@@ -115,21 +108,21 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 	case S_PCDEF:
 		break;
 	case S_LABEQPC:
-		print(prt, "=*");
+		print(prt, PRT_OPERATION, "=*");
 		break;
 	case S_LABDEF:
-		print(prt, "%s", tokenizer_op_details(stmt->assign)->print);
+		print(prt, PRT_OPERATION, "%s", tokenizer_op_details(stmt->assign)->print);
 		a = stmt->param;
 		print_arith_int(prt, a);
 		break;
 	case S_OPCODE:
 		o = stmt->op;
-		print(prt, "%s ", o->name);
-		print(prt, "%s", op_syn_details(stmt->syn)->pre);
+		print(prt, PRT_OPERATION, "%s", o->name);
+		print(prt, PRT_PARAM, "%s", op_syn_details(stmt->syn)->pre);
 		if (stmt->param) {
 			print_arith_int(prt, stmt->param);
 		}
-		print(prt, "%s", op_syn_details(stmt->syn)->post);
+		print(prt, PRT_PARAM, "%s", op_syn_details(stmt->syn)->post);
 		break;
 	case S_PSEUDO:
 		break;
@@ -159,10 +152,7 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 	}
 #endif
 	if (stmt->comment) {
-		if (print_getlen(prt) > l) {
-			print_setcol(prt, 30);
-		}
-		print(prt, "; %s", stmt->comment);
+		print(prt, PRT_COMMENT, "%s", stmt->comment);
 	}	
 
 	print_out(prt);

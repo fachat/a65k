@@ -28,8 +28,19 @@
 #include "print.h"
 #include "arith.h"
 
-
+// filler spaces
 static const char spaces[] = "                                        ";
+
+// column widths for fixed width output, index corresponds to printer_col_t
+static const int widths[] = { 
+	6, 	// PRT_LINENO
+	5,	// PRT_ADDR
+	9,	// PRT_DATA
+	11,	// PRT_LABEL
+	4,	// PRT_OPERATION
+	12,	// PRT_PARAM
+	30	// PRT_COMMENT
+};
 
 void print_module_init() {
 
@@ -60,28 +71,19 @@ printer_t *print_init() {
 
 	prt->outfile = f;
 	prt->cfg = cfg;
+	prt->current_col = PRT_LINENO;
+
+	int p = 0;
+	for (int i = PRT_LINENO; i < PRT_END; i++) {
+		prt->col_width[i] = p;
+		p += widths[i];
+	}
+
 	print_clr(prt);
 
 	prt->was_empty = 0;
 
 	return prt;
-}
-
-
-void print(printer_t *prt, const char *pattern, ...) {
-
-        va_list ap;
-        va_start(ap, pattern);
-
-	int buflen = print_getlen(prt);
-
-        int r = vsnprintf(prt->buf + buflen, BUF_LEN - buflen, pattern, ap);
-        if (r < 0 || r > BUF_LEN) {
-                // error
-                log_error("Error printing %d\n", r);
-                return;
-        }
-	prt->buflen += r;
 }
 
 int print_getlen(printer_t *prt) {
@@ -100,9 +102,33 @@ void print_setcol(printer_t *prt, int col) {
 		if (step < 0) {
 			step = 0;
 		}
-		print(prt, "%s", spaces + step);
+		print(prt, prt->current_col, "%s", spaces + step);
 		todo -= slen + step;
 	}
+}
+
+
+void print(printer_t *prt, print_col_t col_no, const char *pattern, ...) {
+
+	if (col_no != prt->current_col) {
+		// target fixed width column
+		int trg = prt->col_width[col_no];
+		print_setcol(prt, trg);
+		prt->current_col = col_no;
+	}
+
+        va_list ap;
+        va_start(ap, pattern);
+
+	int buflen = print_getlen(prt);
+
+        int r = vsnprintf(prt->buf + buflen, BUF_LEN - buflen, pattern, ap);
+        if (r < 0 || r > BUF_LEN) {
+                // error
+                log_error("Error printing %d\n", r);
+                return;
+        }
+	prt->buflen += r;
 }
 
 void print_out(printer_t *prt) {
@@ -127,6 +153,7 @@ void print_out(printer_t *prt) {
 void print_clr(printer_t *prt) {
 	prt->buf[0] = 0;
 	prt->buflen = 0;
+	prt->current_col = PRT_LINENO;
 }
 
 void print_close(printer_t *prt) {
