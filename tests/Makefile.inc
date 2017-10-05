@@ -51,7 +51,7 @@ bin/%: %.c $(OBJ) $(TESTLIBOBJ) $(DEPS) bin
 clean:
 	$(V1) if test x"$(SUBDIRS)" != "x"; then for i in $(SUBDIRS); do echo "dir: "$$i; (cd $$i; make clean); done; fi
 	rm -f *.o $(TESTBINS)
-	sh -c "test -d bin && rmdir bin"
+	sh -c "test -d bin && rmdir bin; return 0"
 
 dbgprint.o: dbgprint.c 
 	$(CC) -c $(CFLAGS) $(INCLUDES) -o $@ $<
