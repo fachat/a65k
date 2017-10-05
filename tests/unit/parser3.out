@@ -1,0 +1,148 @@
+WRN:
+WRN:>>> 10020 LDA #$E0:STA Z0+1
+WRN:--------------- STMT ---------------
+WRN:LINE: 10020:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)224/e0
+WRN:--------------- STMT ---------------
+WRN:LINE: 10020:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:OPR: name:STA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=2
+WRN:      type=l, modifier=0 ( ), op=0( ), label=Z0 (resolved=0)
+WRN:      type=v, modifier=0 ( ), op=43(+), val=(d)1/1
+WRN:
+WRN:>>> 11010 SERI2 =$029B:SERI1 =$029C
+WRN:--------------- STMT ---------------
+WRN:LINE: 11010:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:SERI2 ctx:0 pos:bogusfile:1
+WRN:LDEF: =
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)667/29b
+WRN:--------------- STMT ---------------
+WRN:LINE: 11010:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:SERI1 ctx:0 pos:bogusfile:1
+WRN:LDEF: =
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)668/29c
+WRN:
+WRN:>>> 12100 *=$ECD9:BC .BYT 11,0
+WRN:--------------- STMT ---------------
+WRN:LINE: 12100:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PCDEF: *=
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)60633/ecd9
+WRN:--------------- STMT ---------------
+WRN:LINE: 12100:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:BC ctx:0 pos:bogusfile:1
+WRN:PSEUDO: byt
+WRN:PARS:
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)11/b
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)0/0
+WRN:
+WRN:>>> 26040 PIEC
+WRN:--------------- STMT ---------------
+WRN:LINE: 26040:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:PIEC ctx:0 pos:bogusfile:1
+WRN:LABEQPC: =*
+WRN:
+WRN:>>> 22350 .BYT <-1,KT4-KT,KT6-KT
+WRN:--------------- STMT ---------------
+WRN:LINE: 22350:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PSEUDO: byt
+WRN:PARS:
+WRN:    A:len=1
+WRN:      type=u, modifier=60(<), op=0( ), unary=45(-)
+WRN:      A:len=1
+WRN:        type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:    A:len=2
+WRN:      type=l, modifier=0 ( ), op=0( ), label=KT4 (resolved=0)
+WRN:      type=l, modifier=0 ( ), op=45(-), label=KT (resolved=0)
+WRN:    A:len=2
+WRN:      type=l, modifier=0 ( ), op=0( ), label=KT6 (resolved=0)
+WRN:      type=l, modifier=0 ( ), op=45(-), label=KT (resolved=0)
+WRN:
+WRN:>>> 12000 .IF MIKE-1:.GOTO 12600
+WRN:--------------- STMT ---------------
+WRN:LINE: 12000:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PSEUDO: if
+WRN:PARS:
+WRN:    A:len=2
+WRN:      type=l, modifier=0 ( ), op=0( ), label=MIKE (resolved=0)
+WRN:      type=v, modifier=0 ( ), op=45(-), val=(d)1/1
+WRN:--------------- STMT ---------------
+WRN:LINE: 12000:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PSEUDO: goto
+WRN:PARS:
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(d)12600/3138
+WRN:
+WRN:>>> 50000 .END; REM
+WRN:err=3
+WRN:--------------- STMT ---------------
+WRN:LINE: 50000:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:PSEUDO: end
+WRN:
+WRN:>>> 28650 HC LDA #<-1:STA $C6
+WRN:--------------- STMT ---------------
+WRN:LINE: 28650:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:HC ctx:0 pos:bogusfile:1
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=u, modifier=60(<), op=0( ), unary=45(-)
+WRN:      A:len=1
+WRN:        type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:--------------- STMT ---------------
+WRN:LINE: 28650:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:OPR: name:STA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)198/c6
+WRN:
+WRN:>>> 28650 HC LDA #<--1:STA $C6
+WRN:--------------- STMT ---------------
+WRN:LINE: 28650:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:HC ctx:0 pos:bogusfile:1
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=u, modifier=60(<), op=0( ), unary=45(-)
+WRN:      A:len=1
+WRN:        type=u, modifier=0( ), op=0( ), unary=45(-)
+WRN:        A:len=1
+WRN:          type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:--------------- STMT ---------------
+WRN:LINE: 28650:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:OPR: name:STA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: -1, LE: -1
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)198/c6
