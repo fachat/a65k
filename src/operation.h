@@ -94,27 +94,33 @@ typedef enum {
 	AM_IND16	= 19,	// zp/word-indirect, word address: (word)
 	AM_IND8Y	= 20,	// zp/word-indirect, y-indexed, word address: (zp),y
 	AM_IND16Y	= 21,	// zp/word-indirect, y-indexed, word address: (word),y
-	AM_XIND8	= 22,	// x-indexed, zp/word-indirect, word address: (zp,x)
-	AM_XIND16	= 23,	// x-indexed, zp/word-indirect, word address: (word,x)
+	AM_IND8Z	= 22,	// zp/word-indirect, z-indexed, word address: (zp),z
+	AM_IND16Z	= 23,	// zp/word-indirect, z-indexed, word address: (word),z
+	AM_XIND8	= 24,	// x-indexed, zp/word-indirect, word address: (zp,x)
+	AM_XIND16	= 25,	// x-indexed, zp/word-indirect, word address: (word,x)
 
-	AM_IND8L	= 24,	// zp/word-indirect, long address: [zp]
-	AM_IND16L	= 25,	// zp/word-indirect, long address: [word]
-	AM_IND8YL	= 26,	// zp/word-indirect, y-indexed, long address: [zp],y
-	AM_IND16YL	= 27,	// zp/word-indirect, y-indexed, long address: [word],y
-	AM_XIND8L	= 28,	// x-indexed, zp/word-indirect, long address: [zp,x]
-	AM_XIND16L	= 29,	// x-indexed, zp/word-indirect, long address: [word,x]
+	AM_IND8L	= 26,	// zp/word-indirect, long address: [zp]
+	AM_IND16L	= 27,	// zp/word-indirect, long address: [word]
+	AM_IND8YL	= 28,	// zp/word-indirect, y-indexed, long address: [zp],y
+	AM_IND16YL	= 29,	// zp/word-indirect, y-indexed, long address: [word],y
+	AM_IND8ZL	= 30,	// zp/word-indirect, z-indexed, long address: [zp],z
+	AM_IND16ZL	= 31,	// zp/word-indirect, z-indexed, long address: [word],z
+	AM_XIND8L	= 32,	// x-indexed, zp/word-indirect, long address: [zp,x]
+	AM_XIND16L	= 33,	// x-indexed, zp/word-indirect, long address: [word,x]
 
-	AM_IND8Q	= 30,	// zp/word-indirect, quad address: [[zp]]
-	AM_IND16Q	= 31,	// zp/word-indirect, quad address: [[word]]
-	AM_IND8YQ	= 32,	// zp/word-indirect, y-indexed, quad address: [[zp]],y
-	AM_IND16YQ	= 33,	// zp/word-indirect, y-indexed, quad address: [[word]],y
-	AM_XIND8Q	= 34,	// x-indexed, zp/word-indirect, quad address: [[zp,x]]
-	AM_XIND16Q	= 35,	// x-indexed, zp/word-indirect, quad address: [[word,x]]
+	AM_IND8Q	= 34,	// zp/word-indirect, quad address: [[zp]]
+	AM_IND16Q	= 35,	// zp/word-indirect, quad address: [[word]]
+	AM_IND8YQ	= 36,	// zp/word-indirect, y-indexed, quad address: [[zp]],y
+	AM_IND16YQ	= 37,	// zp/word-indirect, y-indexed, quad address: [[word]],y
+	AM_IND8ZQ	= 38,	// zp/word-indirect, z-indexed, quad address: [[zp]],z
+	AM_IND16ZQ	= 39,	// zp/word-indirect, z-indexed, quad address: [[word]],z
+	AM_XIND8Q	= 40,	// x-indexed, zp/word-indirect, quad address: [[zp,x]]
+	AM_XIND16Q	= 41,	// x-indexed, zp/word-indirect, quad address: [[word,x]]
 	
-	AM_MV		= 36,	// two byte 65816 MVN/MVP addressing
-	AM_BBREL	= 37,	// zeropage address, plus relative address, R65C02 BBR/BBS
+	AM_MV		= 42,	// two byte 65816 MVN/MVP addressing
+	AM_BBREL	= 43,	// zeropage address, plus relative address, R65C02 BBR/BBS
 	
-	AM_MAX		= 38,	// end
+	AM_MAX		= 44,	// end
 } amode_type;
 	
 typedef enum {

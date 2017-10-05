@@ -32,7 +32,7 @@
 #include "operation.h"
 
 
-static syntax_t sy_amode[SY_MAX] = {
+static syntax_t sy_amode[] = {
 	{ 	"",	"",	{ 	// SY_IMP
 		AM_IMP, 	AM_IMP, 	AM_IMP, 	AM_IMP,		AM_IMP 		}},
 	{ 	"#",	"",	{ 	// SY_IMM
@@ -43,28 +43,48 @@ static syntax_t sy_amode[SY_MAX] = {
 		AM_ABS8X,	AM_ABS16X,	AM_NONE, 	AM_ABS32X,	AM_ABS64X	}},
 	{ 	"",	",Y",	{	// SY_ABSY
 		AM_ABS8Y,	AM_ABS16Y,	AM_NONE, 	AM_ABS32Y,	AM_ABS64Y	}},
+	{ 	"",	",Z",	{	// SY_ABSZ; placeholder
+		AM_NONE,	AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}},
 	{ 	"(",	")",	{	// SY_IND
 		AM_IND8,	AM_IND16,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"(",	"),Y",	{	// SY_INDY
+		AM_IND8Z,	AM_IND16Z,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"(",	"),Z",	{	// SY_INDZ
 		AM_IND8Y,	AM_IND16Y,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"(",	",X)",	{	// SY_XIND
 		AM_XIND8,	AM_XIND16,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"[",	"]",	{	// SY_INDL
 		AM_IND8L,	AM_IND16L,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"[",	"],Y",	{	// SY_INDYL
+		AM_IND8ZL,	AM_IND16ZL,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[",	"],Z",	{	// SY_INDZL
 		AM_IND8YL,	AM_IND16YL,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"[",	",X]",	{	// SY_XINDL
 		AM_XIND8L,	AM_XIND16L,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"[[",	"]]",	{	// SY_INDQ
 		AM_IND8Q,	AM_IND16Q,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"[[",	"]],Y",	{	// SY_INDYQ
+		AM_IND8ZQ,	AM_IND16ZQ,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"[[",	"]],Z",	{	// SY_INDZQ
 		AM_IND8YQ,	AM_IND16YQ,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"[[",	",X]]",	{	// SY_XINDQ
 		AM_XIND8Q,	AM_XIND16Q,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
 	{ 	"",	"",	{	// SY_MV
 		AM_MV,		AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}},
 	{ 	"",	"",	{	// SY_BBREL
-		AM_BBREL,	AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}}
+		AM_BBREL,	AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}},
+
+	{ 	"",	"",	{	// SY_MAX;	// placeholder
+		AM_NONE,	AM_NONE,	AM_NONE, 	AM_NONE,	AM_NONE		}},
+
+	{ 	"((",	"))",	{	// SY_INDD
+		AM_NONE,	AM_NONE,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"((",	")),Y",	{	// SY_INDYD
+		AM_NONE,	AM_NONE,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"((",	")),Z",	{	// SY_INDZD
+		AM_NONE,	AM_NONE,	AM_NONE, 	AM_NONE	,	AM_NONE		}},
+	{ 	"((",	",X))",	{	// SY_XINDD
+		AM_NONE,	AM_NONE,	AM_NONE, 	AM_NONE	,	AM_NONE		}}
 };
 
 // corresponding parameter widts for table sy_amode
