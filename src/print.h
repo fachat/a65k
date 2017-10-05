@@ -72,8 +72,6 @@ void print(printer_t *ptr, print_col_t col_no, const char *pattern, ...);
 // print a statement formatted
 void print_formatted_stmt(printer_t *cfg, const statement_t *stmt);
 
-int print_getlen(printer_t *prt);
-
 void print_out(printer_t *prt);
 
 void print_clr(printer_t *prt);

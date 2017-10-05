@@ -86,11 +86,11 @@ printer_t *print_init() {
 	return prt;
 }
 
-int print_getlen(printer_t *prt) {
+static int print_getlen(printer_t *prt) {
 	return prt->buflen;
 }
 
-void print_setcol(printer_t *prt, int col) {
+static void print_setcol(printer_t *prt, int col) {
 	
 	int buflen = print_getlen(prt);
 

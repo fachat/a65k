@@ -103,7 +103,7 @@ void print_formatted_stmt(printer_t *prt, const statement_t *stmt) {
 	}
 
 	ilist_t *a = NULL;
-	operation_t *o = NULL;
+	const operation_t *o = NULL;
 	switch(stmt->type) {
 	case S_PCDEF:
 		break;
