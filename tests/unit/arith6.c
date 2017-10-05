@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	dprint("1+2+label2+4", blk, &pos, 1);
 
         label_t *label1 = label_init(NULL, "label1", &pos);
-        label_t *ladd1 = block_add_label(blk, label1);
+        block_add_label(blk, label1);
 
 	dprint("1+(label1+3)*4", blk, &pos, 0);
 	dprint("1+(2+3)*label3", blk, &pos, 1);
