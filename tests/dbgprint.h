@@ -20,8 +20,8 @@
 ****************************************************************************/
 
 
-#ifndef PRINT_H
-#define PRINT_H
+#ifndef DBGPRINT_H
+#define DBGPRINT_H
 
 #include "parser.h"
 #include "print-config.h"

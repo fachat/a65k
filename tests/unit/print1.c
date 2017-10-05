@@ -12,6 +12,7 @@
 #include "cmdline.h"
 #include "parser.h"
 #include "print-config.h"
+#include "dbgprint.h"
 #include "print.h"
 #include "log.h"
 
@@ -32,10 +33,12 @@ static void test(const context_t *ctx, const print_config_t *cfg, position_t *po
 	}
 	//log_set_level(LEV_DEBUG);
 
+	printer_t *prt = print_init();
+
 	list_iterator_t *iter = parser_get_statements();
 	while (list_iterator_has_next(iter)) {
 		statement_t *stmt = list_iterator_next(iter);
-		print_formatted_stmt(stmt, cfg);
+		print_formatted_stmt(prt, stmt);
 	}
 }
 
