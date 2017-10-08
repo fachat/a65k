@@ -41,7 +41,7 @@ static inline void error_unary_no_val(const tokenizer_t *tok) {
 }
 
 static inline void error_bracket_mismatch(const tokenizer_t *tok, op_t was, op_t expected) {
-        toklog_error(tok, "%s", "Opening and closing brackets don't match - got '%s' but expected '%s'.",
+        toklog_error(tok, "Opening and closing brackets don't match - got '%s' but expected '%s'.",
 			tokenizer_op_details(was)->print, tokenizer_op_details(expected)->print);
 }
 
@@ -79,7 +79,7 @@ static err_t arith_parse_int(tokenizer_t *tok,
 				if (tokenizer_next(tok, allow_index)) {
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
-					arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, OP_NONE, 0, 0, allow_string);
+					arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, closing_op(anode->val.subv.type), 0, 0, allow_string);
 
 					if (tok->type != T_BRACKET) {
 						rv = E_SYNTAX;
@@ -210,7 +210,7 @@ end:
 			if (closing) {
 				if (tok->type == T_BRACKET) {
 					if (tok->vals.op != closing) {
-						error_bracket_mismatch(tok, closing, tok->vals.op);
+						error_bracket_mismatch(tok, tok->vals.op, closing);
 						rv = E_SYNTAX;
 						goto exit;
 					}

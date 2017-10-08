@@ -54,8 +54,10 @@ static op_details_t ops[] = {
         {	OP_CLOSE,		")",	0,	0,	0,	0,	0	},
         {	OP_HASH, 		"#",	0,	0,	0,	0,	0	},
         {	OP_BOPEN,		"[",	0,	0,	0,	0,	0	},
+        {	OP_COPEN,		"{",	0,	0,	0,	0,	0	},
         {	OP_BBOPEN,		"[[",	0,	0,	0,	0,	0	},
         {	OP_BCLOSE,		"]",	0,	0,	0,	0,	0	},
+        {	OP_CCLOSE,		"}",	0,	0,	0,	0,	0	},
         {	OP_BBCLOSE,		"]]",	0,	0,	0,	0,	0	}, 
         {	OP_STAR,		"*",	0,	0,	1,	0,	0	},
         {	OP_COMMA,		",",	0,	0,	0,	0,	0	},
@@ -301,6 +303,8 @@ static inline bool_t parse_token(tokenizer_t *tok, int ptr, int can_have_operato
 		return true;
 	case '(':
 	case ')':
+	case '{':
+	case '}':
 		tok->type = T_BRACKET;
 		return true;
 	case ',':

@@ -39,7 +39,9 @@ static void print_arith_int(printer_t *prt, const ilist_t *anodes) {
 		case A_BRACKET:
 			print(prt, PRT_PARAM, "  type=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
 				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
+			print(prt, PRT_PARAM, "%c", n->val.subv.type);
 			print_arith_int(prt, n->val.subv.value);
+			print(prt, PRT_PARAM, "%c", n->val.subv.type);
 			break;
 		case A_VALUE:
 			switch(n->val.intv.type) {
