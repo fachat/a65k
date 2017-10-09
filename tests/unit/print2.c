@@ -68,8 +68,17 @@ int main(int argc, char *argv[]) {
 	test(ctx, cfg, &pos, "label adc.w #1+(2*123)");	
 	test(ctx, cfg, &pos, "lda 0+(2*123)");	
 	test(ctx, cfg, &pos, "lda 0+(2*123),s");	
-/*
+
 	test(ctx, cfg, &pos, "lda 123,p");	
+	test(ctx, cfg, &pos, "lda <123,p");	
+	test(ctx, cfg, &pos, "lda >123,p");	
+	test(ctx, cfg, &pos, "lda #>123,p");	
+
+	test(ctx, cfg, &pos, "lda -123,p");	
+	test(ctx, cfg, &pos, "lda <-123,p");	
+	test(ctx, cfg, &pos, "lda >-~123,p");	
+	test(ctx, cfg, &pos, "lda #>-123,p");	
+/*
 
 	test(ctx, cfg, &pos, "lda 123,b");	
 	test(ctx, cfg, &pos, "ldx (12),y");	

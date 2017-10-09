@@ -240,3 +240,9 @@ ERR:bogusfile:1 Double prefix '1' conflicting with previous '0'
 ERR:ADC.01 #1
 ERR:    ^
 WRN:err=1
+WRN:
+WRN:>>> lda #>-123,p
+ERR:bogusfile:1 Syntax error: Expecting comment or colon
+ERR:lda #>-123,p
+ERR:          ^
+WRN:err=1

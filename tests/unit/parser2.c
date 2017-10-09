@@ -92,6 +92,8 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "ADC.uu #1");	
 	test(ctx, &pos, "ADC.nn #1");	
 	test(ctx, &pos, "ADC.01 #1");	
+
+	test(ctx, &pos, "lda #>-123,p");	
 }
 
 

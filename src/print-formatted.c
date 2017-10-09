@@ -35,13 +35,19 @@ static void print_arith_int(printer_t *prt, const ilist_t *anodes) {
 
 	for (int i = 0; i < anodes->len; i++) {
 		const anode_t *n = ilist_get(anodes, i);
+		if (n->modifier) {
+			print(prt, PRT_PARAM, "%c", n->modifier);
+		}
+		if (n->op) {
+			print(prt, PRT_PARAM, "%s", tokenizer_op_details(n->op)->print);
+		}
 		switch(n->type) {
 		case A_BRACKET:
-			print(prt, PRT_PARAM, "  type=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
-				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
-			print(prt, PRT_PARAM, "%c", n->val.subv.type);
+			//print(prt, PRT_PARAM, "  type=%c, modifier=%d(%c), op=%d(%c) btype=%d (%c)", 
+			//	n->type, n->modifier, prop(n->modifier), n->op, prop(n->op), n->val.subv.type, prop(n->val.subv.type));
+			print(prt, PRT_PARAM, "%s", tokenizer_op_details(n->val.subv.type));
 			print_arith_int(prt, n->val.subv.value);
-			print(prt, PRT_PARAM, "%c", n->val.subv.type);
+			print(prt, PRT_PARAM, "%s", tokenizer_op_details(closing_op(n->val.subv.type)));
 			break;
 		case A_VALUE:
 			switch(n->val.intv.type) {
@@ -76,11 +82,14 @@ static void print_arith_int(printer_t *prt, const ilist_t *anodes) {
 			}
 			break;
 		case A_INDEX:
-			print(prt, PRT_PARAM, "  type=%c, modifier=%d (%c), op=%d(%c)", 
-				n->type, n->modifier, prop(n->modifier), n->op, prop(n->op));
+			// can be ignored, as already printed by .op above
 			break;
 		case A_LABEL:
 			print(prt, PRT_PARAM, "%s", n->val.lab.name);
+			break;
+		case A_UNARY:
+			print(prt, PRT_PARAM, "%s", tokenizer_op_details(n->val.unary.op)->print);
+			print_arith_int(prt, n->val.unary.value);
 			break;
 		default:
 			print(prt, PRT_PARAM, "  UNHANDLED: type=%c, modifier=%d (%c), op=%d(%c)", 

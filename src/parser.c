@@ -157,7 +157,7 @@ err_t parse_param(tokenizer_t *tok, statement_t *stmt) {
 		stmt->syn = SY_IMM;
 
 		if (tokenizer_next(tok, 0)) {
-			return arith_parse_integer(tok, stmt->blk, 1, (const ilist_t**)&stmt->param);	
+			return arith_parse_integer(tok, stmt->blk, 0, (const ilist_t**)&stmt->param);	
 		}
 		return E_OK;
 	} else {
