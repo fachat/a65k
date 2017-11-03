@@ -1,4 +1,4 @@
-static operation_t cpu_operations[] = {
+static instruction_t cpu_operations[] = {
 { "BRK", ISA_BASE, false, false, false,NULL,{
     { 0x00, PG_BASE, "imm", ISA_BASE, },
 }

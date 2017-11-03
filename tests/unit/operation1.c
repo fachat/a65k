@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 	cmdline_module_init();
 	cpu_module_init();
 	segment_module_init();
-	operation_module_init();
+	instruction_module_init();
 
 	const cpu_t *cpu = cpu_by_name("nmos");
 
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
 	const context_t *ctx = context_init(seg, cpu);
 
-	const operation_t *op = operation_find("adc");
+	const instruction_t *op = instruction_find("adc");
 
 	if (op == NULL) {
 		printf("Opcode 'adc' not found!\n");

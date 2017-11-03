@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-    CPU operation management
+    CPU instruction management
     Copyright (C) 2015 Andre Fachat
 
     This program is free software; you can redistribute it and/or modify
@@ -209,7 +209,7 @@ static width_map widths_map[] = {
 
 #include "table.h"
 
-//static operation_t opcodes[] = {
+//static instruction_t opcodes[] = {
 //	{ 	"adc",	ISA_ALL, false,	true, false, NULL, {
 //		// AM_IMP
 //		{  false  },	
@@ -233,17 +233,17 @@ static width_map widths_map[] = {
 static hash_t *opcode_map = NULL;
 
 
-static const char *key_from_operation(const void *entry) {
-	return ((operation_t*)entry)->name;
+static const char *key_from_instruction(const void *entry) {
+	return ((instruction_t*)entry)->name;
 }
 
-void operation_module_init() {
+void instruction_module_init() {
 
-	opcode_map = hash_init_stringkey_nocase(400, 64, &key_from_operation);
+	opcode_map = hash_init_stringkey_nocase(400, 64, &key_from_instruction);
 
-	int n = sizeof(cpu_operations)/sizeof(operation_t);
+	int n = sizeof(cpu_operations)/sizeof(instruction_t);
 	for (int i = 0; i < n; i++) {
-		operation_t *orig = hash_put(opcode_map, &cpu_operations[i]);
+		instruction_t *orig = hash_put(opcode_map, &cpu_operations[i]);
 		if (orig != NULL) {
 			cpu_operations[i].next = orig;
 		}
@@ -254,9 +254,9 @@ const syntax_t *op_syn_details(syntax_type syn) {
 	return &sy_amode[syn];
 }
 
-const operation_t *operation_find(const char *name) {
+const instruction_t *instruction_find(const char *name) {
 
-	operation_t *op = hash_get(opcode_map, name);
+	instruction_t *op = hash_get(opcode_map, name);
 
 	return op;
 }
@@ -301,7 +301,7 @@ static inline void error_wide_operand_narrow_idx(const position_t *loc, const ch
 
 bool_t opcode_find(const position_t *loc, 
 		const context_t *ctx, 
-		const operation_t *op_initial, 
+		const instruction_t *op_initial, 
 		syntax_type syntax, 
 		int opsize_in_bytes,
 		codepoint_t *returned_code) {
@@ -310,7 +310,7 @@ bool_t opcode_find(const position_t *loc,
 
 	codepoint_t *rc = returned_code;
 
-	const operation_t *op = op_initial;
+	const instruction_t *op = op_initial;
 
 	if (opsize_in_bytes < 0 || opsize_in_bytes > 8) {
 		error_illegal_opcode_size(loc, opsize_in_bytes);
@@ -403,7 +403,7 @@ bool_t opcode_find(const position_t *loc,
 				}
 			}
 
-			// check adressing mode in current operation
+			// check adressing mode in current instruction
 			const opcode_t *opc = &op->opcodes[am];
 
 			//if (!opc->is_valid) { 

@@ -165,15 +165,15 @@ typedef struct {
 } opcode_t;
 
 // operation - equivalent to the mnemonic, like "lda", "adc", "inx", ...
-typedef struct operation_s operation_t;
+typedef struct instruction_s instruction_t;
 
-struct operation_s {
+struct instruction_s {
 	const char	*name;
 	isa_map		isa;		// what ISA is it from? Also selects BCD and Illegal opcodes
 	bool_t		abs_is_rel;	// is branch with relative addressing?
 	bool_t		check_ac_w;	// check AC width mode for 65816, for adr modes with check_width
 	bool_t		check_idx_w;	// check Index register width mode for 65816 (with check_width)
-	operation_t	*next;
+	instruction_t	*next;
 	opcode_t	opcodes[AM_MAX];
 };
 
@@ -184,11 +184,11 @@ typedef struct {
 	unsigned char	code;
 } codepoint_t;
 
-void operation_module_init();
+void instruction_module_init();
 
-const operation_t *operation_find(const char *name);
+const instruction_t *instruction_find(const char *name);
 
-bool_t opcode_find(const position_t *loc, const context_t *ctx, const operation_t *op, syntax_type syntax, int opsize_in_bytes,
+bool_t opcode_find(const position_t *loc, const context_t *ctx, const instruction_t *op, syntax_type syntax, int opsize_in_bytes,
 	codepoint_t *returned_code);
 
 const syntax_t *op_syn_details(syntax_type syn);

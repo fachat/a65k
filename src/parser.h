@@ -64,7 +64,7 @@ struct statement_s {
 	// S_LABDEF (see also param in S_OPCODE)
 	op_t			assign;		// assign operation
 	// S_OPCODE
-       	const operation_t       *op;		// pointer to info about operation, like "ADC", "TAX", ...
+       	const instruction_t     *op;		// pointer to info about operation, like "ADC", "TAX", ...
 	op_t			base;		// base extension of the parameter, like ",B", ",s" if any, zero else
 	le_type			le_prefix;	// LE prefix
 	rs_type			rs_prefix;	// RS prefix

@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 	cmdline_module_init();
 	cpu_module_init();
 	segment_module_init();
-	operation_module_init();
+	instruction_module_init();
 	parser_module_init();
 	tokenizer_module_init();
 	pseudo_module_init();

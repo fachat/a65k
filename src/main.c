@@ -136,8 +136,8 @@ static void main_init() {
 
 	// input files
 	infiles_module_init();
-	// operation
-	operation_module_init();
+	// instructions
+	instruction_module_init();
 	// segments
 	segment_module_init();
 	// pseudo opcodes

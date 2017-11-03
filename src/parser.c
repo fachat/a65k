@@ -390,7 +390,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 
 	statement_t *stmt = new_statement(ctx);
 
-	const operation_t *op = NULL;
+	const instruction_t *op = NULL;
 	const char *name = NULL;
 	label_t *label = NULL;
 
@@ -423,7 +423,7 @@ err_t parser_push(const context_t *ctx, const line_t *line) {
 
 		while (stmt->op == NULL && tok->type == T_NAME) {
 			name = mem_alloc_strn(tok->line + tok->ptr, tok->len);
-			op = operation_find(name);
+			op = instruction_find(name);
 			if (op != NULL) {
 				// check if the operation is compatible with the current CPU
 				if (0 == (ctx->cpu->isa & op->isa)) {

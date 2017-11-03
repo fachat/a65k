@@ -8,7 +8,7 @@ TESTROOT=..
 
 SUBDIRS=
 
-OBJFILES=log.o linked_list.o array_list.o mem.o hashmap.o tokenizer.o infiles.o block.o cpu.o context.o err.o segment.o operation.o parser.o arith.o print.o inline_list.o parser-config.o cmdline.o pseudo.o print-config.o print-formatted.o
+OBJFILES=log.o linked_list.o array_list.o mem.o hashmap.o tokenizer.o infiles.o block.o cpu.o context.o err.o segment.o instruction.o parser.o arith.o print.o inline_list.o parser-config.o cmdline.o pseudo.o print-config.o print-formatted.o
 
 include ../Makefile.inc
 
