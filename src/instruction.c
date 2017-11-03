@@ -29,7 +29,7 @@
 #include "cpu.h"
 #include "segment.h"
 #include "context.h"
-#include "operation.h"
+#include "instruction.h"
 
 
 static syntax_t sy_amode[] = {

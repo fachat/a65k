@@ -8,7 +8,7 @@
 #include "segment.h"
 #include "context.h"
 #include "position.h"
-#include "operation.h"
+#include "instruction.h"
 #include "cmdline.h"
 #include "parser.h"
 #include "print-config.h"

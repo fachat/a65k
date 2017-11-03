@@ -28,7 +28,7 @@ typedef struct statement_s statement_t;
 #include "context.h"
 #include "label.h"
 #include "block.h"
-#include "operation.h"
+#include "instruction.h"
 #include "tokenizer.h"
 #include "list.h"
 #include "inline_list.h"

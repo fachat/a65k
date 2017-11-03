@@ -34,7 +34,7 @@
 #include "context.h"
 #include "infiles.h"
 #include "parser.h"
-#include "operation.h"
+#include "instruction.h"
 #include "cmdline.h"
 #include "print.h"
 #include "tokenizer.h"
