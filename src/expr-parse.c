@@ -23,7 +23,7 @@
 #include "types.h"
 #include "mem.h"
 #include "tokenizer.h"
-#include "arith.h"
+#include "expr.h"
 
 typedef enum {
 	EXP_VAL,

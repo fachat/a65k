@@ -26,7 +26,7 @@
 
 #include "print-config.h"
 #include "print.h"
-#include "arith.h"
+#include "expr.h"
 
 // filler spaces
 static const char spaces[] = "                                        ";

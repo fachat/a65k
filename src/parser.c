@@ -40,7 +40,7 @@
 #include "label.h"
 #include "block.h"
 #include "tokenizer.h"
-#include "arith.h"
+#include "expr.h"
 #include "parser-config.h"
 
 typedef struct {

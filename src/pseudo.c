@@ -26,7 +26,7 @@
 #include "err.h"
 #include "pseudo.h"
 #include "hashmap.h"
-#include "arith.h"
+#include "expr.h"
 #include "array_list.h"
 #include "parser.h"
 #include "mem.h"

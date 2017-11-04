@@ -25,7 +25,7 @@
 
 #include "print-config.h"
 #include "print.h"
-#include "arith.h"
+#include "expr.h"
 
 
 static inline char prop(int o) {  return isprint(o) ? o : ' '; }

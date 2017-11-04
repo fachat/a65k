@@ -5,7 +5,7 @@
 #include "inline_list.h"
 #include "tokenizer.h"
 #include "dbgprint.h"
-#include "arith.h"
+#include "expr.h"
 
 
 void dprint(const char *val) {
