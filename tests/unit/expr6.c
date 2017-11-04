@@ -15,9 +15,9 @@ void dprint(const char *val, block_t *blk, position_t *pos, int allow_index) {
 	const ilist_t *out = NULL;
 
 	tokenizer_t *tok = tokenizer_create(pos, val, 0);
-	arith_parse(tok, blk, allow_index, &out, 0);
+	expr_parse(tok, blk, allow_index, &out, 0);
 
-	print_debug_arith(out);
+	print_debug_expr(out);
 	
 	do_print("   > next is type %c, %s", tok->type, tok->line + tok->ptr);
 }

@@ -30,7 +30,7 @@ void do_print(const char *pattern, ...);
 
 void print_debug_stmt(const statement_t *stmt);
 
-void print_debug_arith(const ilist_t *anodes);
+void print_debug_expr(const ilist_t *anodes);
 
 #endif
 

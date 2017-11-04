@@ -17,9 +17,9 @@ void dprint(const char *val, int allow_index) {
 
 	const ilist_t *out = NULL;
 
-	arith_parse(tok, NULL, allow_index, &out, 0);
+	expr_parse(tok, NULL, allow_index, &out, 0);
 
-	print_debug_arith(out);
+	print_debug_expr(out);
 	
 	do_print("   > next is type %c, %s", tok->type, tok->line + tok->ptr);
 }

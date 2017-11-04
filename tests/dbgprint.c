@@ -25,9 +25,7 @@
 
 #include "print-config.h"
 #include "print.h"
-#include "arith.h"
-
-#define	BUF_LEN		2048
+#include "expr.h"
 
 
 static void print_debug_arith_int(const ilist_t *anodes, int indlen);
@@ -66,7 +64,7 @@ void print_debug_stmt(const statement_t *stmt) {
 	}
 
 	if (stmt->op != NULL) {
-		const operation_t *o = stmt->op;
+		const instruction_t *o = stmt->op;
 		do_print("OPR: name:%s isa:$%x isrel:%d acw:%d idxw:%d", 
 			o->name, o->isa, o->abs_is_rel, o->check_ac_w, o->check_idx_w);
 
@@ -150,7 +148,7 @@ static void print_debug_arith_int(const ilist_t *anodes, int indlen) {
 	}
 }
 
-void print_debug_arith(const ilist_t *anodes) {
+void print_debug_expr(const ilist_t *anodes) {
 
 	print_debug_arith_int(anodes, 2);
 
