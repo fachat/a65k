@@ -154,7 +154,41 @@ static inline err_t expr_parse_strings(tokenizer_t *tok, const block_t *blk, int
 	return expr_parse(tok, blk, allow_index,anode, 1);
 }
 
-err_t expr_eval(ilist_t *nodelist);
+// ---------------------------------------------------------
+// evaluation of expressions
+
+typedef enum {
+	EV_UNSET	= '-',	// not set so far
+	EV_CONST	= 'c',	// constant value
+	EV_ADDR		= 'a',	// address value
+	EV_UNDEF	= 'u',	// undefined label
+} result_type;
+
+typedef struct {
+	maxval_t	value;		// the value
+	int		len;		// number of bytes (1,2,4,8)
+	result_type	type;
+	segment_t	*segment;	// for addresses
+	label_t		*label;		// for undefined values
+} eval_t;
+
+static inline int eval_len_from_value(maxval_t val) {
+	if (val < (2^8)) return 1;
+	if (val < (2^16)) return 2;
+	if (val < (2^24)) return 3;
+	if (val < (2^32)) return 4;
+	return 8;
+}
+
+static inline void eval_init(eval_t *e) {
+	e->value = 0;
+	e->type = EV_UNSET;
+	e->len = 0;
+	e->segment = NULL;
+	e->label = NULL;
+}
+
+err_t expr_eval(ilist_t *nodelist, eval_t *result);
 
 
 #endif

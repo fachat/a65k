@@ -154,5 +154,9 @@ void print_debug_expr(const ilist_t *anodes) {
 
 }
 
+void print_debug_eval(const eval_t *ev) {
+
+	do_print("type=%c len=%d, value=%d", ev->type, ev->len, ev->value);
+}
 
 

@@ -23,6 +23,7 @@
 #ifndef DBGPRINT_H
 #define DBGPRINT_H
 
+#include "expr.h"
 #include "parser.h"
 #include "print-config.h"
 
@@ -31,6 +32,8 @@ void do_print(const char *pattern, ...);
 void print_debug_stmt(const statement_t *stmt);
 
 void print_debug_expr(const ilist_t *anodes);
+
+void print_debug_eval(const eval_t *eval_result);
 
 #endif
 
