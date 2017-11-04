@@ -44,7 +44,7 @@ static err_t pseudo_list_parse(const pseudo_t *pseudo, tokenizer_t *tok, stateme
 	int allow_string = !strcmp(pseudo->name, "asc");
 
 	ilist_t *nodep;
-	while ((rv = arith_parse(tok, stmt->blk, 0, (const ilist_t**)&nodep, allow_string)) == E_OK) {
+	while ((rv = expr_parse(tok, stmt->blk, 0, (const ilist_t**)&nodep, allow_string)) == E_OK) {
 		list_add(pparams, nodep);
 
 		if (tok->type != T_TOKEN || tok->vals.op != OP_COMMA) {
@@ -68,7 +68,7 @@ static err_t pseudo_param_parse(const pseudo_t *pseudo, tokenizer_t *tok, statem
 	stmt->pparams = pparams;
 
 	ilist_t *nodep;
-	if ((rv = arith_parse(tok, stmt->blk, 0, (const ilist_t**)&nodep, 0)) == E_OK) {
+	if ((rv = expr_parse(tok, stmt->blk, 0, (const ilist_t**)&nodep, 0)) == E_OK) {
 		list_add(pparams, nodep);
 	}
 

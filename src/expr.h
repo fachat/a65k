@@ -144,15 +144,17 @@ static inline anode_t *anode_init() {
 	return anode;
 }
 
-err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode, int allow_string);
+err_t expr_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode, int allow_string);
 
-static inline err_t arith_parse_integer(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode) {
-	return arith_parse(tok, blk, allow_index,anode, 0);
+static inline err_t expr_parse_integer(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode) {
+	return expr_parse(tok, blk, allow_index,anode, 0);
 }
 
-static inline err_t arith_parse_strings(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode) {
-	return arith_parse(tok, blk, allow_index,anode, 1);
+static inline err_t expr_parse_strings(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **anode) {
+	return expr_parse(tok, blk, allow_index,anode, 1);
 }
+
+err_t expr_eval(ilist_t *nodelist);
 
 
 #endif

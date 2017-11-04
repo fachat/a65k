@@ -45,7 +45,7 @@ static inline void error_bracket_mismatch(const tokenizer_t *tok, op_t was, op_t
 			tokenizer_op_details(was)->print, tokenizer_op_details(expected)->print);
 }
 
-static err_t arith_parse_int(tokenizer_t *tok, 
+static err_t expr_parse_int(tokenizer_t *tok, 
 			const block_t *blk, 
 			int allow_index, 
 			const ilist_t **ext_anode, 
@@ -79,7 +79,7 @@ static err_t arith_parse_int(tokenizer_t *tok,
 				if (tokenizer_next(tok, allow_index)) {
 					// NOTE cast necessary due to stupid standards nitpicking by gcc 
 					// https://stackoverflow.com/questions/28701376/incompatible-pointer-types-and-constness
-					arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, closing_op(anode->val.subv.type), 0, 0, allow_string);
+					expr_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.subv.value, closing_op(anode->val.subv.type), 0, 0, allow_string);
 
 					if (tok->type != T_BRACKET) {
 						rv = E_SYNTAX;
@@ -119,7 +119,7 @@ static err_t arith_parse_int(tokenizer_t *tok,
 				if (tokenizer_op_details(tok->vals.op)->is_unary) {
 					anode->val.unary.op = tok->vals.op;
 					if (tokenizer_next(tok, allow_index)) {
-						arith_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.unary.value, OP_NONE, 1, 0, allow_string);
+						expr_parse_int(tok, blk, allow_index, (const ilist_t**) &anode->val.unary.value, OP_NONE, 1, 0, allow_string);
 						expect = EXP_OP;
 						anode->type = A_UNARY;
 						anode = ilist_add(list);
@@ -238,9 +238,9 @@ exit:
 }
 
 
-err_t arith_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, int allow_string) {
+err_t expr_parse(tokenizer_t *tok, const block_t *blk, int allow_index, const ilist_t **ext_anode, int allow_string) {
 
-	return arith_parse_int(tok, blk, allow_index, ext_anode, OP_NONE, 0, 1, allow_string);
+	return expr_parse_int(tok, blk, allow_index, ext_anode, OP_NONE, 0, 1, allow_string);
 }
 
 

@@ -156,11 +156,11 @@ err_t parse_param(tokenizer_t *tok, statement_t *stmt) {
 		stmt->syn = SY_IMM;
 
 		if (tokenizer_next(tok, 0)) {
-			return arith_parse_integer(tok, stmt->blk, 0, (const ilist_t**)&stmt->param);	
+			return expr_parse_integer(tok, stmt->blk, 0, (const ilist_t**)&stmt->param);	
 		}
 		return E_OK;
 	} else {
-		err_t rv = arith_parse_integer(tok, stmt->blk, 1, (const ilist_t**)&stmt->param);	
+		err_t rv = expr_parse_integer(tok, stmt->blk, 1, (const ilist_t**)&stmt->param);	
 		if (rv == E_OK && stmt->param->len > 0) {
 
 			stmt->syn = SY_ABS;
