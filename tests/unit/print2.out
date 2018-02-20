@@ -1,0 +1,39 @@
+WRN:
+WRN:>>> label adc.w #1+(2*123)
+                    label      ADC.W #1+(2*123)
+WRN:
+WRN:>>> lda 0+(2*123)
+                               LDA 0+(2*123)
+WRN:
+WRN:>>> lda 0+(2*123),s
+                               LDA 0+(2*123),S
+WRN:
+WRN:>>> lda 123,p
+                               LDA 123,P
+WRN:
+WRN:>>> lda <123,p
+                               LDA <123,P
+WRN:
+WRN:>>> lda >123,p
+                               LDA >123,P
+WRN:
+WRN:>>> lda #>123,p
+ERR:bogusfile:1 Syntax error: Expecting comment or colon
+ERR:lda #>123,p
+ERR:         ^
+WRN:err=1
+WRN:
+WRN:>>> lda -123,p
+                               LDA -123,P
+WRN:
+WRN:>>> lda <-123,p
+                               LDA <-123,P
+WRN:
+WRN:>>> lda >-~123,p
+                               LDA >-~123,P
+WRN:
+WRN:>>> lda #>-123,p
+ERR:bogusfile:1 Syntax error: Expecting comment or colon
+ERR:lda #>-123,p
+ERR:          ^
+WRN:err=1
