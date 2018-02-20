@@ -92,7 +92,7 @@ static op_details_t ops[] = {
         {	OP_LOGICAND,		"&&",	0,	0,	1,	0,	0	},
         {	OP_LOGICOR,		"||",	0,	0,	1,	0,	0	},
         {	OP_LOGICXOR,		"^^",	0,	0,	1,	0,	0	},
-        {	OP_BITINV,		"~",	1,	0,	1,	0,	0	},
+        {	OP_BITINV,		"~",	1,	1,	0,	0,	0	},
         {	OP_MOD,			"%",	1,	0,	1,	0,	0	},
         {	OP_DOUBLESLASH,		"//",	0,	0,	0,	0,	0	},
         {	OP_XIND,		",X",	0,	0,	0,	1,	0	},
@@ -300,6 +300,7 @@ static inline bool_t parse_token(tokenizer_t *tok, int ptr, int can_have_operato
 	case ':':
 	case '.':
 	case ';':
+	case '~':
 		return true;
 	case '(':
 	case ')':

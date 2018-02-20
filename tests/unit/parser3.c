@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
 	test(ctx, &pos, "50000 .END; REM");	
 	test(ctx, &pos, "28650 HC LDA #<-1:STA $C6");	
 	test(ctx, &pos, "28650 HC LDA #<--1:STA $C6");	
+	test(ctx, &pos, "28650 HC LDA #<-~1:STA $C6");	
 }
 
 

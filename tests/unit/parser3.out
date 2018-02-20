@@ -146,3 +146,26 @@ WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: 0, LE: 0
 WRN:PAR: 
 WRN:    A:len=1
 WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)198/c6
+WRN:
+WRN:>>> 28650 HC LDA #<-~1:STA $C6
+WRN:--------------- STMT ---------------
+WRN:LINE: 28650:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:LAB: name:HC ctx:0 pos:bogusfile:1
+WRN:OPR: name:LDA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 1, UM: 0, NF: 0, RS: 0, LE: 0
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=u, modifier=60(<), op=0( ), unary=45(-)
+WRN:      A:len=1
+WRN:        type=u, modifier=0( ), op=0( ), unary=126(~)
+WRN:        A:len=1
+WRN:          type=v, modifier=0 ( ), op=0( ), val=(d)1/1
+WRN:--------------- STMT ---------------
+WRN:LINE: 28650:
+WRN:BLK:0 ctx:0 (CPU: nmos, isa:$7), seg=test
+WRN:OPR: name:STA isa:$1561 isrel:0 acw:0 idxw:0
+WRN:MOD: BASE: 0, SYN: 2, UM: 0, NF: 0, RS: 0, LE: 0
+WRN:PAR: 
+WRN:    A:len=1
+WRN:      type=v, modifier=0 ( ), op=0( ), val=(h)198/c6
