@@ -31,44 +31,57 @@
  * this method evaluates the expression given to it in the nodelist
  */
 
-err_t expr_eval(ilist_t *nodelist, eval_t *result) {
+static err_t expr_eval_int(ilist_t *nodelist, int p, eval_t *result) {
 
 	eval_init(result);
 
-	int n = ilist_len(nodelist);
-	for (int i = 0; i < n; i++) {
+	eval_t sub;
+	err_t sub_err = E_OK;
 
-		anode_t *node = ilist_get(nodelist, i);
+	anode_t *node = ilist_get(nodelist, p);
 
-		switch(node->type) {
-		case A_VALUE:
-			result->value = node->val.intv.value;
-			result->len = eval_len_from_value(result->value);
-			result->type = EV_CONST;
-			break;
-		case A_BRACKET:
-		case A_INDEX:
-		case A_LABEL:
-		case A_UNARY:
-		default:
-			printf("error");
-			break;
-		}
+	switch(node->type) {
+	case A_VALUE:
+		result->value = node->val.intv.value;
+		result->len = EVAL_MAX_LEN;
+		result->type = EV_CONST;
+		break;
+	case A_BRACKET:
+		eval_init(&sub);
+		// TODO check len (or use external eval?)
+		sub_err = expr_eval_int(node->val.subv.value, 0, &sub);
+		
+	case A_INDEX:
+	case A_LABEL:
+	case A_UNARY:
+	default:
+		printf("error");
+		break;
+	}
 
-		switch (node->modifier) {
-		case AMOD_NONE:
-			break;
-		case AMOD_LOW:
-			result->value &=0xff;
-			result->len = 1;
-			break;
-		case AMOD_HIGH:
-			result->value = (result->value >> 8) & 0xff;
-			result->len = 1;
-			break;
-		}
+	switch (node->modifier) {
+	case AMOD_NONE:
+		break;
+	case AMOD_LOW:
+		result->value &=0xff;
+		result->len = 1;
+		break;
+	case AMOD_HIGH:
+		result->value = (result->value >> 8) & 0xff;
+		result->len = 1;
+		break;
 	}
 
 	return E_OK;
 }
+
+err_t expr_eval(ilist_t *nodelist, eval_t *result) {
+
+	int n = ilist_len(nodelist);
+	if (n > 0) {
+		return expr_eval_int(nodelist, 0, result);
+	}
+	return E_ABORT;
+}
+
 

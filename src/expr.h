@@ -29,8 +29,6 @@
 #include "block.h"
 #include "err.h"
 
-typedef signed long maxval_t;
-
 /*
 The anode_t struct is a node in an arithmetic expression
 It is linked together in a tree-structure like such:
@@ -157,6 +155,10 @@ static inline err_t expr_parse_strings(tokenizer_t *tok, const block_t *blk, int
 // ---------------------------------------------------------
 // evaluation of expressions
 
+// maximum length of value in bytes
+// Note: operations are usually done in full size, to not loose bits due to shortening, esp. sign info
+#define	EVAL_MAX_LEN	8
+
 typedef enum {
 	EV_UNSET	= '-',	// not set so far
 	EV_CONST	= 'c',	// constant value
@@ -171,14 +173,6 @@ typedef struct {
 	segment_t	*segment;	// for addresses
 	label_t		*label;		// for undefined values
 } eval_t;
-
-static inline int eval_len_from_value(maxval_t val) {
-	if (val < (2^8)) return 1;
-	if (val < (2^16)) return 2;
-	if (val < (2^24)) return 3;
-	if (val < (2^32)) return 4;
-	return 8;
-}
 
 static inline void eval_init(eval_t *e) {
 	e->value = 0;

@@ -25,6 +25,8 @@
 
 #include <stdbool.h>
 
+typedef signed long maxval_t;
+
 typedef struct _type type_t;
 
 // more or less a class definition type

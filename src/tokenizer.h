@@ -134,6 +134,9 @@ typedef struct {
 	char		is_binary;
 	char		is_index;	// like ",x"
 	char		is_assign;
+	char		priority;	// zero is lowest, higher is more prio
+					// perform the operation (if any), left only for unary
+	maxval_t	(*do_op)(maxval_t left, maxval_t right);
 } op_details_t;
 
 
