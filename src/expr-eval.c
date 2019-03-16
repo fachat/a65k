@@ -27,16 +27,30 @@
 #include "err.h"
 
 
+/** 
+ * calculate result of an operation back into result
+ * 	result <- result <op> nextres
+ */
+static err_t expr_op(eval_t *result, op_t op, eval_t *nextres) {
+
+	switch(op) {
+	}
+
+	return E_SYNTAX;
+}
+
 /**
  * this method evaluates the expression given to it in the nodelist
  */
-
-static err_t expr_eval_int(ilist_t *nodelist, int p, eval_t *result) {
+static err_t expr_eval_int(const ilist_t *nodelist, int *startp, eval_t *result, int prio) {
 
 	eval_init(result);
 
 	eval_t sub;
 	err_t sub_err = E_OK;
+
+	int p = *startp;
+	int l = ilist_len(nodelist);
 
 	anode_t *node = ilist_get(nodelist, p);
 
@@ -49,8 +63,8 @@ static err_t expr_eval_int(ilist_t *nodelist, int p, eval_t *result) {
 	case A_BRACKET:
 		eval_init(&sub);
 		// TODO check len (or use external eval?)
-		sub_err = expr_eval_int(node->val.subv.value, 0, &sub);
-		
+		sub_err = expr_eval_int(node->val.subv.value, 0, &sub, 0);
+		break;
 	case A_INDEX:
 	case A_LABEL:
 	case A_UNARY:
@@ -72,14 +86,31 @@ static err_t expr_eval_int(ilist_t *nodelist, int p, eval_t *result) {
 		break;
 	}
 
+	char p0 = prio_of_operator(node->op);
+	p++;
+	if (p0 > prio) {
+		// prio of followup op is higher than previous op
+		if (p >= l) {
+			// evaluate next node
+			eval_t nextres;
+			sub_err = expr_eval_int(nodelist, &p, &nextres, p0);
+			if (sub_err == E_OK) {
+				// evaluate operation
+				sub_err = expr_op(result, node->op, &nextres);
+			}
+		}
+		
+	}
+	
 	return E_OK;
 }
 
-err_t expr_eval(ilist_t *nodelist, eval_t *result) {
+err_t expr_eval(const ilist_t *nodelist, eval_t *result) {
 
+	int p = 0;
 	int n = ilist_len(nodelist);
 	if (n > 0) {
-		return expr_eval_int(nodelist, 0, result);
+		return expr_eval_int(nodelist, &p, result, 0);
 	}
 	return E_ABORT;
 }

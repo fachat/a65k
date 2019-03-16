@@ -182,7 +182,7 @@ static inline void eval_init(eval_t *e) {
 	e->label = NULL;
 }
 
-err_t expr_eval(ilist_t *nodelist, eval_t *result);
+err_t expr_eval(const ilist_t *nodelist, eval_t *result);
 
 
 #endif

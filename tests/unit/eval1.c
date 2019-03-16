@@ -25,14 +25,18 @@ void dprint(const char *val) {
 		do_print("parse err=%d", rv);
 	} else {
 
+		print_debug_expr(out);
+
 		err_t rvx = expr_eval(out, &result);
 
 		if (rvx) {
 			do_print("eval err=%d", rv);
 		}
+		else {
+			print_debug_eval((const eval_t*)&result);
+		}
 	}
 
-	print_debug_eval((const eval_t*)&result);
 }
 
 int main(int argc, char *argv[]) {
@@ -43,12 +47,12 @@ int main(int argc, char *argv[]) {
 	tokenizer_module_init();
 
 	dprint("<1234");
-/*
 	dprint("<$1234");
 	dprint("<$x234");
 	dprint("0x234");
 
 	dprint("123+234");
+/*
 	dprint("123+34*44");
 
 	dprint("(123+34)*44");

@@ -160,10 +160,10 @@ static inline op_t closing_op(op_t opening_bracket) {
 	}
 }
 
-extern int prio_of_operator_table[];
+op_details_t *tokenizer_op_details(op_t op);
 
 static inline int prio_of_operator(const op_t op) {
-	return prio_of_operator_table[op];
+	return tokenizer_op_details(op)->priority;
 }
 
 typedef struct {
@@ -206,7 +206,6 @@ void tokenizer_rewind(tokenizer_t *tok);
 
 void tokenizer_free(tokenizer_t *tok);
 
-op_details_t *tokenizer_op_details(op_t op);
 
 #endif
 

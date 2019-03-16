@@ -51,7 +51,7 @@ typedef struct {
 
 ilist_t *inline_list_init(int bucket_size, const type_t *type, void (*init_item)(void*));
 
-static inline int ilist_len(ilist_t *il) {
+static inline int ilist_len(const ilist_t *il) {
 	return il->len;
 }
 
